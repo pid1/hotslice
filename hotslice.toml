@@ -1,0 +1,8 @@
+[defaults]
+theme = "light"
+output = "dist/index.html"
+separator = "^---$"
+
+[metadata]
+author = ""
+date = ""

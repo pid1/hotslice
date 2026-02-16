@@ -1,0 +1,45 @@
+# Output
+dist/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+
+# Nix
+.direnv/
+result
+result-*
+
+# devenv
+.devenv/
+devenv.lock
+.devenv.flake.nix
+
+# Ruff
+.ruff_cache/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
