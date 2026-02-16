@@ -185,7 +185,3 @@ Run these inside `devenv shell`:
 | `format`       | Run ruff formatter                    |
 | `test`         | Run pytest                            |
 | `install-deps` | Install Python dependencies with uv   |
-
-## License
-
-MIT
