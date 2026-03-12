@@ -30,7 +30,7 @@ Install and build your first deck:
 ```bash
 uv add hotslice
 hotslice build slides.md
-open dist/index.html
+open slides.html
 ```
 
 That's it. No config required.

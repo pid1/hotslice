@@ -13,8 +13,8 @@ curl -fsSL https://raw.githubusercontent.com/pid1/hotslice/main/install.sh | bas
 # Build a deck
 hotslice build slides.md
 
-# Open it
-open dist/index.html
+# Open it (output defaults to <input_stem>.html in PWD)
+open slides.html
 ```
 
 ## Installation
@@ -108,13 +108,15 @@ hotslice uses the GFM-like preset from markdown-it-py, which includes:
 hotslice build <input.md> [options]
 ```
 
-| Flag            | Default            | Description                        |
-|-----------------|--------------------|------------------------------------|
-| `-o, --output`  | `dist/index.html`  | Output HTML file path              |
-| `--theme`       | `light`            | Theme name or path                 |
-| `--theme-dir`   | bundled `themes/`  | Directory to search for themes     |
-| `--title`       | auto-detected      | Presentation title override        |
-| `--separator`   | `^---$`            | Slide separator regex              |
+| Flag            | Default              | Description                        |
+|-----------------|----------------------|------------------------------------|
+| `-o, --output`  | `<input_stem>.html`  | Output HTML file path              |
+| `--theme`       | `light`              | Theme name or path                 |
+| `--theme-dir`   | bundled `themes/`    | Directory to search for themes     |
+| `--title`       | auto-detected        | Presentation title override        |
+| `--separator`   | `^---$`              | Slide separator regex              |
+
+When no `-o` flag is provided, the output file is written to the current directory using the input file's stem. For example, `hotslice build training.md` produces `training.html` in the current directory.
 
 ## Themes
 
@@ -187,7 +189,6 @@ Set personal defaults that apply to all your projects:
 ```toml
 [defaults]
 theme = "dark"
-output = "dist/index.html"
 separator = "^---$"
 
 [metadata]
@@ -197,6 +198,8 @@ date = ""
 
 The install script creates this file automatically. You can also create it by hand.
 
+You can add an explicit `output` key to always write to a fixed path (e.g., `output = "dist/index.html"`). When omitted, the output path is derived from the input filename.
+
 ### Project config (`hotslice.toml` in project root)
 
 Override user defaults for a specific project:
@@ -204,13 +207,14 @@ Override user defaults for a specific project:
 ```toml
 [defaults]
 theme = "light"
-output = "dist/index.html"
 separator = "^---$"
 
 [metadata]
 author = "Team Name"
 date = "2026-01-01"
 ```
+
+As with user config, you can add `output = "build/slides.html"` to force a fixed output path for the project.
 
 ### Priority order
 
@@ -233,7 +237,7 @@ Once your deck is open in a browser:
 | Click right half     | Next slide     |
 | Click left half      | Previous slide |
 
-Deep-link to any slide with `#N` in the URL (e.g., `index.html#3`).
+Deep-link to any slide with `#N` in the URL (e.g., `slides.html#3`).
 
 ## Development
 
@@ -258,7 +262,7 @@ Run these inside `devenv shell`:
 |----------------|---------------------------------------|
 | `setup`        | Install dependencies                  |
 | `dev`          | Build demo deck and open in browser   |
-| `build`        | Build demo deck to dist/              |
+| `build`        | Build demo deck to demo.html          |
 | `lint`         | Run ruff linter                       |
 | `lint-fix`     | Auto-fix lint issues                  |
 | `format`       | Run ruff formatter                    |
