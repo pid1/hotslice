@@ -18,7 +18,7 @@ class Metadata:
 @dataclass
 class Config:
     theme: str = "light"
-    output: str = "dist/index.html"
+    output: str | None = None
     separator: str = "^---$"
     theme_dir: str | None = None
     title: str | None = None

@@ -20,7 +20,7 @@ dev
 |----------------|-------------------------------------|
 | `setup`        | Initialize repo (runs install-deps) |
 | `dev`          | Build demo deck and open in browser |
-| `build`        | Build demo deck to dist/            |
+| `build`        | Build demo deck to demo.html        |
 | `lint`         | Run ruff linter                     |
 | `lint-fix`     | Run ruff with auto-fix              |
 | `format`       | Run ruff formatter                  |
@@ -32,7 +32,7 @@ dev
 **IMPORTANT**: When working in this repository:
 
 1. **Always use devenv scripts** — Run `lint` not `ruff check .`
-2. **Use `build`** to test changes — it builds `examples/demo.md` to `dist/index.html`
+2. **Use `build`** to test changes: it builds `examples/demo.md` to `demo.html`
 3. **Run `lint`** before considering work complete
 
 ### Key Files
@@ -155,7 +155,7 @@ result = hotslice.build("slides.md")
 ### Building
 
 ```bash
-hotslice build slides.md                   # → dist/index.html
+hotslice build slides.md                   # → slides.html
 hotslice build slides.md -o output.html    # custom output path
 hotslice build slides.md --theme dark      # use dark theme
 ```

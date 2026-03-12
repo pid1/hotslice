@@ -29,6 +29,10 @@ def _build(args: argparse.Namespace) -> None:
         theme_dir=args.theme_dir,
     )
 
+    # Default output: <input_stem>.html in current directory
+    if config.output is None:
+        config.output = input_path.stem + ".html"
+
     # Read and parse markdown
     markdown_text = input_path.read_text(encoding="utf-8")
     deck = parse_deck(markdown_text, separator=config.separator)
