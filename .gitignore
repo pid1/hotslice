@@ -43,3 +43,6 @@ htmlcov/
 *.swo
 *~
 .DS_Store
+
+# FastForward runtime artifacts
+.fastforward/

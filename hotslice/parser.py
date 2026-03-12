@@ -8,7 +8,6 @@ from dataclasses import dataclass, field
 
 from markdown_it import MarkdownIt
 
-
 # Matches sequences of emoji characters (including ZWJ and variation selectors)
 _EMOJI_RE = re.compile(
     "(["

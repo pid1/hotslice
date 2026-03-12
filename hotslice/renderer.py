@@ -6,7 +6,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from hotslice.config import Config
+from hotslice.config import USER_CONFIG_DIR, Config
 from hotslice.parser import DeckData
 
 # Bundled themes directory (sibling to this package)
@@ -20,14 +20,20 @@ def _resolve_theme_dir(theme_name: str, theme_dir: str | None) -> Path:
 
     Search order:
     1. theme_dir argument (custom themes directory)
-    2. Bundled themes directory
-    3. Treat theme_name as an absolute/relative path
+    2. User themes directory (~/.config/hotslice/themes/)
+    3. Bundled themes directory
+    4. Treat theme_name as an absolute/relative path
     """
     # Check custom theme directory first
     if theme_dir:
         custom = Path(theme_dir) / theme_name
         if custom.is_dir():
             return custom
+
+    # Check user themes directory
+    user_theme = USER_CONFIG_DIR / "themes" / theme_name
+    if user_theme.is_dir():
+        return user_theme
 
     # Check bundled themes
     bundled = _BUNDLED_THEMES_DIR / theme_name
@@ -41,7 +47,8 @@ def _resolve_theme_dir(theme_name: str, theme_dir: str | None) -> Path:
 
     raise FileNotFoundError(
         f"Theme '{theme_name}' not found. "
-        f"Searched: {theme_dir or '(none)'}, {_BUNDLED_THEMES_DIR}, {theme_name}"
+        f"Searched: {theme_dir or '(none)'}, {USER_CONFIG_DIR / 'themes'}, "
+        f"{_BUNDLED_THEMES_DIR}, {theme_name}"
     )
 
 
