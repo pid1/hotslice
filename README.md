@@ -7,14 +7,44 @@ hotslice converts a single Markdown file into a self-contained HTML presentation
 ## Quick Start
 
 ```bash
-# Install
-uv add hotslice
+# Install (one-liner for macOS and Linux)
+curl -fsSL https://raw.githubusercontent.com/pid1/hotslice/main/install.sh | bash
 
 # Build a deck
 hotslice build slides.md
 
 # Open it
 open dist/index.html
+```
+
+## Installation
+
+### One-line installer (recommended)
+
+The install script works on macOS and Linux. It installs [uv](https://docs.astral.sh/uv/) if needed, then installs hotslice:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pid1/hotslice/main/install.sh | bash
+```
+
+The installer:
+- Detects your OS (macOS or Linux)
+- Installs `uv` if it is not already present
+- Installs hotslice to `~/.local/bin/` via `uv tool install`
+- Creates a user config directory at `~/.config/hotslice/`
+- Writes a default `~/.config/hotslice/hotslice.toml` (preserves any existing file)
+- Creates `~/.config/hotslice/themes/` for user-installed themes
+
+### Manual install with uv
+
+```bash
+uv add hotslice
+```
+
+Or install as a standalone tool:
+
+```bash
+uv tool install git+https://github.com/pid1/hotslice
 ```
 
 ## Slide Format
@@ -90,10 +120,32 @@ hotslice build <input.md> [options]
 
 ### Built-in Themes
 
-- **light** — Clean white background, indigo accents (default)
-- **dark** — Deep slate background, blue accents
+- **light**: Clean white background, indigo accents (default)
+- **dark**: Deep slate background, blue accents
 
 Use with `--theme dark` or set in frontmatter/config.
+
+### Theme Resolution Order
+
+When you specify a theme name, hotslice searches these locations in order:
+
+1. `--theme-dir` argument (if provided)
+2. `~/.config/hotslice/themes/<name>/` (user themes)
+3. Bundled `themes/` directory (ships with hotslice)
+4. Direct path (absolute or relative)
+
+### User Themes
+
+Place custom themes in `~/.config/hotslice/themes/` to make them available across all your projects. For example, a theme called `corporate` would live at:
+
+```
+~/.config/hotslice/themes/corporate/
+  theme.css       # Required
+  theme.js        # Optional
+  theme.toml      # Optional
+```
+
+Then use it with `hotslice build slides.md --theme corporate`.
 
 ### Creating a Theme
 
@@ -101,9 +153,9 @@ A theme is a directory with at minimum a `theme.css` file:
 
 ```
 themes/my-theme/
-  theme.css       # Required — CSS overrides
-  theme.js        # Optional — JS that runs after deck runtime
-  theme.toml      # Optional — metadata (name, description, author)
+  theme.css       # Required: CSS overrides
+  theme.js        # Optional: JS that runs after deck runtime
+  theme.toml      # Optional: metadata (name, description, author)
 ```
 
 Override the CSS custom properties to restyle everything:
@@ -126,7 +178,28 @@ The optional `theme.js` runs after the deck runtime, so you can add animations, 
 
 ## Configuration
 
-Create a `hotslice.toml` in your project root for defaults:
+hotslice supports two levels of TOML configuration that are layered together.
+
+### User config (`~/.config/hotslice/hotslice.toml`)
+
+Set personal defaults that apply to all your projects:
+
+```toml
+[defaults]
+theme = "dark"
+output = "dist/index.html"
+separator = "^---$"
+
+[metadata]
+author = "Your Name"
+date = ""
+```
+
+The install script creates this file automatically. You can also create it by hand.
+
+### Project config (`hotslice.toml` in project root)
+
+Override user defaults for a specific project:
 
 ```toml
 [defaults]
@@ -135,11 +208,17 @@ output = "dist/index.html"
 separator = "^---$"
 
 [metadata]
-author = "Your Name"
+author = "Team Name"
 date = "2026-01-01"
 ```
 
-Priority order: CLI flags > frontmatter > `hotslice.toml` > built-in defaults.
+### Priority order
+
+Settings are resolved with the highest-priority source winning:
+
+CLI flags > frontmatter > project `hotslice.toml` > user `~/.config/hotslice/hotslice.toml` > built-in defaults
+
+Metadata fields merge across layers. If the user config sets `author` and the project config sets `date`, both values are preserved in the final configuration.
 
 ## Navigation
 

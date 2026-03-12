@@ -35,6 +35,18 @@ dev
 2. **Use `build`** to test changes — it builds `examples/demo.md` to `dist/index.html`
 3. **Run `lint`** before considering work complete
 
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `hotslice/config.py` | Config loading with layered user/project support |
+| `hotslice/renderer.py` | Theme resolution and HTML rendering |
+| `hotslice/cli.py` | CLI entry point (argparse) |
+| `hotslice/parser.py` | Markdown parsing and slide splitting |
+| `install.sh` | `curl \| bash` installer for macOS and Linux |
+| `hotslice.toml` | Project-level config (repo root) |
+| `themes/` | Bundled themes (light, dark) |
+
 ---
 
 ## Slide Authoring Format
@@ -154,13 +166,33 @@ hotslice build slides.md --theme dark      # use dark theme
 
 Themes are directories containing at minimum a `theme.css` file.
 
+### Theme Resolution Order
+
+When hotslice resolves a theme name, it searches in this order:
+
+1. `--theme-dir` argument (custom themes directory, if provided)
+2. `~/.config/hotslice/themes/<name>/` (user themes directory)
+3. Bundled `themes/` directory (ships with the package)
+4. Direct path (treats the theme name as an absolute or relative path)
+
+The first match wins. This means user themes override bundled themes of the same name.
+
 ### Directory Structure
 
 ```
 themes/my-theme/
-  theme.css       # REQUIRED — CSS overrides and custom styles
-  theme.js        # OPTIONAL — JavaScript that runs after deck runtime
-  theme.toml      # OPTIONAL — metadata (name, description, author)
+  theme.css       # REQUIRED: CSS overrides and custom styles
+  theme.js        # OPTIONAL: JavaScript that runs after deck runtime
+  theme.toml      # OPTIONAL: metadata (name, description, author)
+```
+
+User themes follow the same structure. Place them in `~/.config/hotslice/themes/`:
+
+```
+~/.config/hotslice/themes/my-theme/
+  theme.css
+  theme.js        # optional
+  theme.toml      # optional
 ```
 
 ### CSS Custom Properties
