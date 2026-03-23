@@ -133,7 +133,7 @@ hotslice serve [options]
 | `--host`   | `0.0.0.0` | Host to bind to                |
 | `--port`   | `8000`     | Port to listen on              |
 
-Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme picker groups options into Hotslice Themes, Light Code Themes, and Dark Code Themes, with human-readable names.
+Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme dropdown lists all installed on-disk themes.
 
 **API endpoints:**
 
@@ -154,11 +154,11 @@ Use with `--theme pizza-dark` or set in frontmatter/config.
 
 Each theme specifies its own highlight.js color scheme via the `hljs_theme` field in `theme.toml`. The matching stylesheet is loaded from the highlight.js CDN automatically.
 
-### Highlight.js Themes
+### Highlight.js Themes (CLI Only)
 
-In addition to the built-in themes, hotslice includes all 255 highlight.js themes as selectable options. When you use an hljs theme (e.g., `--theme monokai` or `--theme nord`), hotslice automatically selects the appropriate pizza base theme (pizza-light for light hljs themes, pizza-dark for dark hljs themes) and applies the chosen highlight.js stylesheet for code blocks.
+hotslice bundles a registry of 255 highlight.js themes for use from the CLI. When you pass an hljs theme slug (e.g., `--theme monokai` or `--theme nord`), hotslice automatically selects the appropriate pizza base theme (pizza-light for light hljs themes, pizza-dark for dark hljs themes) and applies the chosen highlight.js stylesheet for code blocks.
 
-The web UI and `/api/themes` endpoint display human-readable theme names grouped by variant (Light Code Themes and Dark Code Themes).
+The web UI theme dropdown and `/api/themes` endpoint show only on-disk themes. To use an hljs-only theme, pass it via the CLI `--theme` flag or set it in frontmatter.
 
 ### Theme Resolution Order
 
