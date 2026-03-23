@@ -1,13 +1,13 @@
-/* hotslice dark theme — deep slate, blue accents */
+/* hotslice dark theme — GitHub Dark base16 palette */
 
 :root {
-  --slide-bg: #0f172a;
-  --slide-fg: #e2e8f0;
-  --accent: #38bdf8;
-  --code-bg: #1e293b;
-  --code-fg: #e2e8f0;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  --slide-bg: #0d1117;
+  --slide-fg: #e6edf3;
+  --accent: #58a6ff;
+  --code-bg: #161b22;
+  --code-fg: #e6edf3;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
   --slide-padding: 64px;
   --slide-max-width: 1100px;
 }
@@ -19,7 +19,7 @@ html, body {
 /* Title slide */
 .slide[data-index="0"] h1 {
   font-size: 3.5rem;
-  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  background: linear-gradient(135deg, #58a6ff, #d2a8ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -39,20 +39,20 @@ html, body {
 /* Code blocks */
 .slide pre {
   background: var(--code-bg);
-  border: 1px solid #334155;
+  border: 1px solid #30363d;
 }
 
 /* Blockquotes */
 .slide blockquote {
-  background: #1e293b;
-  border-left: 4px solid var(--accent);
+  background: #161b22;
+  border-left: 4px solid #58a6ff;
   border-radius: 0 8px 8px 0;
   padding: 1em 1.5em;
 }
 
 /* Links */
 .slide a {
-  color: var(--accent);
+  color: #58a6ff;
 }
 
 /* Tables */
@@ -60,10 +60,10 @@ html, body {
   color: var(--accent);
 }
 .slide th, .slide td {
-  border-bottom-color: #334155;
+  border-bottom-color: #30363d;
 }
 .slide tr:hover td {
-  background: #1e293b;
+  background: #161b22;
 }
 
 /* Progress bar */

@@ -1,3 +1,4 @@
 name = "dark"
-description = "Deep slate background with blue accents. Easy on the eyes."
+description = "GitHub Dark inspired theme. Easy on the eyes."
 author = "hotslice"
+hljs_theme = "github-dark"

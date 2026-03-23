@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import tomllib
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -59,12 +60,56 @@ def _read_file_or_empty(path: Path) -> str:
     return ""
 
 
+def _read_theme_meta(theme_dir: Path) -> dict:
+    """Read theme.toml and return its contents as a dict."""
+    toml_path = theme_dir / "theme.toml"
+    if toml_path.is_file():
+        with open(toml_path, "rb") as f:
+            return tomllib.load(f)
+    return {}
+
+
+def list_available_themes(theme_dir: str | None = None) -> list[dict]:
+    """List all available themes with their metadata.
+
+    Returns a list of dicts with keys: name, description, hljs_theme.
+    Searches bundled themes and user themes directories.
+    """
+    themes = []
+    seen: set[str] = set()
+
+    search_dirs = []
+    if theme_dir:
+        search_dirs.append(Path(theme_dir))
+    search_dirs.append(USER_CONFIG_DIR / "themes")
+    search_dirs.append(_BUNDLED_THEMES_DIR)
+
+    for base in search_dirs:
+        if not base.is_dir():
+            continue
+        for entry in sorted(base.iterdir()):
+            if entry.is_dir() and (entry / "theme.css").is_file() and entry.name not in seen:
+                seen.add(entry.name)
+                meta = _read_theme_meta(entry)
+                themes.append(
+                    {
+                        "name": entry.name,
+                        "description": meta.get("description", ""),
+                        "hljs_theme": meta.get("hljs_theme", "github-dark"),
+                    }
+                )
+    return themes
+
+
 def render_deck(deck: DeckData, config: Config) -> str:
     """Render a DeckData object to a complete HTML string."""
     theme_dir = _resolve_theme_dir(config.theme, config.theme_dir)
 
     theme_css = _read_file_or_empty(theme_dir / "theme.css")
     theme_js = _read_file_or_empty(theme_dir / "theme.js")
+
+    meta = _read_theme_meta(theme_dir)
+    hljs_theme = meta.get("hljs_theme", "github-dark")
 
     title = config.title or deck.title or "Untitled Presentation"
 
@@ -80,6 +125,7 @@ def render_deck(deck: DeckData, config: Config) -> str:
         theme_css=theme_css,
         theme_js=theme_js,
         metadata=config.metadata,
+        hljs_theme=hljs_theme,
     )
 
 

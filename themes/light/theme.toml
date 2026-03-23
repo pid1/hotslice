@@ -1,3 +1,4 @@
 name = "light"
-description = "Clean white background with indigo accents. The default hotslice theme."
+description = "GitHub Light inspired theme with blue accents."
 author = "hotslice"
+hljs_theme = "github"
