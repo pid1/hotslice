@@ -1,0 +1,12 @@
+name = "Base16 Green Screen"
+description = "Base16 Green Screen theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-green-screen"
+variant = "dark"
+
+[colors]
+slide_bg = "#010"
+slide_fg = "#0b0"
+accent = "#050"
+code_bg = "#010"
+code_fg = "#0b0"

@@ -1,0 +1,12 @@
+name = "Base16 Black Metal Bathory"
+description = "Base16 Black Metal Bathory theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-black-metal-bathory"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#c1c1c1"
+accent = "#aaa"
+code_bg = "#000"
+code_fg = "#c1c1c1"

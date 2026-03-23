@@ -1,0 +1,12 @@
+name = "Base16 Mexico Light"
+description = "Base16 Mexico Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-mexico-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f8f8f8"
+slide_fg = "#383838"
+accent = "#4b8093"
+code_bg = "#f8f8f8"
+code_fg = "#383838"

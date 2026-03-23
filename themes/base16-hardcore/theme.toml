@@ -1,0 +1,12 @@
+name = "Base16 Hardcore"
+description = "Base16 Hardcore theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-hardcore"
+variant = "dark"
+
+[colors]
+slide_bg = "#212121"
+slide_fg = "#cdcdcd"
+accent = "#708387"
+code_bg = "#212121"
+code_fg = "#cdcdcd"

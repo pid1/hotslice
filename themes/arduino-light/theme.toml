@@ -1,0 +1,12 @@
+name = "Arduino Light"
+description = "Arduino Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "arduino-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#434f54"
+accent = "#00979d"
+code_bg = "#fff"
+code_fg = "#434f54"

@@ -1,0 +1,12 @@
+name = "Base16 Brewer"
+description = "Base16 Brewer theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-brewer"
+variant = "dark"
+
+[colors]
+slide_bg = "#0c0d0e"
+slide_fg = "#b7b8b9"
+accent = "#80b1d3"
+code_bg = "#0c0d0e"
+code_fg = "#b7b8b9"

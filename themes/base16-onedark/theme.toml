@@ -1,0 +1,12 @@
+name = "Base16 Onedark"
+description = "Base16 Onedark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-onedark"
+variant = "dark"
+
+[colors]
+slide_bg = "#282c34"
+slide_fg = "#abb2bf"
+accent = "#56b6c2"
+code_bg = "#282c34"
+code_fg = "#abb2bf"

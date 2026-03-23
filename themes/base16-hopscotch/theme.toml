@@ -1,0 +1,12 @@
+name = "Base16 Hopscotch"
+description = "Base16 Hopscotch theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-hopscotch"
+variant = "dark"
+
+[colors]
+slide_bg = "#322931"
+slide_fg = "#b9b5b8"
+accent = "#149b93"
+code_bg = "#322931"
+code_fg = "#b9b5b8"

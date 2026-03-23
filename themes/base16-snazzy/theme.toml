@@ -1,0 +1,12 @@
+name = "Base16 Snazzy"
+description = "Base16 Snazzy theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-snazzy"
+variant = "dark"
+
+[colors]
+slide_bg = "#282a36"
+slide_fg = "#e2e4e5"
+accent = "#9aedfe"
+code_bg = "#282a36"
+code_fg = "#e2e4e5"

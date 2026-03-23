@@ -1,0 +1,12 @@
+name = "Base16 Grayscale Dark"
+description = "Base16 Grayscale Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-grayscale-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#101010"
+slide_fg = "#b9b9b9"
+accent = "#868686"
+code_bg = "#101010"
+code_fg = "#b9b9b9"

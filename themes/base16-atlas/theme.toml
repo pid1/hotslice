@@ -1,0 +1,12 @@
+name = "Base16 Atlas"
+description = "Base16 Atlas theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atlas"
+variant = "dark"
+
+[colors]
+slide_bg = "#002635"
+slide_fg = "#a1a19a"
+accent = "#14747e"
+code_bg = "#002635"
+code_fg = "#a1a19a"

@@ -1,0 +1,12 @@
+name = "Nord"
+description = "Nord theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "nord"
+variant = "dark"
+
+[colors]
+slide_bg = "#2e3440"
+slide_fg = "#e0e0e0"
+accent = "#81a1c1"
+code_bg = "#2e3440"
+code_fg = "#e0e0e0"

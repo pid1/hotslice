@@ -1,0 +1,12 @@
+name = "Base16 Atelier Heath"
+description = "Base16 Atelier Heath theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-heath"
+variant = "dark"
+
+[colors]
+slide_bg = "#1b181b"
+slide_fg = "#ab9bab"
+accent = "#159393"
+code_bg = "#1b181b"
+code_fg = "#ab9bab"

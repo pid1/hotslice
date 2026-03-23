@@ -1,0 +1,12 @@
+name = "Base16 Synth Midnight Terminal Dark"
+description = "Base16 Synth Midnight Terminal Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-synth-midnight-terminal-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#050608"
+slide_fg = "#c1c3c4"
+accent = "#42fff9"
+code_bg = "#050608"
+code_fg = "#c1c3c4"

@@ -1,0 +1,12 @@
+name = "Srcery"
+description = "Srcery theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "srcery"
+variant = "dark"
+
+[colors]
+slide_bg = "#1c1b19"
+slide_fg = "#fce8c3"
+accent = "#ef2f27"
+code_bg = "#1c1b19"
+code_fg = "#fce8c3"

@@ -1,0 +1,12 @@
+name = "Gradient Dark"
+description = "Gradient Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "gradient-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#652487"
+slide_fg = "#e7e4eb"
+accent = "#17fc95"
+code_bg = "#652487"
+code_fg = "#e7e4eb"

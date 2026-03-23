@@ -1,0 +1,12 @@
+name = "Base16 Sagelight"
+description = "Base16 Sagelight theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-sagelight"
+variant = "dark"
+
+[colors]
+slide_bg = "#f8f8f8"
+slide_fg = "#383838"
+accent = "#a2d6f5"
+code_bg = "#f8f8f8"
+code_fg = "#383838"

@@ -1,0 +1,12 @@
+name = "Base16 Dirtysea"
+description = "Base16 Dirtysea theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-dirtysea"
+variant = "dark"
+
+[colors]
+slide_bg = "#e0e0e0"
+slide_fg = "#000"
+accent = "#755b00"
+code_bg = "#e0e0e0"
+code_fg = "#000"

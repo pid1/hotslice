@@ -1,0 +1,12 @@
+name = "Base16 Gruvbox Light Soft"
+description = "Base16 Gruvbox Light Soft theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-gruvbox-light-soft"
+variant = "light"
+
+[colors]
+slide_bg = "#f2e5bc"
+slide_fg = "#504945"
+accent = "#427b58"
+code_bg = "#f2e5bc"
+code_fg = "#504945"

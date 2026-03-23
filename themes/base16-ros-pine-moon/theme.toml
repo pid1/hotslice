@@ -1,0 +1,12 @@
+name = "Base16 Ros Pine Moon"
+description = "Base16 Ros Pine Moon theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-ros-pine-moon"
+variant = "dark"
+
+[colors]
+slide_bg = "#232136"
+slide_fg = "#e0def4"
+accent = "#3e8fb0"
+code_bg = "#232136"
+code_fg = "#e0def4"

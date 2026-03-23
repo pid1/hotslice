@@ -1,0 +1,12 @@
+name = "Base16 Chalk"
+description = "Base16 Chalk theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-chalk"
+variant = "dark"
+
+[colors]
+slide_bg = "#151515"
+slide_fg = "#d0d0d0"
+accent = "#12cfc0"
+code_bg = "#151515"
+code_fg = "#d0d0d0"

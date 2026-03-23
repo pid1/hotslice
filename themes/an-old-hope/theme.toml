@@ -1,0 +1,12 @@
+name = "An Old Hope"
+description = "An Old Hope theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "an-old-hope"
+variant = "dark"
+
+[colors]
+slide_bg = "#1c1d21"
+slide_fg = "#c0c5ce"
+accent = "#b45ea4"
+code_bg = "#1c1d21"
+code_fg = "#c0c5ce"

@@ -1,0 +1,12 @@
+name = "NNFX Dark"
+description = "NNFX Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "nnfx-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#333"
+slide_fg = "#fff"
+accent = "#a7a"
+code_bg = "#333"
+code_fg = "#fff"

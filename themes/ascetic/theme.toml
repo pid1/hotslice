@@ -1,0 +1,12 @@
+name = "Ascetic"
+description = "Ascetic theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "ascetic"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#000"
+accent = "#4f46e5"
+code_bg = "#fff"
+code_fg = "#000"

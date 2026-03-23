@@ -1,0 +1,12 @@
+name = "Base16 Vulcan"
+description = "Base16 Vulcan theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-vulcan"
+variant = "dark"
+
+[colors]
+slide_bg = "#041523"
+slide_fg = "#5b778c"
+accent = "#977d7c"
+code_bg = "#041523"
+code_fg = "#5b778c"

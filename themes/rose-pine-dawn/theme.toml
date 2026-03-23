@@ -1,0 +1,12 @@
+name = "Rose Pine Dawn"
+description = "Rose Pine Dawn theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "rose-pine-dawn"
+variant = "light"
+
+[colors]
+slide_bg = "#faf4ed"
+slide_fg = "#575279"
+accent = "#56949f"
+code_bg = "#faf4ed"
+code_fg = "#575279"

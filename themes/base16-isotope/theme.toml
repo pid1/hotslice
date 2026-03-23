@@ -1,0 +1,12 @@
+name = "Base16 Isotope"
+description = "Base16 Isotope theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-isotope"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#d0d0d0"
+accent = "#0ff"
+code_bg = "#000"
+code_fg = "#d0d0d0"

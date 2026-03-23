@@ -1,0 +1,12 @@
+name = "Base16 Sandcastle"
+description = "Base16 Sandcastle theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-sandcastle"
+variant = "dark"
+
+[colors]
+slide_bg = "#282c34"
+slide_fg = "#a89984"
+accent = "#83a598"
+code_bg = "#282c34"
+code_fg = "#a89984"

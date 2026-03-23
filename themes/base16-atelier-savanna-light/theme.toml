@@ -1,0 +1,12 @@
+name = "Base16 Atelier Savanna Light"
+description = "Base16 Atelier Savanna Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-savanna-light"
+variant = "light"
+
+[colors]
+slide_bg = "#ecf4ee"
+slide_fg = "#526057"
+accent = "#1c9aa0"
+code_bg = "#ecf4ee"
+code_fg = "#526057"

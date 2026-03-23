@@ -1,0 +1,12 @@
+name = "Base16 Atelier Plateau"
+description = "Base16 Atelier Plateau theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-plateau"
+variant = "dark"
+
+[colors]
+slide_bg = "#1b1818"
+slide_fg = "#8a8585"
+accent = "#5485b6"
+code_bg = "#1b1818"
+code_fg = "#8a8585"

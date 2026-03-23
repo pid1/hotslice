@@ -1,0 +1,12 @@
+name = "Base16 Silk Dark"
+description = "Base16 Silk Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-silk-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#0e3c46"
+slide_fg = "#c7dbdd"
+accent = "#3fb2b9"
+code_bg = "#0e3c46"
+code_fg = "#c7dbdd"

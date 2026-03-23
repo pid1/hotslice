@@ -1,0 +1,12 @@
+name = "Base16 Summerfruit Light"
+description = "Base16 Summerfruit Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-summerfruit-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#101010"
+accent = "#1faaaa"
+code_bg = "#fff"
+code_fg = "#101010"

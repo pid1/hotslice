@@ -1,0 +1,12 @@
+name = "Base16 Darktooth"
+description = "Base16 Darktooth theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-darktooth"
+variant = "dark"
+
+[colors]
+slide_bg = "#1d2021"
+slide_fg = "#a89984"
+accent = "#8ba59b"
+code_bg = "#1d2021"
+code_fg = "#a89984"

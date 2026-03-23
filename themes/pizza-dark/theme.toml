@@ -2,3 +2,10 @@ name = "Pizza Dark"
 description = "Rich dark pizza-inspired theme with orange and red accents."
 author = "hotslice"
 hljs_theme = "github-dark"
+
+[colors]
+slide_bg = "#1A0F0A"
+slide_fg = "#FFF8F0"
+accent = "#F4A261"
+code_bg = "#2D1810"
+code_fg = "#FDEBD0"

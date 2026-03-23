@@ -1,0 +1,12 @@
+name = "Base16 Atelier Cave"
+description = "Base16 Atelier Cave theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-cave"
+variant = "dark"
+
+[colors]
+slide_bg = "#19171c"
+slide_fg = "#8b8792"
+accent = "#398bc6"
+code_bg = "#19171c"
+code_fg = "#8b8792"

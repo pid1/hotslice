@@ -1,0 +1,12 @@
+name = "GitHub"
+description = "GitHub theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "github"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#24292e"
+accent = "#d73a49"
+code_bg = "#fff"
+code_fg = "#24292e"

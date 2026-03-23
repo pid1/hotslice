@@ -1,0 +1,12 @@
+name = "Base16 Shapeshifter"
+description = "Base16 Shapeshifter theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-shapeshifter"
+variant = "dark"
+
+[colors]
+slide_bg = "#f9f9f9"
+slide_fg = "#102015"
+accent = "#23edda"
+code_bg = "#f9f9f9"
+code_fg = "#102015"

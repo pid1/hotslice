@@ -1,0 +1,12 @@
+name = "Base16 Solarized Dark"
+description = "Base16 Solarized Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-solarized-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#002b36"
+slide_fg = "#93a1a1"
+accent = "#2aa198"
+code_bg = "#002b36"
+code_fg = "#93a1a1"

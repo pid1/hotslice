@@ -7,7 +7,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F355;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -163,11 +163,30 @@
       box-shadow: 4px 5px 0px #962D22;
     }
 
+    /* Theme search */
+    .theme-search {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 12px 12px 0 0;
+      border: 3px solid var(--secondary);
+      border-bottom: none;
+      background: var(--surface);
+      color: var(--fg);
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 3px 0 0px var(--secondary);
+    }
+    .theme-search:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
     /* Theme select */
     .theme-select {
       width: 100%;
       padding: 12px 16px;
-      border-radius: 12px;
+      border-radius: 0 0 12px 12px;
       border: 3px solid var(--secondary);
       background: var(--surface);
       color: var(--fg);
@@ -263,30 +282,13 @@
     .preview-inner pre code {
       font-size: 0.65rem;
       line-height: 1.4;
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
-    /* Scoped pizza-light styles for preview */
-    .preview-light {
-      background: #FFF8F0;
-      color: #3D2B1F;
-    }
-    .preview-light h2 { color: #E63946; }
-    .preview-light h3 { color: #F4A261; }
-    .preview-light pre { background: #FDEBD0; border: 2px solid #F4A261; border-radius: 8px; }
-    .preview-light li::marker { color: #F4A261; }
-    .preview-light a { color: #E63946; }
-
-    /* Scoped pizza-dark styles for preview */
-    .preview-dark {
-      background: #1A0F0A;
-      color: #FFF8F0;
-    }
-    .preview-dark h2 { color: #F4A261; }
-    .preview-dark h3 { color: #E63946; }
-    .preview-dark pre { background: #2D1810; border: 2px solid #3D2B1F; border-radius: 8px; }
-    .preview-dark li::marker { color: #E63946; }
-    .preview-dark a { color: #F4A261; }
+    /* Dynamic preview accent (for elements that cannot use inline styles) */
+    .preview-slide { --preview-accent: #E63946; }
+    .preview-slide li::marker { color: var(--preview-accent); }
+    .preview-slide a { color: var(--preview-accent); }
 
     /* Footer */
     .footer {
@@ -337,15 +339,37 @@
         </div>
         <div class="field">
           <label for="theme">Theme</label>
-          <select id="theme" name="theme" class="theme-select">
-            {% for t in themes %}
-            <option value="{{ t.name }}"
-                    data-variant="{{ t.variant }}"
-                    data-hljs-theme="{{ t.hljs_theme }}"
-                    {% if t.name == "pizza-light" %}selected{% endif %}>
-              {{ t.display_name }}
-            </option>
-            {% endfor %}
+          <input type="text" id="theme-search" class="theme-search" placeholder="Search themes..." autocomplete="off">
+          <select id="theme" name="theme" class="theme-select" size="8">
+            <optgroup label="Light Themes">
+              {% for t in themes if t.variant == "light" %}
+              <option value="{{ t.name }}"
+                      data-variant="{{ t.variant }}"
+                      data-hljs-theme="{{ t.hljs_theme }}"
+                      data-slide-bg="{{ t.colors.slide_bg }}"
+                      data-slide-fg="{{ t.colors.slide_fg }}"
+                      data-accent="{{ t.colors.accent }}"
+                      data-code-bg="{{ t.colors.code_bg }}"
+                      data-code-fg="{{ t.colors.code_fg }}"
+                      {% if t.name == "pizza-light" %}selected{% endif %}>
+                {{ t.display_name }}
+              </option>
+              {% endfor %}
+            </optgroup>
+            <optgroup label="Dark Themes">
+              {% for t in themes if t.variant == "dark" %}
+              <option value="{{ t.name }}"
+                      data-variant="{{ t.variant }}"
+                      data-hljs-theme="{{ t.hljs_theme }}"
+                      data-slide-bg="{{ t.colors.slide_bg }}"
+                      data-slide-fg="{{ t.colors.slide_fg }}"
+                      data-accent="{{ t.colors.accent }}"
+                      data-code-bg="{{ t.colors.code_bg }}"
+                      data-code-fg="{{ t.colors.code_fg }}">
+                {{ t.display_name }}
+              </option>
+              {% endfor %}
+            </optgroup>
           </select>
         </div>
         <button type="submit" class="build-btn">Build &amp; Download</button>
@@ -358,16 +382,16 @@
       <div class="preview-frame">
         <link id="preview-hljs-css" rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css">
-        <div id="preview-slide" class="preview-slide preview-light">
+        <div id="preview-slide" class="preview-slide" style="background: #FFF8F0; color: #3D2B1F;">
           <div class="preview-inner">
-            <h2>Sample Slide</h2>
+            <h2 style="color: #E63946;">Sample Slide</h2>
             <p>This is a preview of your slide theme.</p>
             <ul>
               <li>First point</li>
               <li>Second point</li>
               <li>Third point</li>
             </ul>
-            <pre><code class="language-python">def hello():
+            <pre style="background: #FDEBD0; border: 2px solid rgba(61,43,31,0.15); border-radius: 8px;"><code class="language-python">def hello():
     print("Hello, hotslice!")
 
 for i in range(3):
@@ -389,36 +413,70 @@ for i in range(3):
     var previewCss = document.getElementById('preview-hljs-css');
     var fileInput = document.getElementById('file');
     var fileLabel = document.getElementById('file-label-text');
+    var searchInput = document.getElementById('theme-search');
 
-    // Update file label when file is selected
+    // File label update
     fileInput.addEventListener('change', function() {
-      if (this.files.length > 0) {
-        fileLabel.textContent = this.files[0].name;
-      } else {
-        fileLabel.textContent = 'Choose a file...';
-      }
+      fileLabel.textContent = this.files.length > 0 ? this.files[0].name : 'Choose a file...';
     });
 
-    // Update preview when theme changes
-    select.addEventListener('change', function() {
+    // Theme search/filter
+    searchInput.addEventListener('input', function() {
+      var query = this.value.toLowerCase();
+      var options = select.querySelectorAll('option');
+      options.forEach(function(opt) {
+        var match = opt.textContent.toLowerCase().indexOf(query) !== -1;
+        opt.style.display = match ? '' : 'none';
+      });
+      // Show/hide optgroups based on whether they have visible options
+      select.querySelectorAll('optgroup').forEach(function(group) {
+        var visibleOptions = group.querySelectorAll('option:not([style*="display: none"])');
+        group.style.display = visibleOptions.length > 0 ? '' : 'none';
+      });
+    });
+
+    // Apply theme preview
+    function applyPreview() {
       var option = select.options[select.selectedIndex];
-      var variant = option.getAttribute('data-variant');
-      // Read hljs theme from data attribute
+      if (!option) return;
+
       var hljsSlug = option.getAttribute('data-hljs-theme') || 'github';
+      var slideBg = option.getAttribute('data-slide-bg') || '#ffffff';
+      var slideFg = option.getAttribute('data-slide-fg') || '#111111';
+      var accent = option.getAttribute('data-accent') || '#4f46e5';
+      var codeBg = option.getAttribute('data-code-bg') || '#f3f4f6';
+      var codeFg = option.getAttribute('data-code-fg') || '#1f2937';
 
-      // Update hljs stylesheet
+      // Apply colors to preview
+      previewSlide.style.background = slideBg;
+      previewSlide.style.color = slideFg;
+      previewSlide.style.setProperty('--preview-accent', accent);
+
+      var h2 = previewSlide.querySelector('h2');
+      if (h2) h2.style.color = accent;
+
+      var pre = previewSlide.querySelector('pre');
+      if (pre) {
+        pre.style.background = codeBg;
+        pre.style.borderColor = slideFg + '26'; // 15% opacity
+      }
+
+      var code = previewSlide.querySelector('pre code');
+      if (code) code.style.color = codeFg;
+
+      // Swap hljs stylesheet
       previewCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/' + hljsSlug + '.min.css';
-
-      // Toggle light/dark preview class
-      previewSlide.className = 'preview-slide ' + (variant === 'dark' ? 'preview-dark' : 'preview-light');
 
       // Re-highlight code after CSS loads
       previewCss.onload = function() {
         document.querySelectorAll('#preview-slide pre code').forEach(function(block) {
+          delete block.dataset.highlighted;
           hljs.highlightElement(block);
         });
       };
-    });
+    }
+
+    select.addEventListener('change', applyPreview);
 
     // Initial highlight
     hljs.highlightAll();

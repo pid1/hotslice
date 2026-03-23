@@ -1,0 +1,12 @@
+name = "Base16 Edge Light"
+description = "Base16 Edge Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-edge-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fafafa"
+slide_fg = "#5e646f"
+accent = "#509c93"
+code_bg = "#fafafa"
+code_fg = "#5e646f"

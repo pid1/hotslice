@@ -1,0 +1,12 @@
+name = "Base16 Windows 10 Light"
+description = "Base16 Windows 10 Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-windows-10-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f2f2f2"
+slide_fg = "#767676"
+accent = "#3a96dd"
+code_bg = "#f2f2f2"
+code_fg = "#767676"

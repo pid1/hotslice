@@ -1,0 +1,12 @@
+name = "Gradient Light"
+description = "Gradient Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "gradient-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f9ccff"
+slide_fg = "#250482"
+accent = "#7d2801"
+code_bg = "#f9ccff"
+code_fg = "#250482"

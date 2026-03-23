@@ -1,0 +1,12 @@
+name = "Base16 Bright"
+description = "Base16 Bright theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-bright"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#e0e0e0"
+accent = "#76c7b7"
+code_bg = "#000"
+code_fg = "#e0e0e0"

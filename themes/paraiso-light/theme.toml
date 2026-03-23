@@ -1,0 +1,12 @@
+name = "Paraiso Light"
+description = "Paraiso Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "paraiso-light"
+variant = "light"
+
+[colors]
+slide_bg = "#e7e9db"
+slide_fg = "#4f424c"
+accent = "#815ba4"
+code_bg = "#e7e9db"
+code_fg = "#4f424c"

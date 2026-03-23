@@ -1,0 +1,12 @@
+name = "Base16 Atelier Forest Light"
+description = "Base16 Atelier Forest Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-forest-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f1efee"
+slide_fg = "#68615e"
+accent = "#3d97b8"
+code_bg = "#f1efee"
+code_fg = "#68615e"

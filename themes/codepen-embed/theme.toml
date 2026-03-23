@@ -1,0 +1,12 @@
+name = "Codepen Embed"
+description = "Codepen Embed theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "codepen-embed"
+variant = "dark"
+
+[colors]
+slide_bg = "#222"
+slide_fg = "#fff"
+accent = "#8f9c6c"
+code_bg = "#222"
+code_fg = "#fff"

@@ -1,0 +1,12 @@
+name = "Base16 Tango"
+description = "Base16 Tango theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-tango"
+variant = "dark"
+
+[colors]
+slide_bg = "#2e3436"
+slide_fg = "#d3d7cf"
+accent = "#06989a"
+code_bg = "#2e3436"
+code_fg = "#d3d7cf"

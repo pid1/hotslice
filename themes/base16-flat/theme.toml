@@ -1,0 +1,12 @@
+name = "Base16 Flat"
+description = "Base16 Flat theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-flat"
+variant = "dark"
+
+[colors]
+slide_bg = "#2c3e50"
+slide_fg = "#e0e0e0"
+accent = "#1abc9c"
+code_bg = "#2c3e50"
+code_fg = "#e0e0e0"

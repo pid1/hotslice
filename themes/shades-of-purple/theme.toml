@@ -1,0 +1,12 @@
+name = "Shades Of Purple"
+description = "Shades Of Purple theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "shades-of-purple"
+variant = "dark"
+
+[colors]
+slide_bg = "#2d2b57"
+slide_fg = "#e3dfff"
+accent = "#fb9e00"
+code_bg = "#2d2b57"
+code_fg = "#e3dfff"

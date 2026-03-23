@@ -1,0 +1,12 @@
+name = "Base16 Danqing"
+description = "Base16 Danqing theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-danqing"
+variant = "dark"
+
+[colors]
+slide_bg = "#2d302f"
+slide_fg = "#e0f0ef"
+accent = "#30dff3"
+code_bg = "#2d302f"
+code_fg = "#e0f0ef"

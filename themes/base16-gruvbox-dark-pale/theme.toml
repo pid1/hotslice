@@ -1,0 +1,12 @@
+name = "Base16 Gruvbox Dark Pale"
+description = "Base16 Gruvbox Dark Pale theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-gruvbox-dark-pale"
+variant = "dark"
+
+[colors]
+slide_bg = "#262626"
+slide_fg = "#dab997"
+accent = "#85ad85"
+code_bg = "#262626"
+code_fg = "#dab997"

@@ -1,0 +1,12 @@
+name = "Mono Blue"
+description = "Mono Blue theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "mono-blue"
+variant = "light"
+
+[colors]
+slide_bg = "#eaeef3"
+slide_fg = "#00193a"
+accent = "#4f46e5"
+code_bg = "#eaeef3"
+code_fg = "#00193a"

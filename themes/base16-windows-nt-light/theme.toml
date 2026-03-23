@@ -1,0 +1,12 @@
+name = "Base16 Windows Nt Light"
+description = "Base16 Windows Nt Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-windows-nt-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#808080"
+accent = "#008080"
+code_bg = "#fff"
+code_fg = "#808080"

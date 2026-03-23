@@ -1,0 +1,12 @@
+name = "Base16 Darkmoss"
+description = "Base16 Darkmoss theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-darkmoss"
+variant = "dark"
+
+[colors]
+slide_bg = "#171e1f"
+slide_fg = "#c7c7a5"
+accent = "#66d9ef"
+code_bg = "#171e1f"
+code_fg = "#c7c7a5"

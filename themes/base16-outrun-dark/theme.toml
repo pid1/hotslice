@@ -1,0 +1,12 @@
+name = "Base16 Outrun Dark"
+description = "Base16 Outrun Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-outrun-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#00002a"
+slide_fg = "#d0d0fa"
+accent = "#0ef0f0"
+code_bg = "#00002a"
+code_fg = "#d0d0fa"

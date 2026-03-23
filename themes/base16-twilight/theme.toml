@@ -1,0 +1,12 @@
+name = "Base16 Twilight"
+description = "Base16 Twilight theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-twilight"
+variant = "dark"
+
+[colors]
+slide_bg = "#1e1e1e"
+slide_fg = "#a7a7a7"
+accent = "#afc4db"
+code_bg = "#1e1e1e"
+code_fg = "#a7a7a7"

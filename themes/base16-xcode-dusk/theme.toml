@@ -1,0 +1,12 @@
+name = "Base16 Xcode Dusk"
+description = "Base16 Xcode Dusk theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-xcode-dusk"
+variant = "dark"
+
+[colors]
+slide_bg = "#282b35"
+slide_fg = "#939599"
+accent = "#00a0be"
+code_bg = "#282b35"
+code_fg = "#939599"

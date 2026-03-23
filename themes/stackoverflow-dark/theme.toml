@@ -1,0 +1,12 @@
+name = "Stack Overflow Dark"
+description = "Stack Overflow Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "stackoverflow-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#1c1b1b"
+slide_fg = "#fff"
+accent = "#88aece"
+code_bg = "#1c1b1b"
+code_fg = "#fff"
