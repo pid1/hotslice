@@ -1,0 +1,89 @@
+/* hotslice pizza-dark theme -- dark pizza-inspired palette from onapizza */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap');
+
+:root {
+  --slide-bg: #1A0F0A;
+  --slide-fg: #FFF8F0;
+  --accent: #F4A261;
+  --code-bg: #2D1810;
+  --code-fg: #FDEBD0;
+  --font-sans: 'Fredoka', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --slide-padding: 64px;
+  --slide-max-width: 1100px;
+}
+
+html, body {
+  background: var(--slide-bg);
+}
+
+/* Title slide */
+.slide[data-index="0"] h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #F4A261, #E63946);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide[data-index="0"] p {
+  font-size: 1.4rem;
+  opacity: 0.55;
+}
+
+/* Accent bar on non-title slides */
+.slide:not([data-index="0"]) .slide-inner {
+  border-top: 3px dashed var(--accent);
+  padding-top: 1.5rem;
+}
+
+/* Headings */
+.slide h2 {
+  color: #F4A261;
+}
+
+.slide h3 {
+  color: #E63946;
+}
+
+/* Code blocks */
+.slide pre {
+  background: var(--code-bg);
+  border: 2px solid #3D2B1F;
+  border-radius: 12px;
+}
+
+/* Blockquotes */
+.slide blockquote {
+  background: #2D1810;
+  border-left: 4px solid #F4A261;
+  border-radius: 0 12px 12px 0;
+  padding: 1em 1.5em;
+}
+
+/* Links */
+.slide a {
+  color: #F4A261;
+}
+
+/* Tables */
+.slide th {
+  color: var(--accent);
+}
+.slide th, .slide td {
+  border-bottom-color: #3D2B1F;
+}
+.slide tr:hover td {
+  background: #2D1810;
+}
+
+/* List markers */
+.slide li::marker {
+  color: #E63946;
+}
+
+/* Progress bar */
+#progress-bar {
+  background: linear-gradient(90deg, #F4A261, #E63946);
+}

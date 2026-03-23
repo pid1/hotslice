@@ -8,6 +8,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from hotslice.config import USER_CONFIG_DIR, Config
+from hotslice.hljs_themes import all_hljs_themes, get_hljs_theme_info
 from hotslice.parser import DeckData
 
 # Bundled themes directory (sibling to this package)
@@ -72,12 +73,14 @@ def _read_theme_meta(theme_dir: Path) -> dict:
 def list_available_themes(theme_dir: str | None = None) -> list[dict]:
     """List all available themes with their metadata.
 
-    Returns a list of dicts with keys: name, description, hljs_theme.
-    Searches bundled themes and user themes directories.
+    Returns a list of dicts with keys: name, display_name, description,
+    hljs_theme, variant, type. Includes both on-disk themes and all
+    highlight.js themes from the registry.
     """
     themes = []
     seen: set[str] = set()
 
+    # On-disk themes
     search_dirs = []
     if theme_dir:
         search_dirs.append(Path(theme_dir))
@@ -94,22 +97,47 @@ def list_available_themes(theme_dir: str | None = None) -> list[dict]:
                 themes.append(
                     {
                         "name": entry.name,
+                        "display_name": meta.get("name", entry.name),
                         "description": meta.get("description", ""),
                         "hljs_theme": meta.get("hljs_theme", "github-dark"),
+                        "variant": "light" if "light" in entry.name else "dark",
+                        "type": "builtin",
                     }
                 )
+
+    # Add all hljs themes (skip any whose slug matches an on-disk theme name)
+    for hljs in all_hljs_themes():
+        if hljs["slug"] not in seen:
+            themes.append(
+                {
+                    "name": hljs["slug"],
+                    "display_name": hljs["name"],
+                    "description": f"Highlight.js {hljs['variant']} theme",
+                    "hljs_theme": hljs["slug"],
+                    "variant": hljs["variant"],
+                    "type": "hljs",
+                }
+            )
+
     return themes
 
 
 def render_deck(deck: DeckData, config: Config) -> str:
     """Render a DeckData object to a complete HTML string."""
-    theme_dir = _resolve_theme_dir(config.theme, config.theme_dir)
+    hljs_info = get_hljs_theme_info(config.theme)
+    if hljs_info:
+        # Map hljs theme to the appropriate pizza base theme
+        base = "pizza-dark" if hljs_info["variant"] == "dark" else "pizza-light"
+        theme_dir = _resolve_theme_dir(base, config.theme_dir)
+        hljs_theme = config.theme  # Use the hljs slug as the CDN stylesheet name
+    else:
+        # Standard on-disk theme
+        theme_dir = _resolve_theme_dir(config.theme, config.theme_dir)
+        meta = _read_theme_meta(theme_dir)
+        hljs_theme = meta.get("hljs_theme", "github-dark")
 
     theme_css = _read_file_or_empty(theme_dir / "theme.css")
     theme_js = _read_file_or_empty(theme_dir / "theme.js")
-
-    meta = _read_theme_meta(theme_dir)
-    hljs_theme = meta.get("hljs_theme", "github-dark")
 
     title = config.title or deck.title or "Untitled Presentation"
 

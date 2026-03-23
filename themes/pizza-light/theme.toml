@@ -1,0 +1,4 @@
+name = "Pizza Light"
+description = "Warm pizza-inspired light theme with red and orange accents."
+author = "hotslice"
+hljs_theme = "github"
