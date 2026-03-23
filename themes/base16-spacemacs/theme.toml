@@ -1,0 +1,12 @@
+name = "Base16 Spacemacs"
+description = "Base16 Spacemacs theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-spacemacs"
+variant = "dark"
+
+[colors]
+slide_bg = "#1f2022"
+slide_fg = "#a3a3a3"
+accent = "#2d9574"
+code_bg = "#1f2022"
+code_fg = "#a3a3a3"

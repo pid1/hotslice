@@ -1,0 +1,12 @@
+name = "Base16 Material Palenight"
+description = "Base16 Material Palenight theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-material-palenight"
+variant = "dark"
+
+[colors]
+slide_bg = "#292d3e"
+slide_fg = "#959dcb"
+accent = "#89ddff"
+code_bg = "#292d3e"
+code_fg = "#959dcb"

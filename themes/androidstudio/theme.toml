@@ -1,0 +1,12 @@
+name = "Android Studio"
+description = "Android Studio theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "androidstudio"
+variant = "dark"
+
+[colors]
+slide_bg = "#282b2e"
+slide_fg = "#a9b7c6"
+accent = "#cc7832"
+code_bg = "#282b2e"
+code_fg = "#a9b7c6"

@@ -1,0 +1,12 @@
+name = "Google Code"
+description = "Google Code theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "googlecode"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#000"
+accent = "#008"
+code_bg = "#fff"
+code_fg = "#000"

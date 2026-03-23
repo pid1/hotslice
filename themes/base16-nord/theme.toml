@@ -1,0 +1,12 @@
+name = "Base16 Nord"
+description = "Base16 Nord theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-nord"
+variant = "dark"
+
+[colors]
+slide_bg = "#2e3440"
+slide_fg = "#e5e9f0"
+accent = "#88c0d0"
+code_bg = "#2e3440"
+code_fg = "#e5e9f0"

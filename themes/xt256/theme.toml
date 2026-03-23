@@ -1,0 +1,12 @@
+name = "XT256"
+description = "XT256 theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "xt256"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#eaeaea"
+accent = "#fff000"
+code_bg = "#000"
+code_fg = "#eaeaea"

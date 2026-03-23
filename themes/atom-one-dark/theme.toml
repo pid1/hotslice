@@ -1,0 +1,12 @@
+name = "Atom One Dark"
+description = "Atom One Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "atom-one-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#282c34"
+slide_fg = "#abb2bf"
+accent = "#c678dd"
+code_bg = "#282c34"
+code_fg = "#abb2bf"

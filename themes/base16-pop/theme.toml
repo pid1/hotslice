@@ -1,0 +1,12 @@
+name = "Base16 Pop"
+description = "Base16 Pop theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-pop"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#d0d0d0"
+accent = "#0ab"
+code_bg = "#000"
+code_fg = "#d0d0d0"

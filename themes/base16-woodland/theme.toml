@@ -1,0 +1,12 @@
+name = "Base16 Woodland"
+description = "Base16 Woodland theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-woodland"
+variant = "dark"
+
+[colors]
+slide_bg = "#231e18"
+slide_fg = "#cabcb1"
+accent = "#6eb958"
+code_bg = "#231e18"
+code_fg = "#cabcb1"

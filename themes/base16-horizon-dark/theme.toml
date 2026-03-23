@@ -1,0 +1,12 @@
+name = "Base16 Horizon Dark"
+description = "Base16 Horizon Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-horizon-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#1c1e26"
+slide_fg = "#cbced0"
+accent = "#24a8b4"
+code_bg = "#1c1e26"
+code_fg = "#cbced0"

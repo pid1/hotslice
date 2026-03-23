@@ -1,0 +1,12 @@
+name = "Night Owl"
+description = "Night Owl theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "night-owl"
+variant = "dark"
+
+[colors]
+slide_bg = "#011627"
+slide_fg = "#d6deeb"
+accent = "#c792ea"
+code_bg = "#011627"
+code_fg = "#d6deeb"

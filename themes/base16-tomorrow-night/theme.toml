@@ -1,0 +1,12 @@
+name = "Base16 Tomorrow Night"
+description = "Base16 Tomorrow Night theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-tomorrow-night"
+variant = "dark"
+
+[colors]
+slide_bg = "#2d2d2d"
+slide_fg = "#ccc"
+accent = "#6cc"
+code_bg = "#2d2d2d"
+code_fg = "#ccc"

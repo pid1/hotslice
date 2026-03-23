@@ -1,0 +1,12 @@
+name = "Kimbie Dark"
+description = "Kimbie Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "kimbie-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#221a0f"
+slide_fg = "#d3af86"
+accent = "#98676a"
+code_bg = "#221a0f"
+code_fg = "#d3af86"

@@ -1,0 +1,12 @@
+name = "Obsidian"
+description = "Obsidian theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "obsidian"
+variant = "dark"
+
+[colors]
+slide_bg = "#282b2e"
+slide_fg = "#e0e2e4"
+accent = "#93c763"
+code_bg = "#282b2e"
+code_fg = "#e0e2e4"

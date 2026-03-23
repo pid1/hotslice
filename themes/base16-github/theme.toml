@@ -1,0 +1,12 @@
+name = "Base16 Github"
+description = "Base16 Github theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-github"
+variant = "dark"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#333"
+accent = "#183691"
+code_bg = "#fff"
+code_fg = "#333"

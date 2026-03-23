@@ -1,0 +1,12 @@
+name = "Base16 Fruit Soda"
+description = "Base16 Fruit Soda theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-fruit-soda"
+variant = "dark"
+
+[colors]
+slide_bg = "#f1ecf1"
+slide_fg = "#515151"
+accent = "#0f9cfd"
+code_bg = "#f1ecf1"
+code_fg = "#515151"

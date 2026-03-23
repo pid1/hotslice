@@ -1,0 +1,12 @@
+name = "Base16 Default Light"
+description = "Base16 Default Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-default-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f8f8f8"
+slide_fg = "#383838"
+accent = "#86c1b9"
+code_bg = "#f8f8f8"
+code_fg = "#383838"

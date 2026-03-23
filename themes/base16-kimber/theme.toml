@@ -1,0 +1,12 @@
+name = "Base16 Kimber"
+description = "Base16 Kimber theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-kimber"
+variant = "dark"
+
+[colors]
+slide_bg = "#222"
+slide_fg = "#dedee7"
+accent = "#78b4b4"
+code_bg = "#222"
+code_fg = "#dedee7"

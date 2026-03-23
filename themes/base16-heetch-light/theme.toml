@@ -1,0 +1,12 @@
+name = "Base16 Heetch Light"
+description = "Base16 Heetch Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-heetch-light"
+variant = "light"
+
+[colors]
+slide_bg = "#feffff"
+slide_fg = "#5a496e"
+accent = "#c33678"
+code_bg = "#feffff"
+code_fg = "#5a496e"

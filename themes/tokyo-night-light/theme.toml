@@ -1,0 +1,12 @@
+name = "Tokyo Night Light"
+description = "Tokyo Night Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "tokyo-night-light"
+variant = "light"
+
+[colors]
+slide_bg = "#d5d6db"
+slide_fg = "#565a6e"
+accent = "#0f4b6e"
+code_bg = "#d5d6db"
+code_fg = "#565a6e"

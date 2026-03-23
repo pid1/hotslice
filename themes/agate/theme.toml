@@ -1,0 +1,12 @@
+name = "Agate"
+description = "Agate theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "agate"
+variant = "dark"
+
+[colors]
+slide_bg = "#333"
+slide_fg = "#fff"
+accent = "#fcc28c"
+code_bg = "#333"
+code_fg = "#fff"

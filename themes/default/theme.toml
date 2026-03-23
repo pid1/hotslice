@@ -1,0 +1,12 @@
+name = "Default"
+description = "Default theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "default"
+variant = "light"
+
+[colors]
+slide_bg = "#f3f3f3"
+slide_fg = "#444"
+accent = "#4f46e5"
+code_bg = "#f3f3f3"
+code_fg = "#444"

@@ -1,0 +1,12 @@
+name = "Base16 Nebula"
+description = "Base16 Nebula theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-nebula"
+variant = "dark"
+
+[colors]
+slide_bg = "#22273b"
+slide_fg = "#a4a6a9"
+accent = "#226f68"
+code_bg = "#22273b"
+code_fg = "#a4a6a9"

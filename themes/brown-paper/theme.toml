@@ -1,0 +1,12 @@
+name = "Brown Paper"
+description = "Brown Paper theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "brown-paper"
+variant = "light"
+
+[colors]
+slide_bg = "url(./brown-papersq.png)"
+slide_fg = "#363c69"
+accent = "#059"
+code_bg = "url(./brown-papersq.png)"
+code_fg = "#363c69"

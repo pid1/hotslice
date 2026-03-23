@@ -1,0 +1,12 @@
+name = "Base16 Papercolor Light"
+description = "Base16 Papercolor Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-papercolor-light"
+variant = "light"
+
+[colors]
+slide_bg = "#eee"
+slide_fg = "#444"
+accent = "#d75f00"
+code_bg = "#eee"
+code_fg = "#444"

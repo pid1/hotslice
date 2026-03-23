@@ -1,0 +1,12 @@
+name = "Base16 Equilibrium Light"
+description = "Base16 Equilibrium Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-equilibrium-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f5f0e7"
+slide_fg = "#43474e"
+accent = "#007a72"
+code_bg = "#f5f0e7"
+code_fg = "#43474e"

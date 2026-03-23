@@ -1,0 +1,12 @@
+name = "Base16 Unikitty Light"
+description = "Base16 Unikitty Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-unikitty-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#6c696e"
+accent = "#149bda"
+code_bg = "#fff"
+code_fg = "#6c696e"

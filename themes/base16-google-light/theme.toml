@@ -1,0 +1,12 @@
+name = "Base16 Google Light"
+description = "Base16 Google Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-google-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#373b41"
+accent = "#3971ed"
+code_bg = "#fff"
+code_fg = "#373b41"

@@ -1,0 +1,12 @@
+name = "Base16 Materia"
+description = "Base16 Materia theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-materia"
+variant = "dark"
+
+[colors]
+slide_bg = "#263238"
+slide_fg = "#cdd3de"
+accent = "#80cbc4"
+code_bg = "#263238"
+code_fg = "#cdd3de"

@@ -1,0 +1,12 @@
+name = "Base16 Humanoid Light"
+description = "Base16 Humanoid Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-humanoid-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f8f8f2"
+slide_fg = "#232629"
+accent = "#008e8e"
+code_bg = "#f8f8f2"
+code_fg = "#232629"

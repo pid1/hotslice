@@ -1,0 +1,12 @@
+name = "Base16 Gigavolt"
+description = "Base16 Gigavolt theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-gigavolt"
+variant = "dark"
+
+[colors]
+slide_bg = "#202126"
+slide_fg = "#e9e7e1"
+accent = "#fb6acb"
+code_bg = "#202126"
+code_fg = "#e9e7e1"

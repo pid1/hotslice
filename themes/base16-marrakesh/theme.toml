@@ -1,0 +1,12 @@
+name = "Base16 Marrakesh"
+description = "Base16 Marrakesh theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-marrakesh"
+variant = "dark"
+
+[colors]
+slide_bg = "#201602"
+slide_fg = "#948e48"
+accent = "#75a738"
+code_bg = "#201602"
+code_fg = "#948e48"

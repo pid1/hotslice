@@ -1,0 +1,12 @@
+name = "ISBL Editor Light"
+description = "ISBL Editor Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "isbl-editor-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#000"
+accent = "#000"
+code_bg = "#fff"
+code_fg = "#000"

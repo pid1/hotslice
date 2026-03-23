@@ -1,0 +1,12 @@
+name = "Base16 London Tube"
+description = "Base16 London Tube theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-london-tube"
+variant = "dark"
+
+[colors]
+slide_bg = "#231f20"
+slide_fg = "#d9d8d8"
+accent = "#85cebc"
+code_bg = "#231f20"
+code_fg = "#d9d8d8"

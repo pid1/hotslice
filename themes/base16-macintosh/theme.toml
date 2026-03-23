@@ -1,0 +1,12 @@
+name = "Base16 Macintosh"
+description = "Base16 Macintosh theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-macintosh"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#c0c0c0"
+accent = "#02abea"
+code_bg = "#000"
+code_fg = "#c0c0c0"

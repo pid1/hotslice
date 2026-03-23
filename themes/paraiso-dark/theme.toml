@@ -1,0 +1,12 @@
+name = "Paraiso Dark"
+description = "Paraiso Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "paraiso-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#2f1e2e"
+slide_fg = "#a39e9b"
+accent = "#815ba4"
+code_bg = "#2f1e2e"
+code_fg = "#a39e9b"

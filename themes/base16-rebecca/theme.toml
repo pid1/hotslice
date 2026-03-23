@@ -1,0 +1,12 @@
+name = "Base16 Rebecca"
+description = "Base16 Rebecca theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-rebecca"
+variant = "dark"
+
+[colors]
+slide_bg = "#292a44"
+slide_fg = "#f1eff8"
+accent = "#8eaee0"
+code_bg = "#292a44"
+code_fg = "#f1eff8"

@@ -1,0 +1,12 @@
+name = "Arta"
+description = "Arta theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "arta"
+variant = "dark"
+
+[colors]
+slide_bg = "#222"
+slide_fg = "#aaa"
+accent = "#64a"
+code_bg = "#222"
+code_fg = "#aaa"

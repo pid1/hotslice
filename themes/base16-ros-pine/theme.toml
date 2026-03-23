@@ -1,0 +1,12 @@
+name = "Base16 Ros Pine"
+description = "Base16 Ros Pine theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-ros-pine"
+variant = "dark"
+
+[colors]
+slide_bg = "#191724"
+slide_fg = "#e0def4"
+accent = "#31748f"
+code_bg = "#191724"
+code_fg = "#e0def4"

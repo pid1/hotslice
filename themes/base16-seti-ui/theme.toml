@@ -1,0 +1,12 @@
+name = "Base16 Seti Ui"
+description = "Base16 Seti Ui theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-seti-ui"
+variant = "dark"
+
+[colors]
+slide_bg = "#151718"
+slide_fg = "#d6d6d6"
+accent = "#55dbbe"
+code_bg = "#151718"
+code_fg = "#d6d6d6"

@@ -1,0 +1,35 @@
+/* hotslice base16-brush-trees theme (auto-generated from highlight.js) */
+
+:root {
+  --slide-bg: #e3efef;
+  --slide-fg: #6d828e;
+  --accent: #86b3b3;
+  --code-bg: #e3efef;
+  --code-fg: #6d828e;
+  --font-mono: 'Atkinson Hyperlegible Mono', monospace;
+}
+
+html, body {
+  background: var(--slide-bg);
+}
+
+.slide h2 { color: var(--accent); }
+.slide h3 { color: var(--accent); opacity: 0.85; }
+
+.slide pre {
+  background: var(--code-bg);
+  border: 1px solid color-mix(in srgb, var(--slide-fg) 15%, transparent);
+  border-radius: 8px;
+}
+
+.slide blockquote {
+  border-left: 4px solid var(--accent);
+}
+
+.slide a { color: var(--accent); }
+.slide th { color: var(--accent); }
+.slide li::marker { color: var(--accent); }
+
+#progress-bar {
+  background: var(--accent);
+}

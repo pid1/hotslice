@@ -1,0 +1,12 @@
+name = "GML"
+description = "GML theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "gml"
+variant = "dark"
+
+[colors]
+slide_bg = "#222"
+slide_fg = "#c0c0c0"
+accent = "#ffb871"
+code_bg = "#222"
+code_fg = "#c0c0c0"

@@ -1,0 +1,12 @@
+name = "Base16 Solar Flare Light"
+description = "Base16 Solar Flare Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-solar-flare-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f5f7fa"
+slide_fg = "#586875"
+accent = "#52cbb0"
+code_bg = "#f5f7fa"
+code_fg = "#586875"

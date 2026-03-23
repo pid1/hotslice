@@ -1,0 +1,12 @@
+name = "Base16 Material Lighter"
+description = "Base16 Material Lighter theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-material-lighter"
+variant = "light"
+
+[colors]
+slide_bg = "#fafafa"
+slide_fg = "#80cbc4"
+accent = "#39adb5"
+code_bg = "#fafafa"
+code_fg = "#80cbc4"

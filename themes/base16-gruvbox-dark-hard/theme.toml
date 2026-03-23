@@ -1,0 +1,12 @@
+name = "Base16 Gruvbox Dark Hard"
+description = "Base16 Gruvbox Dark Hard theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-gruvbox-dark-hard"
+variant = "dark"
+
+[colors]
+slide_bg = "#1d2021"
+slide_fg = "#d5c4a1"
+accent = "#8ec07c"
+code_bg = "#1d2021"
+code_fg = "#d5c4a1"

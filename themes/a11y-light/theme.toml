@@ -1,0 +1,12 @@
+name = "A11y Light"
+description = "A11y Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "a11y-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fefefe"
+slide_fg = "#545454"
+accent = "#7928a1"
+code_bg = "#fefefe"
+code_fg = "#545454"

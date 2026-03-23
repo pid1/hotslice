@@ -1,0 +1,12 @@
+name = "Rainbow"
+description = "Rainbow theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "rainbow"
+variant = "dark"
+
+[colors]
+slide_bg = "#474949"
+slide_fg = "#d1d9e1"
+accent = "#c9c"
+code_bg = "#474949"
+code_fg = "#d1d9e1"

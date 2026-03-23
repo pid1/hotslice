@@ -1,0 +1,12 @@
+name = "Base16 Phd"
+description = "Base16 Phd theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-phd"
+variant = "dark"
+
+[colors]
+slide_bg = "#061229"
+slide_fg = "#b8bbc2"
+accent = "#72b9bf"
+code_bg = "#061229"
+code_fg = "#b8bbc2"

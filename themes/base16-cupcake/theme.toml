@@ -1,0 +1,12 @@
+name = "Base16 Cupcake"
+description = "Base16 Cupcake theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-cupcake"
+variant = "dark"
+
+[colors]
+slide_bg = "#fbf1f2"
+slide_fg = "#8b8198"
+accent = "#69a9a7"
+code_bg = "#fbf1f2"
+code_fg = "#8b8198"

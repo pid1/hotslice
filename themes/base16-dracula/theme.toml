@@ -1,0 +1,12 @@
+name = "Base16 Dracula"
+description = "Base16 Dracula theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-dracula"
+variant = "dark"
+
+[colors]
+slide_bg = "#282936"
+slide_fg = "#e9e9f4"
+accent = "#a1efe4"
+code_bg = "#282936"
+code_fg = "#e9e9f4"

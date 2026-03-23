@@ -1,0 +1,12 @@
+name = "Base16 Mellow Purple"
+description = "Base16 Mellow Purple theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-mellow-purple"
+variant = "dark"
+
+[colors]
+slide_bg = "#1e0528"
+slide_fg = "#fef"
+accent = "#b900b1"
+code_bg = "#1e0528"
+code_fg = "#fef"

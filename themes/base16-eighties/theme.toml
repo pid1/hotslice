@@ -1,0 +1,12 @@
+name = "Base16 Eighties"
+description = "Base16 Eighties theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-eighties"
+variant = "dark"
+
+[colors]
+slide_bg = "#2d2d2d"
+slide_fg = "#d3d0c8"
+accent = "#6cc"
+code_bg = "#2d2d2d"
+code_fg = "#d3d0c8"

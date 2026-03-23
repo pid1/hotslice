@@ -1,0 +1,12 @@
+name = "Base16 One Light"
+description = "Base16 One Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-one-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fafafa"
+slide_fg = "#383a42"
+accent = "#0184bc"
+code_bg = "#fafafa"
+code_fg = "#383a42"

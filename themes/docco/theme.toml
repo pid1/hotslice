@@ -1,0 +1,12 @@
+name = "Docco"
+description = "Docco theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "docco"
+variant = "light"
+
+[colors]
+slide_bg = "#f8f8ff"
+slide_fg = "#000"
+accent = "#954121"
+code_bg = "#f8f8ff"
+code_fg = "#000"

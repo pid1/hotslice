@@ -1,0 +1,12 @@
+name = "Base16 Icy Dark"
+description = "Base16 Icy Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-icy-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#021012"
+slide_fg = "#095b67"
+accent = "#26c6da"
+code_bg = "#021012"
+code_fg = "#095b67"

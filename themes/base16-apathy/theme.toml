@@ -1,0 +1,12 @@
+name = "Base16 Apathy"
+description = "Base16 Apathy theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-apathy"
+variant = "dark"
+
+[colors]
+slide_bg = "#031a16"
+slide_fg = "#81b5ac"
+accent = "#963e4c"
+code_bg = "#031a16"
+code_fg = "#81b5ac"

@@ -1,0 +1,12 @@
+name = "Base16 Ir Black"
+description = "Base16 Ir Black theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-ir-black"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#b5b3aa"
+accent = "#c6c5fe"
+code_bg = "#000"
+code_fg = "#b5b3aa"

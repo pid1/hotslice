@@ -1,0 +1,12 @@
+name = "Base16 Harmonic16 Light"
+description = "Base16 Harmonic16 Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-harmonic16-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f7f9fb"
+slide_fg = "#405c79"
+accent = "#568bbf"
+code_bg = "#f7f9fb"
+code_fg = "#405c79"

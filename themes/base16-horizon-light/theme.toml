@@ -1,0 +1,12 @@
+name = "Base16 Horizon Light"
+description = "Base16 Horizon Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-horizon-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fdf0ed"
+slide_fg = "#403c3d"
+accent = "#59e1e3"
+code_bg = "#fdf0ed"
+code_fg = "#403c3d"

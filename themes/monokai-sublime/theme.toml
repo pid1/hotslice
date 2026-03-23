@@ -1,0 +1,12 @@
+name = "Monokai Sublime"
+description = "Monokai Sublime theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "monokai-sublime"
+variant = "dark"
+
+[colors]
+slide_bg = "#23241f"
+slide_fg = "#f8f8f2"
+accent = "#f92672"
+code_bg = "#23241f"
+code_fg = "#f8f8f2"

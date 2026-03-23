@@ -1,0 +1,12 @@
+name = "Pojoaque"
+description = "Pojoaque theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "pojoaque"
+variant = "dark"
+
+[colors]
+slide_bg = "url(./pojoaque.jpg)"
+slide_fg = "#dccf8f"
+accent = "#b64926"
+code_bg = "url(./pojoaque.jpg)"
+code_fg = "#dccf8f"

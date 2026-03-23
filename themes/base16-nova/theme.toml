@@ -1,0 +1,12 @@
+name = "Base16 Nova"
+description = "Base16 Nova theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-nova"
+variant = "dark"
+
+[colors]
+slide_bg = "#3c4c55"
+slide_fg = "#c5d4dd"
+accent = "#f2c38f"
+code_bg = "#3c4c55"
+code_fg = "#c5d4dd"

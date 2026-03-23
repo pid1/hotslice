@@ -1,0 +1,12 @@
+name = "Base16 Oceanicnext"
+description = "Base16 Oceanicnext theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-oceanicnext"
+variant = "dark"
+
+[colors]
+slide_bg = "#1b2b34"
+slide_fg = "#c0c5ce"
+accent = "#5fb3b3"
+code_bg = "#1b2b34"
+code_fg = "#c0c5ce"

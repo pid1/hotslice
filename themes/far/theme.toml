@@ -1,0 +1,12 @@
+name = "Far"
+description = "Far theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "far"
+variant = "dark"
+
+[colors]
+slide_bg = "#000080"
+slide_fg = "#0ff"
+accent = "#fff"
+code_bg = "#000080"
+code_fg = "#0ff"
