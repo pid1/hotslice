@@ -143,22 +143,23 @@
     .file-label {
       display: block;
       width: 100%;
-      padding: 12px 25px;
+      padding: 14px 25px;
       background: var(--primary);
       color: #fff;
       text-align: center;
       border-radius: 30px;
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       border: 3px solid #C0392B;
       box-shadow: 3px 3px 0px #C0392B;
+      letter-spacing: 0.5px;
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .file-label:hover {
       background: #C0392B;
-      transform: scale(1.03) rotate(-0.5deg);
+      transform: scale(1.05) rotate(-0.5deg);
       box-shadow: 4px 5px 0px #962D22;
     }
 
@@ -337,28 +338,17 @@
         <div class="field">
           <label for="theme">Theme</label>
           <select id="theme" name="theme" class="theme-select">
-            <optgroup label="Hotslice Themes">
-              {% for t in themes if t.type == "builtin" %}
-              <option value="{{ t.name }}"
-                      data-variant="{{ t.variant }}"
-                      {% if t.name == "pizza-light" %}selected{% endif %}>
-                {{ t.display_name }}
-              </option>
-              {% endfor %}
-            </optgroup>
-            <optgroup label="Light Code Themes">
-              {% for t in themes if t.type == "hljs" and t.variant == "light" %}
-              <option value="{{ t.name }}" data-variant="light">{{ t.display_name }}</option>
-              {% endfor %}
-            </optgroup>
-            <optgroup label="Dark Code Themes">
-              {% for t in themes if t.type == "hljs" and t.variant == "dark" %}
-              <option value="{{ t.name }}" data-variant="dark">{{ t.display_name }}</option>
-              {% endfor %}
-            </optgroup>
+            {% for t in themes %}
+            <option value="{{ t.name }}"
+                    data-variant="{{ t.variant }}"
+                    data-hljs-theme="{{ t.hljs_theme }}"
+                    {% if t.name == "pizza-light" %}selected{% endif %}>
+              {{ t.display_name }}
+            </option>
+            {% endfor %}
           </select>
         </div>
-        <button type="submit" class="build-btn">Build &amp; Download &#127829;</button>
+        <button type="submit" class="build-btn">Build &amp; Download</button>
       </form>
     </div>
 
@@ -388,7 +378,7 @@ for i in range(3):
     </div>
   </div>
 
-  <div class="footer">Powered by <a href="https://github.com/pid1/hotslice">hotslice</a> &#127829;</div>
+  <div class="footer">Powered by <a href="https://github.com/pid1/hotslice">hotslice</a></div>
 
   <!-- highlight.js for preview syntax highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
@@ -413,13 +403,8 @@ for i in range(3):
     select.addEventListener('change', function() {
       var option = select.options[select.selectedIndex];
       var variant = option.getAttribute('data-variant');
-      var slug = select.value;
-
-      // Determine hljs CSS URL
-      var hljsSlug = slug;
-      // For builtin themes, map to their hljs_theme
-      if (slug === 'pizza-light') hljsSlug = 'github';
-      if (slug === 'pizza-dark') hljsSlug = 'github-dark';
+      // Read hljs theme from data attribute
+      var hljsSlug = option.getAttribute('data-hljs-theme') || 'github';
 
       // Update hljs stylesheet
       previewCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/' + hljsSlug + '.min.css';

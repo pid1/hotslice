@@ -8,7 +8,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from hotslice.config import USER_CONFIG_DIR, Config
-from hotslice.hljs_themes import all_hljs_themes, get_hljs_theme_info
+from hotslice.hljs_themes import get_hljs_theme_info
 from hotslice.parser import DeckData
 
 # Bundled themes directory (sibling to this package)
@@ -71,11 +71,11 @@ def _read_theme_meta(theme_dir: Path) -> dict:
 
 
 def list_available_themes(theme_dir: str | None = None) -> list[dict]:
-    """List all available themes with their metadata.
+    """List all available on-disk themes with their metadata.
 
     Returns a list of dicts with keys: name, display_name, description,
-    hljs_theme, variant, type. Includes both on-disk themes and all
-    highlight.js themes from the registry.
+    hljs_theme, variant, type. Only includes themes that have a theme.css
+    file on disk.
     """
     themes = []
     seen: set[str] = set()
@@ -104,20 +104,6 @@ def list_available_themes(theme_dir: str | None = None) -> list[dict]:
                         "type": "builtin",
                     }
                 )
-
-    # Add all hljs themes (skip any whose slug matches an on-disk theme name)
-    for hljs in all_hljs_themes():
-        if hljs["slug"] not in seen:
-            themes.append(
-                {
-                    "name": hljs["slug"],
-                    "display_name": hljs["name"],
-                    "description": f"Highlight.js {hljs['variant']} theme",
-                    "hljs_theme": hljs["slug"],
-                    "variant": hljs["variant"],
-                    "type": "hljs",
-                }
-            )
 
     return themes
 
