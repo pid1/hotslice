@@ -39,7 +39,7 @@ async def get_themes():
 @app.post("/convert")
 async def convert(
     file: UploadFile,
-    theme: str = Form("light"),
+    theme: str = Form("pizza-light"),
 ):
     """Convert uploaded markdown to HTML and return as download."""
     content = await file.read()

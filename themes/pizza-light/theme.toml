@@ -1,0 +1,11 @@
+name = "Pizza Light"
+description = "Warm pizza-inspired light theme with red and orange accents."
+author = "hotslice"
+hljs_theme = "github"
+
+[colors]
+slide_bg = "#FFF8F0"
+slide_fg = "#3D2B1F"
+accent = "#E63946"
+code_bg = "#FDEBD0"
+code_fg = "#3D2B1F"

@@ -1,0 +1,12 @@
+name = "Base16 Brush Trees"
+description = "Base16 Brush Trees theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-brush-trees"
+variant = "dark"
+
+[colors]
+slide_bg = "#e3efef"
+slide_fg = "#6d828e"
+accent = "#86b3b3"
+code_bg = "#e3efef"
+code_fg = "#6d828e"

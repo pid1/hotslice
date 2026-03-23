@@ -1,0 +1,12 @@
+name = "Base16 Atelier Dune"
+description = "Base16 Atelier Dune theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-dune"
+variant = "dark"
+
+[colors]
+slide_bg = "#20201d"
+slide_fg = "#a6a28c"
+accent = "#1fad83"
+code_bg = "#20201d"
+code_fg = "#a6a28c"

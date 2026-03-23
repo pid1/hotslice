@@ -1,0 +1,12 @@
+name = "Base16 Helios"
+description = "Base16 Helios theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-helios"
+variant = "dark"
+
+[colors]
+slide_bg = "#1d2021"
+slide_fg = "#d5d5d5"
+accent = "#1ba595"
+code_bg = "#1d2021"
+code_fg = "#d5d5d5"

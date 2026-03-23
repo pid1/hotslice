@@ -54,7 +54,7 @@ Write slides in Markdown, separated by `---`:
 ```markdown
 +++
 title = "My Talk"
-theme = "dark"
+theme = "pizza-dark"
 +++
 
 # Welcome
@@ -84,7 +84,7 @@ Add optional TOML frontmatter between `+++` fences at the top of your file:
 ```toml
 +++
 title = "My Talk"
-theme = "dark"
+theme = "pizza-dark"
 +++
 ```
 
@@ -113,7 +113,7 @@ hotslice build <input.md> [options]
 | Flag            | Default              | Description                        |
 |-----------------|----------------------|------------------------------------|
 | `-o, --output`  | `<input_stem>.html`  | Output HTML file path              |
-| `--theme`       | `light`              | Theme name or path                 |
+| `--theme`       | `pizza-light`        | Theme name or path                 |
 | `--theme-dir`   | bundled `themes/`    | Directory to search for themes     |
 | `--title`       | auto-detected        | Presentation title override        |
 | `--separator`   | `^---$`              | Slide separator regex              |
@@ -133,7 +133,7 @@ hotslice serve [options]
 | `--host`   | `0.0.0.0` | Host to bind to                |
 | `--port`   | `8000`     | Port to listen on              |
 
-Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, and download the generated HTML.
+Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme picker lists all 257 installed themes, grouped by Light and Dark, with a search box for quick filtering. Selecting a theme updates the preview with that theme's actual colors.
 
 **API endpoints:**
 
@@ -147,12 +147,24 @@ Open `http://localhost:8000` in your browser to upload a `.md` file, choose a th
 
 ### Built-in Themes
 
-- **light**: GitHub Light inspired. White background, blue accents (#0969da), `github` highlight.js stylesheet. (default)
-- **dark**: GitHub Dark inspired. Dark background (#0d1117), blue accents (#58a6ff), `github-dark` highlight.js stylesheet.
+hotslice ships with 257 themes: 2 hand-crafted pizza themes and 255 themes generated from the highlight.js stylesheet library.
 
-Use with `--theme dark` or set in frontmatter/config.
+**Hand-crafted themes:**
 
-Each theme specifies its own highlight.js color scheme via the `hljs_theme` field in `theme.toml`. The matching stylesheet is loaded from the highlight.js CDN automatically.
+- **pizza-light** (default): Warm pizza-inspired light theme with cream background (#FFF8F0), red/orange accents, and Fredoka font. Uses `github` highlight.js stylesheet.
+- **pizza-dark**: Rich dark pizza-inspired theme with charcoal background (#1A0F0A), orange/red accents, and Fredoka font. Uses `github-dark` highlight.js stylesheet.
+
+**Generated themes** (255 total, 74 light + 183 dark):
+
+Each highlight.js theme has an on-disk directory under `themes/` containing a `theme.css` and `theme.toml` with extracted colors. Use any of them by name:
+
+```bash
+hotslice build slides.md --theme monokai
+hotslice build slides.md --theme nord
+hotslice build slides.md --theme base16-dracula
+```
+
+All 257 themes appear in the web UI theme picker, grouped by Light and Dark. Each theme specifies its own highlight.js color scheme via the `hljs_theme` field in `theme.toml`. The matching stylesheet is loaded from the highlight.js CDN automatically.
 
 ### Theme Resolution Order
 
@@ -184,7 +196,7 @@ A theme is a directory with at minimum a `theme.css` file:
 themes/my-theme/
   theme.css       # Required: CSS overrides
   theme.js        # Optional: JS that runs after deck runtime
-  theme.toml      # Optional: metadata (name, description, author, hljs_theme)
+  theme.toml      # Optional: metadata (name, description, author, hljs_theme, variant, colors)
 ```
 
 The `theme.toml` file supports these fields:
@@ -194,9 +206,17 @@ name = "my-theme"
 description = "A brief description of the theme."
 author = "Your Name"
 hljs_theme = "github"   # highlight.js stylesheet name (default: "github-dark")
+variant = "light"       # "light" or "dark" (controls web UI grouping)
+
+[colors]
+slide_bg = "#ffffff"
+slide_fg = "#111111"
+accent = "#4f46e5"
+code_bg = "#f3f4f6"
+code_fg = "#1f2937"
 ```
 
-The `hljs_theme` value maps to a stylesheet on the highlight.js CDN. See the [highlight.js demo](https://highlightjs.org/demo) for available style names.
+The `hljs_theme` value maps to a stylesheet on the highlight.js CDN. See the [highlight.js demo](https://highlightjs.org/demo) for available style names. The `[colors]` section provides the web UI with color data for its live preview. The `variant` field controls whether the theme appears in the Light or Dark group in the web UI picker.
 
 Override the CSS custom properties to restyle everything:
 
@@ -208,11 +228,13 @@ Override the CSS custom properties to restyle everything:
   --code-bg: #f3f4f6;      /* code block background */
   --code-fg: #1f2937;      /* code text color */
   --font-sans: system-ui, sans-serif;
-  --font-mono: 'SF Mono', monospace;
+  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace;
   --slide-padding: 64px;
   --slide-max-width: 1100px;
 }
 ```
+
+Code blocks use [Atkinson Hyperlegible Mono](https://fonts.google.com/specimen/Atkinson+Hyperlegible+Mono) loaded from Google Fonts. The font is designed for maximum legibility at all sizes.
 
 The optional `theme.js` runs after the deck runtime, so you can add animations, custom key bindings, or other enhancements.
 
@@ -249,7 +271,7 @@ Set personal defaults that apply to all your projects:
 
 ```toml
 [defaults]
-theme = "dark"
+theme = "pizza-dark"
 separator = "^---$"
 
 [metadata]
@@ -267,7 +289,7 @@ Override user defaults for a specific project:
 
 ```toml
 [defaults]
-theme = "light"
+theme = "pizza-light"
 separator = "^---$"
 
 [metadata]

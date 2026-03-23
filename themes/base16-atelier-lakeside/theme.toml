@@ -1,0 +1,12 @@
+name = "Base16 Atelier Lakeside"
+description = "Base16 Atelier Lakeside theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-lakeside"
+variant = "dark"
+
+[colors]
+slide_bg = "#161b1d"
+slide_fg = "#7ea2b4"
+accent = "#2d8f6f"
+code_bg = "#161b1d"
+code_fg = "#7ea2b4"

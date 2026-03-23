@@ -1,0 +1,12 @@
+name = "Base16 Porple"
+description = "Base16 Porple theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-porple"
+variant = "dark"
+
+[colors]
+slide_bg = "#292c36"
+slide_fg = "#d8d8d8"
+accent = "#64878f"
+code_bg = "#292c36"
+code_fg = "#d8d8d8"

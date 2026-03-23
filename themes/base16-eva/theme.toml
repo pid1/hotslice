@@ -1,0 +1,12 @@
+name = "Base16 Eva"
+description = "Base16 Eva theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-eva"
+variant = "dark"
+
+[colors]
+slide_bg = "#2a3b4d"
+slide_fg = "#9fa2a6"
+accent = "#4b8f77"
+code_bg = "#2a3b4d"
+code_fg = "#9fa2a6"

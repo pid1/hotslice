@@ -8,6 +8,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from hotslice.config import USER_CONFIG_DIR, Config
+from hotslice.hljs_themes import get_hljs_theme_info
 from hotslice.parser import DeckData
 
 # Bundled themes directory (sibling to this package)
@@ -70,14 +71,16 @@ def _read_theme_meta(theme_dir: Path) -> dict:
 
 
 def list_available_themes(theme_dir: str | None = None) -> list[dict]:
-    """List all available themes with their metadata.
+    """List all available on-disk themes with their metadata.
 
-    Returns a list of dicts with keys: name, description, hljs_theme.
-    Searches bundled themes and user themes directories.
+    Returns a list of dicts with keys: name, display_name, description,
+    hljs_theme, variant, type. Only includes themes that have a theme.css
+    file on disk.
     """
     themes = []
     seen: set[str] = set()
 
+    # On-disk themes
     search_dirs = []
     if theme_dir:
         search_dirs.append(Path(theme_dir))
@@ -91,25 +94,52 @@ def list_available_themes(theme_dir: str | None = None) -> list[dict]:
             if entry.is_dir() and (entry / "theme.css").is_file() and entry.name not in seen:
                 seen.add(entry.name)
                 meta = _read_theme_meta(entry)
+                colors = meta.get("colors", {})
                 themes.append(
                     {
                         "name": entry.name,
+                        "display_name": meta.get("name", entry.name),
                         "description": meta.get("description", ""),
                         "hljs_theme": meta.get("hljs_theme", "github-dark"),
+                        "variant": meta.get(
+                            "variant",
+                            "light" if "light" in entry.name else "dark",
+                        ),
+                        "type": "builtin",
+                        "colors": {
+                            "slide_bg": colors.get("slide_bg", "#ffffff"),
+                            "slide_fg": colors.get("slide_fg", "#111111"),
+                            "accent": colors.get("accent", "#4f46e5"),
+                            "code_bg": colors.get("code_bg", "#f3f4f6"),
+                            "code_fg": colors.get("code_fg", "#1f2937"),
+                        },
                     }
                 )
-    return themes
+
+    return sorted(themes, key=lambda t: t["display_name"].lower())
 
 
 def render_deck(deck: DeckData, config: Config) -> str:
     """Render a DeckData object to a complete HTML string."""
-    theme_dir = _resolve_theme_dir(config.theme, config.theme_dir)
+    # Try on-disk theme first (covers generated hljs themes and custom themes)
+    try:
+        theme_dir = _resolve_theme_dir(config.theme, config.theme_dir)
+        meta = _read_theme_meta(theme_dir)
+        hljs_theme = meta.get("hljs_theme", "github-dark")
+    except FileNotFoundError:
+        # Fall back to hljs slug -> pizza base theme mapping
+        hljs_info = get_hljs_theme_info(config.theme)
+        if hljs_info:
+            base = "pizza-dark" if hljs_info["variant"] == "dark" else "pizza-light"
+            theme_dir = _resolve_theme_dir(base, config.theme_dir)
+            hljs_theme = config.theme
+        else:
+            raise FileNotFoundError(
+                f"Theme '{config.theme}' not found on disk and is not a known highlight.js theme."
+            ) from None
 
     theme_css = _read_file_or_empty(theme_dir / "theme.css")
     theme_js = _read_file_or_empty(theme_dir / "theme.js")
-
-    meta = _read_theme_meta(theme_dir)
-    hljs_theme = meta.get("hljs_theme", "github-dark")
 
     title = config.title or deck.title or "Untitled Presentation"
 

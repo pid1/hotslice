@@ -1,0 +1,12 @@
+name = "GitHub Dark Dimmed"
+description = "GitHub Dark Dimmed theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "github-dark-dimmed"
+variant = "dark"
+
+[colors]
+slide_bg = "#22272e"
+slide_fg = "#adbac7"
+accent = "#f47067"
+code_bg = "#22272e"
+code_fg = "#adbac7"

@@ -1,5 +1,5 @@
 [defaults]
-theme = "light"
+theme = "pizza-light"
 separator = "^---$"
 
 [metadata]

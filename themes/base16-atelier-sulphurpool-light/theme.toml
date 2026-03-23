@@ -1,0 +1,12 @@
+name = "Base16 Atelier Sulphurpool Light"
+description = "Base16 Atelier Sulphurpool Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-sulphurpool-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f5f7ff"
+slide_fg = "#5e6687"
+accent = "#22a2c9"
+code_bg = "#f5f7ff"
+code_fg = "#5e6687"

@@ -1,0 +1,12 @@
+name = "Hybrid"
+description = "Hybrid theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "hybrid"
+variant = "dark"
+
+[colors]
+slide_bg = "#1d1f21"
+slide_fg = "#c5c8c6"
+accent = "#707880"
+code_bg = "#1d1f21"
+code_fg = "#c5c8c6"

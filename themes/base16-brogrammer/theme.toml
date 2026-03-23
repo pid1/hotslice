@@ -1,0 +1,12 @@
+name = "Base16 Brogrammer"
+description = "Base16 Brogrammer theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-brogrammer"
+variant = "dark"
+
+[colors]
+slide_bg = "#1f1f1f"
+slide_fg = "#4e5ab7"
+accent = "#1081d6"
+code_bg = "#1f1f1f"
+code_fg = "#4e5ab7"

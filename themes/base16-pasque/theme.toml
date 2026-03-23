@@ -1,0 +1,12 @@
+name = "Base16 Pasque"
+description = "Base16 Pasque theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-pasque"
+variant = "dark"
+
+[colors]
+slide_bg = "#271c3a"
+slide_fg = "#dedcdf"
+accent = "#7263aa"
+code_bg = "#271c3a"
+code_fg = "#dedcdf"

@@ -1,0 +1,12 @@
+name = "Visual Studio 2015"
+description = "Visual Studio 2015 theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "vs2015"
+variant = "dark"
+
+[colors]
+slide_bg = "#1e1e1e"
+slide_fg = "#dcdcdc"
+accent = "#569cd6"
+code_bg = "#1e1e1e"
+code_fg = "#dcdcdc"

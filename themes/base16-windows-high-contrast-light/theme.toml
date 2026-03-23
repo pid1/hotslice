@@ -1,0 +1,12 @@
+name = "Base16 Windows High Contrast Light"
+description = "Base16 Windows High Contrast Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-windows-high-contrast-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fcfcfc"
+slide_fg = "#545454"
+accent = "#008080"
+code_bg = "#fcfcfc"
+code_fg = "#545454"

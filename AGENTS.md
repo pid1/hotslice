@@ -32,9 +32,16 @@ dev
 
 **IMPORTANT**: When working in this repository:
 
-1. **Always use devenv scripts** — Run `lint` not `ruff check .`
+1. **Always use devenv scripts** -- Run `lint` not `ruff check .`
 2. **Use `build`** to test changes: it builds `examples/demo.md` to `demo.html`
 3. **Run `lint`** before considering work complete
+
+### Design Decisions
+
+- `list_available_themes()` returns only on-disk themes (directories with `theme.css`). All 255 hljs themes now have generated on-disk directories, so this function returns 257 themes total. Do not add dynamic theme discovery to this function; it scans directories, reads `theme.toml`, and returns color metadata.
+- `render_deck()` tries on-disk theme resolution first, then falls back to hljs slug-to-pizza-base mapping. Since all hljs slugs now have on-disk themes, the fallback only triggers if a generated theme directory is deleted. Do not reverse this priority order.
+- Generated theme CSS files contain `auto-generated` in their first-line comment. The generator script (`scripts/generate_themes.py`) uses this marker to distinguish generated themes from hand-crafted ones (pizza-light, pizza-dark). Do not add this marker to hand-crafted themes; it would cause the generator to overwrite them.
+- The web template stores each theme's color values in `data-slide-bg`, `data-slide-fg`, `data-accent`, `data-code-bg`, `data-code-fg` attributes on `<option>` elements. The preview JS reads these attributes to apply inline styles. Do not replace this with hardcoded color mappings.
 
 ### Key Files
 
@@ -47,7 +54,9 @@ dev
 | `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
 | `install.sh` | `curl \| bash` installer for macOS and Linux |
 | `hotslice.toml` | Project-level config (repo root) |
-| `themes/` | Bundled themes (light, dark) with GitHub-inspired palettes |
+| `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
+| `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
+| `themes/` | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes) |
 | `Dockerfile` | Multi-stage build for containerized web server |
 
 ---
@@ -61,7 +70,7 @@ This section describes how to write `.md` files that hotslice can build into HTM
 ```markdown
 +++
 title = "My Presentation"
-theme = "light"
+theme = "pizza-light"
 +++
 
 # Title Slide
@@ -87,7 +96,7 @@ More content.
 
 2. **Frontmatter** (optional): Place TOML between `+++` fences at the very top of the file.
    - `title` — Sets the HTML `<title>` and can be used by themes
-   - `theme` — Overrides the default theme (e.g., `"dark"`, `"light"`)
+   - `theme` — Overrides the default theme (e.g., `"pizza-dark"`, `"pizza-light"`, or any highlight.js theme slug like `"monokai"`)
 
 3. **Headings**:
    - `# Heading` — Use for slide titles. Best on the first slide or section breaks.
@@ -160,7 +169,8 @@ result = hotslice.build("slides.md")
 ```bash
 hotslice build slides.md                   # → slides.html
 hotslice build slides.md -o output.html    # custom output path
-hotslice build slides.md --theme dark      # use dark theme
+hotslice build slides.md --theme pizza-dark # use dark theme
+hotslice build slides.md --theme monokai   # use highlight.js theme
 ```
 
 ---
@@ -186,7 +196,7 @@ The first match wins. This means user themes override bundled themes of the same
 themes/my-theme/
   theme.css       # REQUIRED: CSS overrides and custom styles
   theme.js        # OPTIONAL: JavaScript that runs after deck runtime
-  theme.toml      # OPTIONAL: metadata (name, description, author, hljs_theme)
+  theme.toml      # OPTIONAL: metadata (name, description, author, hljs_theme, variant, [colors])
 ```
 
 User themes follow the same structure. Place them in `~/.config/hotslice/themes/`:
@@ -198,7 +208,7 @@ User themes follow the same structure. Place them in `~/.config/hotslice/themes/
   theme.toml      # optional
 ```
 
-The `hljs_theme` field in `theme.toml` controls which highlight.js stylesheet is loaded from the CDN. It defaults to `"github-dark"` if omitted. Set it to any valid highlight.js style name (e.g., `"github"`, `"monokai"`, `"nord"`).
+The `hljs_theme` field in `theme.toml` controls which highlight.js stylesheet is loaded from the CDN. It defaults to `"github-dark"` if omitted. Set it to any valid highlight.js style name (e.g., `"github"`, `"monokai"`, `"nord"`). The `variant` field (`"light"` or `"dark"`) controls grouping in the web UI. The `[colors]` section (`slide_bg`, `slide_fg`, `accent`, `code_bg`, `code_fg`) provides the web UI with data for its live preview.
 
 ### CSS Custom Properties
 
@@ -212,7 +222,7 @@ The base template defines these CSS custom properties. Override them in your `th
   --code-bg: #f3f4f6;           /* code block background */
   --code-fg: #1f2937;           /* code block text color */
   --font-sans: system-ui, sans-serif;  /* body font stack */
-  --font-mono: 'SF Mono', monospace;   /* code font stack */
+  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace; /* code font stack */
   --slide-padding: 64px;        /* slide content padding */
   --slide-max-width: 1100px;    /* max content width */
 }

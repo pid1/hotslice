@@ -1,0 +1,12 @@
+name = "Tomorrow Night Bright"
+description = "Tomorrow Night Bright theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "tomorrow-night-bright"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#eaeaea"
+accent = "#c397d8"
+code_bg = "#000"
+code_fg = "#eaeaea"

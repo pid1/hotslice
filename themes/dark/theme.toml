@@ -1,4 +1,12 @@
-name = "dark"
-description = "GitHub Dark inspired theme. Easy on the eyes."
-author = "hotslice"
-hljs_theme = "github-dark"
+name = "Dark"
+description = "Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#303030"
+slide_fg = "#ddd"
+accent = "#fff"
+code_bg = "#303030"
+code_fg = "#ddd"

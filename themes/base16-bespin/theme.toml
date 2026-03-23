@@ -1,0 +1,12 @@
+name = "Base16 Bespin"
+description = "Base16 Bespin theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-bespin"
+variant = "dark"
+
+[colors]
+slide_bg = "#28211c"
+slide_fg = "#8a8986"
+accent = "#afc4db"
+code_bg = "#28211c"
+code_fg = "#8a8986"

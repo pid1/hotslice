@@ -1,0 +1,12 @@
+name = "Base16 Qualia"
+description = "Base16 Qualia theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-qualia"
+variant = "dark"
+
+[colors]
+slide_bg = "#101010"
+slide_fg = "#c0c0c0"
+accent = "#c8c874"
+code_bg = "#101010"
+code_fg = "#c0c0c0"

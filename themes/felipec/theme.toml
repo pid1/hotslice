@@ -1,0 +1,12 @@
+name = "Felipec"
+description = "Felipec theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "felipec"
+variant = "dark"
+
+[colors]
+slide_bg = "#1d1c21"
+slide_fg = "#dedde4"
+accent = "#5fb8f2"
+code_bg = "#1d1c21"
+code_fg = "#dedde4"

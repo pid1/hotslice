@@ -1,0 +1,12 @@
+name = "Sunburst"
+description = "Sunburst theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "sunburst"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#f8f8f8"
+accent = "#e28964"
+code_bg = "#000"
+code_fg = "#f8f8f8"

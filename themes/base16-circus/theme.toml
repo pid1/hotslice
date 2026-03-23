@@ -1,0 +1,12 @@
+name = "Base16 Circus"
+description = "Base16 Circus theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-circus"
+variant = "dark"
+
+[colors]
+slide_bg = "#191919"
+slide_fg = "#a7a7a7"
+accent = "#4bb1a7"
+code_bg = "#191919"
+code_fg = "#a7a7a7"

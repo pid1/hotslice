@@ -17,7 +17,7 @@ class Metadata:
 
 @dataclass
 class Config:
-    theme: str = "light"
+    theme: str = "pizza-light"
     output: str | None = None
     separator: str = "^---$"
     theme_dir: str | None = None

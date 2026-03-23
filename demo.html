@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>hotslice Demo</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F355;</text></svg>">
+  
+
+  <!-- highlight.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css">
+
+  <!-- Atkinson Hyperlegible Mono for code blocks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Base deck styles -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --slide-bg: #ffffff;
+      --slide-fg: #111111;
+      --accent: #4f46e5;
+      --code-bg: #f3f4f6;
+      --code-fg: #1f2937;
+      --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace;
+      --slide-padding: 64px;
+      --slide-max-width: 1100px;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-sans);
+      background: var(--slide-bg);
+      color: var(--slide-fg);
+    }
+
+    .slide {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--slide-padding);
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    .slide-inner {
+      max-width: var(--slide-max-width);
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Typography */
+    .slide h1 { font-size: 2.75rem; font-weight: 700; margin-bottom: 0.5em; line-height: 1.15; color: var(--slide-fg); }
+    .slide h2 { font-size: 2rem; font-weight: 600; margin-bottom: 0.5em; line-height: 1.2; color: var(--slide-fg); }
+    .slide h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5em; line-height: 1.3; color: var(--accent); }
+    .slide p  { font-size: 1.25rem; line-height: 1.7; margin-bottom: 0.75em; }
+    .slide ul, .slide ol { font-size: 1.25rem; line-height: 1.7; margin-left: 1.5em; margin-bottom: 0.75em; }
+    .slide li { margin-bottom: 0.35em; }
+    .slide li::marker { color: var(--accent); }
+    .slide a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    .slide strong { font-weight: 700; }
+    .slide em { font-style: italic; }
+    .slide s { text-decoration: line-through; opacity: 0.6; }
+    .slide blockquote {
+      border-left: 4px solid var(--accent);
+      padding: 0.5em 1em;
+      margin: 1em 0;
+      font-style: italic;
+      opacity: 0.85;
+    }
+    .slide img {
+      max-width: 100%;
+      max-height: 60vh;
+      border-radius: 8px;
+      margin: 0.5em 0;
+    }
+
+    /* Code */
+    .slide code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--code-bg);
+      color: var(--code-fg);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+    }
+    .slide pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 1.25em 1.5em;
+      margin: 1em 0;
+      overflow-x: auto;
+    }
+    .slide pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Tables */
+    .slide table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+      font-size: 1.1rem;
+    }
+    .slide th, .slide td {
+      padding: 0.6em 1em;
+      text-align: left;
+      border-bottom: 1px solid color-mix(in srgb, var(--slide-fg) 15%, transparent);
+    }
+    .slide th {
+      font-weight: 600;
+      color: var(--accent);
+      border-bottom-width: 2px;
+    }
+
+    /* Emoji — preserve native color rendering inside gradient text */
+    .emoji {
+      -webkit-text-fill-color: initial;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      background: none;
+    }
+
+    /* Slide counter */
+    #slide-counter {
+      position: fixed;
+      bottom: 16px;
+      right: 24px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: var(--slide-fg);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Progress bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    /* Two-column layout for slides with text + code */
+    .slide-inner.two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    .slide-inner.two-col .col-text {
+      min-width: 0;
+    }
+    .slide-inner.two-col .col-code {
+      min-width: 0;
+    }
+    .slide-inner.two-col .col-code pre {
+      margin-top: 0;
+    }
+    /* On narrow viewports, stack columns */
+    @media (max-width: 900px) {
+      .slide-inner.two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <!-- Theme CSS (injected) -->
+  <style>
+/* hotslice pizza-light theme -- warm pizza-inspired palette from onapizza */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap');
+
+:root {
+  --slide-bg: #FFF8F0;
+  --slide-fg: #3D2B1F;
+  --accent: #E63946;
+  --code-bg: #FDEBD0;
+  --code-fg: #3D2B1F;
+  --font-sans: 'Fredoka', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Atkinson Hyperlegible Mono', monospace;
+  --slide-padding: 64px;
+  --slide-max-width: 1100px;
+}
+
+html, body {
+  background: var(--slide-bg);
+}
+
+/* Title slide */
+.slide[data-index="0"] h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #E63946, #F4A261);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide[data-index="0"] p {
+  font-size: 1.4rem;
+  opacity: 0.65;
+}
+
+/* Accent bar on non-title slides */
+.slide:not([data-index="0"]) .slide-inner {
+  border-top: 3px dashed var(--accent);
+  padding-top: 1.5rem;
+}
+
+/* Headings */
+.slide h2 {
+  color: #E63946;
+}
+
+.slide h3 {
+  color: #F4A261;
+}
+
+/* Code blocks */
+.slide pre {
+  background: var(--code-bg);
+  border: 2px solid #F4A261;
+  border-radius: 12px;
+}
+
+/* Blockquotes */
+.slide blockquote {
+  background: #FDEBD0;
+  border-left: 4px solid #E63946;
+  border-radius: 0 12px 12px 0;
+  padding: 1em 1.5em;
+}
+
+/* Links */
+.slide a {
+  color: #E63946;
+}
+
+/* Table rows */
+.slide th {
+  color: #E63946;
+}
+.slide tr:hover td {
+  background: #FDEBD0;
+}
+
+/* List markers */
+.slide li::marker {
+  color: #F4A261;
+}
+
+/* Progress bar */
+#progress-bar {
+  background: linear-gradient(90deg, #E63946, #F4A261);
+}
+
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  
+  <section class="slide active" data-index="0">
+    <div class="slide-inner">
+      <h1>hotslice <span class="emoji">🍕</span></h1>
+<p>A hot take, one slice at a time.</p>
+<p>Markdown → HTML presentations from the CLI.</p>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="1">
+    <div class="slide-inner">
+      <h2>Why hotslice?</h2>
+<ul>
+<li><strong>Minimal</strong> — only 2 runtime dependencies</li>
+<li><strong>Fast</strong> — builds a deck in milliseconds</li>
+<li><strong>Themeable</strong> — drop in CSS/JS, done</li>
+<li><strong>Portable</strong> — output is a single HTML file</li>
+<li><strong>Hackable</strong> — it's ~300 lines of Python</li>
+</ul>
+<blockquote>
+<p>&quot;The best presentation tool is the one you'll actually use.&quot;</p>
+</blockquote>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="2">
+    <div class="slide-inner">
+      <h2>Getting Started</h2>
+<p>Install and build your first deck:</p>
+<pre><code class="language-bash">uv add hotslice
+hotslice build slides.md
+open slides.html
+</code></pre>
+<p>That's it. No config required.</p>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="3">
+    <div class="slide-inner">
+      <h2>Slide Format</h2>
+<p>Slides are separated by <code>---</code> on its own line.</p>
+<p>Add <strong>TOML frontmatter</strong> between <code>+++</code> fences at the top:</p>
+<pre><code class="language-toml">+++
+title = &quot;My Talk&quot;
+theme = &quot;dark&quot;
++++
+</code></pre>
+<p>Then just write Markdown. Each <code>---</code> starts a new slide.</p>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="4">
+    <div class="slide-inner">
+      <h2>Code Highlighting</h2>
+<p>Fenced code blocks get syntax highlighting via highlight.js:</p>
+<pre><code class="language-python">from hotslice.parser import parse_deck
+
+deck = parse_deck(Path(&quot;slides.md&quot;).read_text())
+for slide in deck.slides:
+    print(f&quot;Slide {slide.index}: {len(slide.html)} bytes&quot;)
+</code></pre>
+<p>Languages are auto-detected, or specify them explicitly.</p>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="5">
+    <div class="slide-inner">
+      <h2>Tables Work Too</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>hotslice</th>
+<th>Marp</th>
+<th>reveal.js</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dependencies</td>
+<td>2</td>
+<td>12+</td>
+<td>30+</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>HTML</td>
+<td>HTML/PDF</td>
+<td>HTML</td>
+</tr>
+<tr>
+<td>Config</td>
+<td>TOML</td>
+<td>YAML</td>
+<td>JSON</td>
+</tr>
+<tr>
+<td>Themes</td>
+<td>CSS/JS</td>
+<td>CSS</td>
+<td>CSS/JS</td>
+</tr>
+<tr>
+<td>Learning curve</td>
+<td>Low</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<p>GFM-style tables just work.</p>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="6">
+    <div class="slide-inner">
+      <h2>Rich Markdown</h2>
+<p>You get the full <strong>CommonMark</strong> spec plus GFM extras:</p>
+<ul>
+<li><strong>Bold</strong> and <em>italic</em> and <s>strikethrough</s></li>
+<li><a href="https://github.com">Links</a> that work</li>
+<li>Inline <code>code</code> with nice styling</li>
+<li>Ordered and unordered lists</li>
+<li>Blockquotes (you saw one earlier)</li>
+</ul>
+<h3>Nested lists</h3>
+<ol>
+<li>First item
+<ul>
+<li>Sub-item A</li>
+<li>Sub-item B</li>
+</ul>
+</li>
+<li>Second item</li>
+<li>Third item</li>
+</ol>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="7">
+    <div class="slide-inner">
+      <h2>Theming</h2>
+<p>Themes are just directories with a <code>theme.css</code> file:</p>
+<pre><code>themes/my-theme/
+  theme.css       ← required
+  theme.js        ← optional (runs after deck JS)
+  theme.toml      ← optional (metadata)
+</code></pre>
+<p>Override CSS custom properties to restyle everything:</p>
+<pre><code class="language-css">:root {
+  --slide-bg: #0f172a;
+  --slide-fg: #e2e8f0;
+  --accent: #38bdf8;
+}
+</code></pre>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="8">
+    <div class="slide-inner">
+      <h2>Navigation</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>→  Space  Enter</td>
+<td>Next slide</td>
+</tr>
+<tr>
+<td>←  Backspace</td>
+<td>Previous slide</td>
+</tr>
+<tr>
+<td>Home</td>
+<td>First slide</td>
+</tr>
+<tr>
+<td>End</td>
+<td>Last slide</td>
+</tr>
+<tr>
+<td>Click right half</td>
+<td>Next slide</td>
+</tr>
+<tr>
+<td>Click left half</td>
+<td>Previous slide</td>
+</tr>
+</tbody>
+</table>
+<p>Deep-link to any slide with <code>#N</code> in the URL.</p>
+
+    </div>
+  </section>
+  
+  <section class="slide" data-index="9">
+    <div class="slide-inner">
+      <h1>Thanks! <span class="emoji">🍕</span></h1>
+<p><code>pip install hotslice</code> and start slicing.</p>
+<p><a href="http://github.com/pid1/hotslice">github.com/pid1/hotslice</a></p>
+
+    </div>
+  </section>
+  
+
+  <div id="slide-counter"></div>
+
+  <!-- highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+  <!-- Deck runtime -->
+  <script>
+  (function() {
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('progress-bar');
+    const total = slides.length;
+    let current = 0;
+
+    function showSlide(n) {
+      if (n < 0 || n >= total) return;
+      slides[current].classList.remove('active');
+      current = n;
+      slides[current].classList.add('active');
+      counter.textContent = (current + 1) + ' / ' + total;
+      progressBar.style.width = ((current + 1) / total * 100) + '%';
+      window.location.hash = current + 1;
+    }
+
+    function next() { showSlide(current + 1); }
+    function prev() { showSlide(current - 1); }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      switch (e.key) {
+        case 'ArrowRight': case ' ': case 'Enter': e.preventDefault(); next(); break;
+        case 'ArrowLeft': case 'Backspace': e.preventDefault(); prev(); break;
+        case 'Home': e.preventDefault(); showSlide(0); break;
+        case 'End': e.preventDefault(); showSlide(total - 1); break;
+      }
+    });
+
+    // Click navigation (click right half = next, left half = prev)
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('a, button, input, textarea, select')) return;
+      if (e.clientX > window.innerWidth / 2) next(); else prev();
+    });
+
+    // Hash-based deep linking
+    function loadFromHash() {
+      const hash = parseInt(window.location.hash.replace('#', ''), 10);
+      if (hash >= 1 && hash <= total) showSlide(hash - 1);
+    }
+    window.addEventListener('hashchange', loadFromHash);
+
+    // Initialize
+    loadFromHash();
+    showSlide(current);
+
+    // Syntax highlighting
+    hljs.highlightAll();
+
+    // Two-column layout: wrap slides with text + code into side-by-side columns
+    slides.forEach(function(slide) {
+      var inner = slide.querySelector('.slide-inner');
+      var children = Array.from(inner.children);
+      var pres = children.filter(function(el) { return el.tagName === 'PRE'; });
+      var others = children.filter(function(el) { return el.tagName !== 'PRE'; });
+
+      // Only apply if there is exactly one pre block and at least one other element
+      if (pres.length === 1 && others.length >= 1) {
+        var textCol = document.createElement('div');
+        textCol.className = 'col-text';
+        var codeCol = document.createElement('div');
+        codeCol.className = 'col-code';
+
+        others.forEach(function(el) { textCol.appendChild(el); });
+        pres.forEach(function(el) { codeCol.appendChild(el); });
+
+        inner.innerHTML = '';
+        inner.appendChild(textCol);
+        inner.appendChild(codeCol);
+        inner.classList.add('two-col');
+      }
+    });
+
+    // Auto-scale slides that overflow the viewport
+    function scaleSlides() {
+      slides.forEach(function(slide) {
+        var inner = slide.querySelector('.slide-inner');
+        // Reset any previous scaling
+        inner.style.transform = '';
+        inner.style.transformOrigin = 'top left';
+        var slideHeight = slide.clientHeight;
+        var padding = parseInt(getComputedStyle(slide).paddingTop) +
+                      parseInt(getComputedStyle(slide).paddingBottom);
+        var available = slideHeight - padding;
+        var contentHeight = inner.scrollHeight;
+        if (contentHeight > available && available > 0) {
+          var scale = available / contentHeight;
+          inner.style.transform = 'scale(' + scale + ')';
+          inner.style.width = (100 / scale) + '%';
+        }
+      });
+    }
+    scaleSlides();
+    window.addEventListener('resize', scaleSlides);
+  })();
+  </script>
+
+  
+</body>
+</html>

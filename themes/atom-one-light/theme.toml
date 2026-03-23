@@ -1,0 +1,12 @@
+name = "Atom One Light"
+description = "Atom One Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "atom-one-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fafafa"
+slide_fg = "#383a42"
+accent = "#a626a4"
+code_bg = "#fafafa"
+code_fg = "#383a42"

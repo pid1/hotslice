@@ -1,0 +1,12 @@
+name = "Base16 Railscasts"
+description = "Base16 Railscasts theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-railscasts"
+variant = "dark"
+
+[colors]
+slide_bg = "#2b2b2b"
+slide_fg = "#e6e1dc"
+accent = "#519f50"
+code_bg = "#2b2b2b"
+code_fg = "#e6e1dc"

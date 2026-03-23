@@ -1,0 +1,12 @@
+name = "Base16 Framer"
+description = "Base16 Framer theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-framer"
+variant = "dark"
+
+[colors]
+slide_bg = "#181818"
+slide_fg = "#d0d0d0"
+accent = "#acddfd"
+code_bg = "#181818"
+code_fg = "#d0d0d0"

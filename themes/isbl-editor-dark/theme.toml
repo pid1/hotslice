@@ -1,0 +1,12 @@
+name = "ISBL Editor Dark"
+description = "ISBL Editor Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "isbl-editor-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#404040"
+slide_fg = "#e0e0e0"
+accent = "#f0f0f0"
+code_bg = "#404040"
+code_fg = "#e0e0e0"

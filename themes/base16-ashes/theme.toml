@@ -1,0 +1,12 @@
+name = "Base16 Ashes"
+description = "Base16 Ashes theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-ashes"
+variant = "dark"
+
+[colors]
+slide_bg = "#1c2023"
+slide_fg = "#c7ccd1"
+accent = "#95aec7"
+code_bg = "#1c2023"
+code_fg = "#c7ccd1"

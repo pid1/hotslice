@@ -1,0 +1,12 @@
+name = "Base16 Silk Light"
+description = "Base16 Silk Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-silk-light"
+variant = "light"
+
+[colors]
+slide_bg = "#e9f1ef"
+slide_fg = "#385156"
+accent = "#329ca2"
+code_bg = "#e9f1ef"
+code_fg = "#385156"

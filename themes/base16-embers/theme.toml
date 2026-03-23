@@ -1,0 +1,12 @@
+name = "Base16 Embers"
+description = "Base16 Embers theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-embers"
+variant = "dark"
+
+[colors]
+slide_bg = "#16130f"
+slide_fg = "#a39a90"
+accent = "#576d82"
+code_bg = "#16130f"
+code_fg = "#a39a90"

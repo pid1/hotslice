@@ -1,0 +1,12 @@
+name = "Base16 Monokai"
+description = "Base16 Monokai theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-monokai"
+variant = "dark"
+
+[colors]
+slide_bg = "#272822"
+slide_fg = "#f8f8f2"
+accent = "#a1efe4"
+code_bg = "#272822"
+code_fg = "#f8f8f2"

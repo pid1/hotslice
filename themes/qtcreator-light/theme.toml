@@ -1,0 +1,12 @@
+name = "Qt Creator Light"
+description = "Qt Creator Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "qtcreator-light"
+variant = "light"
+
+[colors]
+slide_bg = "#fff"
+slide_fg = "#000"
+accent = "#808000"
+code_bg = "#fff"
+code_fg = "#000"

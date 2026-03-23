@@ -1,0 +1,12 @@
+name = "Foundation"
+description = "Foundation theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "foundation"
+variant = "light"
+
+[colors]
+slide_bg = "#eee"
+slide_fg = "#000"
+accent = "#099"
+code_bg = "#eee"
+code_fg = "#000"

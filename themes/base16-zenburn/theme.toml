@@ -1,0 +1,12 @@
+name = "Base16 Zenburn"
+description = "Base16 Zenburn theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-zenburn"
+variant = "dark"
+
+[colors]
+slide_bg = "#383838"
+slide_fg = "#dcdccc"
+accent = "#93e0e3"
+code_bg = "#383838"
+code_fg = "#dcdccc"

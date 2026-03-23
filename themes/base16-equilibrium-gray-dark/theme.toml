@@ -1,0 +1,12 @@
+name = "Base16 Equilibrium Gray Dark"
+description = "Base16 Equilibrium Gray Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-equilibrium-gray-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#111"
+slide_fg = "#ababab"
+accent = "#00948b"
+code_bg = "#111"
+code_fg = "#ababab"

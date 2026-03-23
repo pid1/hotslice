@@ -1,0 +1,12 @@
+name = "Lioshi"
+description = "Lioshi theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "lioshi"
+variant = "dark"
+
+[colors]
+slide_bg = "#303030"
+slide_fg = "#c5c8c6"
+accent = "#be94bb"
+code_bg = "#303030"
+code_fg = "#c5c8c6"

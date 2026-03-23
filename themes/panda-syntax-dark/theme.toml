@@ -1,0 +1,12 @@
+name = "Panda Syntax Dark"
+description = "Panda Syntax Dark theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "panda-syntax-dark"
+variant = "dark"
+
+[colors]
+slide_bg = "#2a2c2d"
+slide_fg = "#e6e6e6"
+accent = "#ff75b5"
+code_bg = "#2a2c2d"
+code_fg = "#e6e6e6"

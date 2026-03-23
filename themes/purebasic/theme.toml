@@ -1,0 +1,12 @@
+name = "PureBasic"
+description = "PureBasic theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "purebasic"
+variant = "light"
+
+[colors]
+slide_bg = "#ffffdf"
+slide_fg = "#1a1a2e"
+accent = "#066"
+code_bg = "#ffffdf"
+code_fg = "#1a1a2e"

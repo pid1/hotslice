@@ -1,0 +1,12 @@
+name = "Base16 Tender"
+description = "Base16 Tender theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-tender"
+variant = "dark"
+
+[colors]
+slide_bg = "#282828"
+slide_fg = "#eee"
+accent = "#73cef4"
+code_bg = "#282828"
+code_fg = "#eee"

@@ -1,0 +1,12 @@
+name = "Base16 Espresso"
+description = "Base16 Espresso theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-espresso"
+variant = "dark"
+
+[colors]
+slide_bg = "#2d2d2d"
+slide_fg = "#ccc"
+accent = "#bed6ff"
+code_bg = "#2d2d2d"
+code_fg = "#ccc"

@@ -1,0 +1,12 @@
+name = "Base16 Pico"
+description = "Base16 Pico theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-pico"
+variant = "dark"
+
+[colors]
+slide_bg = "#000"
+slide_fg = "#5f574f"
+accent = "#29adff"
+code_bg = "#000"
+code_fg = "#5f574f"

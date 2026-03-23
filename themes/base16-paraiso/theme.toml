@@ -1,0 +1,12 @@
+name = "Base16 Paraiso"
+description = "Base16 Paraiso theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-paraiso"
+variant = "dark"
+
+[colors]
+slide_bg = "#2f1e2e"
+slide_fg = "#a39e9b"
+accent = "#5bc4bf"
+code_bg = "#2f1e2e"
+code_fg = "#a39e9b"

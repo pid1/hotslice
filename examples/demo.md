@@ -1,6 +1,6 @@
 +++
 title = "hotslice Demo"
-theme = "light"
+theme = "pizza-light"
 +++
 
 # hotslice 🍕

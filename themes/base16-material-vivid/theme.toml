@@ -1,0 +1,12 @@
+name = "Base16 Material Vivid"
+description = "Base16 Material Vivid theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-material-vivid"
+variant = "dark"
+
+[colors]
+slide_bg = "#202124"
+slide_fg = "#80868b"
+accent = "#00bcd4"
+code_bg = "#202124"
+code_fg = "#80868b"

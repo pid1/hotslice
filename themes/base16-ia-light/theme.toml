@@ -1,0 +1,12 @@
+name = "Base16 Ia Light"
+description = "Base16 Ia Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-ia-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f6f6f6"
+slide_fg = "#181818"
+accent = "#2d6bb1"
+code_bg = "#f6f6f6"
+code_fg = "#181818"

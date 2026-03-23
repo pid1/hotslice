@@ -1,0 +1,12 @@
+name = "Base16 Atelier Seaside"
+description = "Base16 Atelier Seaside theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-seaside"
+variant = "dark"
+
+[colors]
+slide_bg = "#131513"
+slide_fg = "#8ca68c"
+accent = "#1999b3"
+code_bg = "#131513"
+code_fg = "#8ca68c"

@@ -1,0 +1,12 @@
+name = "Base16 Atelier Estuary Light"
+description = "Base16 Atelier Estuary Light theme (generated from highlight.js)"
+author = "hotslice (generated)"
+hljs_theme = "base16-atelier-estuary-light"
+variant = "light"
+
+[colors]
+slide_bg = "#f4f3ec"
+slide_fg = "#5f5e4e"
+accent = "#5b9d48"
+code_bg = "#f4f3ec"
+code_fg = "#5f5e4e"
