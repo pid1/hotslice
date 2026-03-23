@@ -47,7 +47,8 @@ dev
 | `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
 | `install.sh` | `curl \| bash` installer for macOS and Linux |
 | `hotslice.toml` | Project-level config (repo root) |
-| `themes/` | Bundled themes (light, dark) with GitHub-inspired palettes |
+| `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
+| `themes/` | Bundled themes (pizza-light, pizza-dark) with onapizza-inspired palettes |
 | `Dockerfile` | Multi-stage build for containerized web server |
 
 ---
@@ -61,7 +62,7 @@ This section describes how to write `.md` files that hotslice can build into HTM
 ```markdown
 +++
 title = "My Presentation"
-theme = "light"
+theme = "pizza-light"
 +++
 
 # Title Slide
@@ -87,7 +88,7 @@ More content.
 
 2. **Frontmatter** (optional): Place TOML between `+++` fences at the very top of the file.
    - `title` — Sets the HTML `<title>` and can be used by themes
-   - `theme` — Overrides the default theme (e.g., `"dark"`, `"light"`)
+   - `theme` — Overrides the default theme (e.g., `"pizza-dark"`, `"pizza-light"`, or any highlight.js theme slug like `"monokai"`)
 
 3. **Headings**:
    - `# Heading` — Use for slide titles. Best on the first slide or section breaks.
@@ -160,7 +161,8 @@ result = hotslice.build("slides.md")
 ```bash
 hotslice build slides.md                   # → slides.html
 hotslice build slides.md -o output.html    # custom output path
-hotslice build slides.md --theme dark      # use dark theme
+hotslice build slides.md --theme pizza-dark # use dark theme
+hotslice build slides.md --theme monokai   # use highlight.js theme
 ```
 
 ---
