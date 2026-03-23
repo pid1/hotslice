@@ -133,7 +133,7 @@ hotslice serve [options]
 | `--host`   | `0.0.0.0` | Host to bind to                |
 | `--port`   | `8000`     | Port to listen on              |
 
-Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme dropdown lists all installed on-disk themes.
+Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme picker lists all 257 installed themes, grouped by Light and Dark, with a search box for quick filtering. Selecting a theme updates the preview with that theme's actual colors.
 
 **API endpoints:**
 
@@ -147,18 +147,24 @@ Open `http://localhost:8000` in your browser to upload a `.md` file, choose a th
 
 ### Built-in Themes
 
+hotslice ships with 257 themes: 2 hand-crafted pizza themes and 255 themes generated from the highlight.js stylesheet library.
+
+**Hand-crafted themes:**
+
 - **pizza-light** (default): Warm pizza-inspired light theme with cream background (#FFF8F0), red/orange accents, and Fredoka font. Uses `github` highlight.js stylesheet.
 - **pizza-dark**: Rich dark pizza-inspired theme with charcoal background (#1A0F0A), orange/red accents, and Fredoka font. Uses `github-dark` highlight.js stylesheet.
 
-Use with `--theme pizza-dark` or set in frontmatter/config.
+**Generated themes** (255 total, 74 light + 183 dark):
 
-Each theme specifies its own highlight.js color scheme via the `hljs_theme` field in `theme.toml`. The matching stylesheet is loaded from the highlight.js CDN automatically.
+Each highlight.js theme has an on-disk directory under `themes/` containing a `theme.css` and `theme.toml` with extracted colors. Use any of them by name:
 
-### Highlight.js Themes (CLI Only)
+```bash
+hotslice build slides.md --theme monokai
+hotslice build slides.md --theme nord
+hotslice build slides.md --theme base16-dracula
+```
 
-hotslice bundles a registry of 255 highlight.js themes for use from the CLI. When you pass an hljs theme slug (e.g., `--theme monokai` or `--theme nord`), hotslice automatically selects the appropriate pizza base theme (pizza-light for light hljs themes, pizza-dark for dark hljs themes) and applies the chosen highlight.js stylesheet for code blocks.
-
-The web UI theme dropdown and `/api/themes` endpoint show only on-disk themes. To use an hljs-only theme, pass it via the CLI `--theme` flag or set it in frontmatter.
+All 257 themes appear in the web UI theme picker, grouped by Light and Dark. Each theme specifies its own highlight.js color scheme via the `hljs_theme` field in `theme.toml`. The matching stylesheet is loaded from the highlight.js CDN automatically.
 
 ### Theme Resolution Order
 
@@ -190,7 +196,7 @@ A theme is a directory with at minimum a `theme.css` file:
 themes/my-theme/
   theme.css       # Required: CSS overrides
   theme.js        # Optional: JS that runs after deck runtime
-  theme.toml      # Optional: metadata (name, description, author, hljs_theme)
+  theme.toml      # Optional: metadata (name, description, author, hljs_theme, variant, colors)
 ```
 
 The `theme.toml` file supports these fields:
@@ -200,9 +206,17 @@ name = "my-theme"
 description = "A brief description of the theme."
 author = "Your Name"
 hljs_theme = "github"   # highlight.js stylesheet name (default: "github-dark")
+variant = "light"       # "light" or "dark" (controls web UI grouping)
+
+[colors]
+slide_bg = "#ffffff"
+slide_fg = "#111111"
+accent = "#4f46e5"
+code_bg = "#f3f4f6"
+code_fg = "#1f2937"
 ```
 
-The `hljs_theme` value maps to a stylesheet on the highlight.js CDN. See the [highlight.js demo](https://highlightjs.org/demo) for available style names.
+The `hljs_theme` value maps to a stylesheet on the highlight.js CDN. See the [highlight.js demo](https://highlightjs.org/demo) for available style names. The `[colors]` section provides the web UI with color data for its live preview. The `variant` field controls whether the theme appears in the Light or Dark group in the web UI picker.
 
 Override the CSS custom properties to restyle everything:
 
@@ -214,11 +228,13 @@ Override the CSS custom properties to restyle everything:
   --code-bg: #f3f4f6;      /* code block background */
   --code-fg: #1f2937;      /* code text color */
   --font-sans: system-ui, sans-serif;
-  --font-mono: 'SF Mono', monospace;
+  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace;
   --slide-padding: 64px;
   --slide-max-width: 1100px;
 }
 ```
+
+Code blocks use [Atkinson Hyperlegible Mono](https://fonts.google.com/specimen/Atkinson+Hyperlegible+Mono) loaded from Google Fonts. The font is designed for maximum legibility at all sizes.
 
 The optional `theme.js` runs after the deck runtime, so you can add animations, custom key bindings, or other enhancements.
 

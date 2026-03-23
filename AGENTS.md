@@ -38,8 +38,10 @@ dev
 
 ### Design Decisions
 
-- `list_available_themes()` intentionally returns only on-disk themes (directories with `theme.css`). The web UI dropdown and `/api/themes` endpoint use this function. Do not add hljs-only themes back to this function; the decision to exclude them from the web UI was deliberate. The CLI still accepts any hljs theme slug via `--theme` because `render_deck()` calls `get_hljs_theme_info()` separately.
-- The web template stores each theme's hljs stylesheet slug in a `data-hljs-theme` attribute on `<option>` elements. The preview JS reads this attribute to swap the highlight.js CDN stylesheet. Do not replace this with hardcoded slug-to-stylesheet mappings.
+- `list_available_themes()` returns only on-disk themes (directories with `theme.css`). All 255 hljs themes now have generated on-disk directories, so this function returns 257 themes total. Do not add dynamic theme discovery to this function; it scans directories, reads `theme.toml`, and returns color metadata.
+- `render_deck()` tries on-disk theme resolution first, then falls back to hljs slug-to-pizza-base mapping. Since all hljs slugs now have on-disk themes, the fallback only triggers if a generated theme directory is deleted. Do not reverse this priority order.
+- Generated theme CSS files contain `auto-generated` in their first-line comment. The generator script (`scripts/generate_themes.py`) uses this marker to distinguish generated themes from hand-crafted ones (pizza-light, pizza-dark). Do not add this marker to hand-crafted themes; it would cause the generator to overwrite them.
+- The web template stores each theme's color values in `data-slide-bg`, `data-slide-fg`, `data-accent`, `data-code-bg`, `data-code-fg` attributes on `<option>` elements. The preview JS reads these attributes to apply inline styles. Do not replace this with hardcoded color mappings.
 
 ### Key Files
 
@@ -53,7 +55,8 @@ dev
 | `install.sh` | `curl \| bash` installer for macOS and Linux |
 | `hotslice.toml` | Project-level config (repo root) |
 | `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
-| `themes/` | Bundled themes (pizza-light, pizza-dark) with onapizza-inspired palettes |
+| `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
+| `themes/` | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes) |
 | `Dockerfile` | Multi-stage build for containerized web server |
 
 ---
@@ -193,7 +196,7 @@ The first match wins. This means user themes override bundled themes of the same
 themes/my-theme/
   theme.css       # REQUIRED: CSS overrides and custom styles
   theme.js        # OPTIONAL: JavaScript that runs after deck runtime
-  theme.toml      # OPTIONAL: metadata (name, description, author, hljs_theme)
+  theme.toml      # OPTIONAL: metadata (name, description, author, hljs_theme, variant, [colors])
 ```
 
 User themes follow the same structure. Place them in `~/.config/hotslice/themes/`:
@@ -205,7 +208,7 @@ User themes follow the same structure. Place them in `~/.config/hotslice/themes/
   theme.toml      # optional
 ```
 
-The `hljs_theme` field in `theme.toml` controls which highlight.js stylesheet is loaded from the CDN. It defaults to `"github-dark"` if omitted. Set it to any valid highlight.js style name (e.g., `"github"`, `"monokai"`, `"nord"`).
+The `hljs_theme` field in `theme.toml` controls which highlight.js stylesheet is loaded from the CDN. It defaults to `"github-dark"` if omitted. Set it to any valid highlight.js style name (e.g., `"github"`, `"monokai"`, `"nord"`). The `variant` field (`"light"` or `"dark"`) controls grouping in the web UI. The `[colors]` section (`slide_bg`, `slide_fg`, `accent`, `code_bg`, `code_fg`) provides the web UI with data for its live preview.
 
 ### CSS Custom Properties
 
@@ -219,7 +222,7 @@ The base template defines these CSS custom properties. Override them in your `th
   --code-bg: #f3f4f6;           /* code block background */
   --code-fg: #1f2937;           /* code block text color */
   --font-sans: system-ui, sans-serif;  /* body font stack */
-  --font-mono: 'SF Mono', monospace;   /* code font stack */
+  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace; /* code font stack */
   --slide-padding: 64px;        /* slide content padding */
   --slide-max-width: 1100px;    /* max content width */
 }
