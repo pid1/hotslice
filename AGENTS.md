@@ -32,9 +32,14 @@ dev
 
 **IMPORTANT**: When working in this repository:
 
-1. **Always use devenv scripts** — Run `lint` not `ruff check .`
+1. **Always use devenv scripts** -- Run `lint` not `ruff check .`
 2. **Use `build`** to test changes: it builds `examples/demo.md` to `demo.html`
 3. **Run `lint`** before considering work complete
+
+### Design Decisions
+
+- `list_available_themes()` intentionally returns only on-disk themes (directories with `theme.css`). The web UI dropdown and `/api/themes` endpoint use this function. Do not add hljs-only themes back to this function; the decision to exclude them from the web UI was deliberate. The CLI still accepts any hljs theme slug via `--theme` because `render_deck()` calls `get_hljs_theme_info()` separately.
+- The web template stores each theme's hljs stylesheet slug in a `data-hljs-theme` attribute on `<option>` elements. The preview JS reads this attribute to swap the highlight.js CDN stylesheet. Do not replace this with hardcoded slug-to-stylesheet mappings.
 
 ### Key Files
 
