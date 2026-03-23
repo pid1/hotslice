@@ -12,6 +12,13 @@ from hotslice.parser import parse_deck
 from hotslice.renderer import render_deck, write_deck
 
 
+def _serve(args: argparse.Namespace) -> None:
+    """Start the hotslice web server."""
+    from hotslice.web import main as web_main
+
+    web_main(host=args.host, port=args.port)
+
+
 def _build(args: argparse.Namespace) -> None:
     """Execute the build command."""
     input_path = Path(args.input)
@@ -68,6 +75,16 @@ def main(argv: list[str] | None = None) -> None:
     build_parser.add_argument("--title", help="Presentation title override")
     build_parser.add_argument("--separator", help="Slide separator regex (default: ^---$)")
     build_parser.set_defaults(func=_build)
+
+    # serve subcommand
+    serve_parser = subparsers.add_parser("serve", help="Start the hotslice web server")
+    serve_parser.add_argument(
+        "--host", default="0.0.0.0", help="Host to bind to (default: 0.0.0.0)"
+    )
+    serve_parser.add_argument(
+        "--port", type=int, default=8000, help="Port to listen on (default: 8000)"
+    )
+    serve_parser.set_defaults(func=_serve)
 
     args = parser.parse_args(argv)
     args.func(args)

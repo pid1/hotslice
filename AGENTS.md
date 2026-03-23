@@ -21,6 +21,7 @@ dev
 | `setup`        | Initialize repo (runs install-deps) |
 | `dev`          | Build demo deck and open in browser |
 | `build`        | Build demo deck to demo.html        |
+| `serve`        | Start the hotslice web server       |
 | `lint`         | Run ruff linter                     |
 | `lint-fix`     | Run ruff with auto-fix              |
 | `format`       | Run ruff formatter                  |
@@ -40,12 +41,14 @@ dev
 | File | Purpose |
 |------|---------|
 | `hotslice/config.py` | Config loading with layered user/project support |
-| `hotslice/renderer.py` | Theme resolution and HTML rendering |
-| `hotslice/cli.py` | CLI entry point (argparse) |
+| `hotslice/renderer.py` | Theme resolution, HTML rendering, `list_available_themes()` |
+| `hotslice/cli.py` | CLI entry point (argparse): `build` and `serve` subcommands |
 | `hotslice/parser.py` | Markdown parsing and slide splitting |
+| `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
 | `install.sh` | `curl \| bash` installer for macOS and Linux |
 | `hotslice.toml` | Project-level config (repo root) |
-| `themes/` | Bundled themes (light, dark) |
+| `themes/` | Bundled themes (light, dark) with GitHub-inspired palettes |
+| `Dockerfile` | Multi-stage build for containerized web server |
 
 ---
 
@@ -183,7 +186,7 @@ The first match wins. This means user themes override bundled themes of the same
 themes/my-theme/
   theme.css       # REQUIRED: CSS overrides and custom styles
   theme.js        # OPTIONAL: JavaScript that runs after deck runtime
-  theme.toml      # OPTIONAL: metadata (name, description, author)
+  theme.toml      # OPTIONAL: metadata (name, description, author, hljs_theme)
 ```
 
 User themes follow the same structure. Place them in `~/.config/hotslice/themes/`:
@@ -194,6 +197,8 @@ User themes follow the same structure. Place them in `~/.config/hotslice/themes/
   theme.js        # optional
   theme.toml      # optional
 ```
+
+The `hljs_theme` field in `theme.toml` controls which highlight.js stylesheet is loaded from the CDN. It defaults to `"github-dark"` if omitted. Set it to any valid highlight.js style name (e.g., `"github"`, `"monokai"`, `"nord"`).
 
 ### CSS Custom Properties
 

@@ -2,7 +2,7 @@
 
 A hot take, one slice at a time. **Markdown → HTML slide decks from the CLI.**
 
-hotslice converts a single Markdown file into a self-contained HTML presentation with keyboard/click navigation, syntax highlighting, and pluggable themes — using only 2 Python dependencies.
+hotslice converts a single Markdown file into a self-contained HTML presentation with keyboard/click navigation, syntax highlighting, and pluggable themes. Build decks from the CLI or upload Markdown through the built-in web UI.
 
 ## Quick Start
 
@@ -104,6 +104,8 @@ hotslice uses the GFM-like preset from markdown-it-py, which includes:
 
 ## CLI Reference
 
+### `hotslice build`
+
 ```
 hotslice build <input.md> [options]
 ```
@@ -118,14 +120,39 @@ hotslice build <input.md> [options]
 
 When no `-o` flag is provided, the output file is written to the current directory using the input file's stem. For example, `hotslice build training.md` produces `training.html` in the current directory.
 
+### `hotslice serve`
+
+Start a web server with an upload form for converting Markdown to HTML presentations.
+
+```
+hotslice serve [options]
+```
+
+| Flag       | Default    | Description                    |
+|------------|------------|--------------------------------|
+| `--host`   | `0.0.0.0` | Host to bind to                |
+| `--port`   | `8000`     | Port to listen on              |
+
+Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, and download the generated HTML.
+
+**API endpoints:**
+
+| Method | Path          | Description                              |
+|--------|---------------|------------------------------------------|
+| GET    | `/`           | Upload form (HTML)                       |
+| GET    | `/api/themes` | List available themes (JSON)             |
+| POST   | `/convert`    | Convert uploaded Markdown to HTML (multipart form) |
+
 ## Themes
 
 ### Built-in Themes
 
-- **light**: Clean white background, indigo accents (default)
-- **dark**: Deep slate background, blue accents
+- **light**: GitHub Light inspired. White background, blue accents (#0969da), `github` highlight.js stylesheet. (default)
+- **dark**: GitHub Dark inspired. Dark background (#0d1117), blue accents (#58a6ff), `github-dark` highlight.js stylesheet.
 
 Use with `--theme dark` or set in frontmatter/config.
+
+Each theme specifies its own highlight.js color scheme via the `hljs_theme` field in `theme.toml`. The matching stylesheet is loaded from the highlight.js CDN automatically.
 
 ### Theme Resolution Order
 
@@ -157,8 +184,19 @@ A theme is a directory with at minimum a `theme.css` file:
 themes/my-theme/
   theme.css       # Required: CSS overrides
   theme.js        # Optional: JS that runs after deck runtime
-  theme.toml      # Optional: metadata (name, description, author)
+  theme.toml      # Optional: metadata (name, description, author, hljs_theme)
 ```
+
+The `theme.toml` file supports these fields:
+
+```toml
+name = "my-theme"
+description = "A brief description of the theme."
+author = "Your Name"
+hljs_theme = "github"   # highlight.js stylesheet name (default: "github-dark")
+```
+
+The `hljs_theme` value maps to a stylesheet on the highlight.js CDN. See the [highlight.js demo](https://highlightjs.org/demo) for available style names.
 
 Override the CSS custom properties to restyle everything:
 
@@ -177,6 +215,29 @@ Override the CSS custom properties to restyle everything:
 ```
 
 The optional `theme.js` runs after the deck runtime, so you can add animations, custom key bindings, or other enhancements.
+
+## Slide Layout
+
+### Auto-scaling
+
+Slides automatically scale down when their content exceeds the viewport height. This prevents text from overflowing or being clipped. The scaling recalculates on window resize.
+
+### Two-column layout
+
+Slides that contain exactly one code block alongside other content (headings, paragraphs, lists) are automatically rendered in a side-by-side two-column layout. Text appears on the left and the code block on the right. On viewports narrower than 900px, columns stack vertically.
+
+Slides with multiple code blocks or code-only slides are not affected.
+
+## Docker
+
+Run the web UI in a container:
+
+```bash
+docker build -t hotslice .
+docker run -p 8000:8000 hotslice
+```
+
+Open `http://localhost:8000` to access the upload form. The container runs as a non-root user and exposes port 8000.
 
 ## Configuration
 
@@ -263,6 +324,7 @@ Run these inside `devenv shell`:
 | `setup`        | Install dependencies                  |
 | `dev`          | Build demo deck and open in browser   |
 | `build`        | Build demo deck to demo.html          |
+| `serve`        | Start the hotslice web server         |
 | `lint`         | Run ruff linter                       |
 | `lint-fix`     | Auto-fix lint issues                  |
 | `format`       | Run ruff formatter                    |

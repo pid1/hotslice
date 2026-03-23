@@ -7,7 +7,7 @@
   {% if metadata.author %}<meta name="author" content="{{ metadata.author }}">{% endif %}
 
   <!-- highlight.js for syntax highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/{{ hljs_theme }}.min.css">
 
   <!-- Base deck styles -->
   <style>
@@ -39,6 +39,7 @@
       justify-content: center;
       min-height: 100vh;
       padding: var(--slide-padding);
+      overflow: hidden;
     }
 
     .slide.active {
@@ -149,6 +150,29 @@
       transition: width 0.3s ease;
       z-index: 100;
     }
+
+    /* Two-column layout for slides with text + code */
+    .slide-inner.two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    .slide-inner.two-col .col-text {
+      min-width: 0;
+    }
+    .slide-inner.two-col .col-code {
+      min-width: 0;
+    }
+    .slide-inner.two-col .col-code pre {
+      margin-top: 0;
+    }
+    /* On narrow viewports, stack columns */
+    @media (max-width: 900px) {
+      .slide-inner.two-col {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 
   <!-- Theme CSS (injected) -->
@@ -223,6 +247,52 @@
 
     // Syntax highlighting
     hljs.highlightAll();
+
+    // Two-column layout: wrap slides with text + code into side-by-side columns
+    slides.forEach(function(slide) {
+      var inner = slide.querySelector('.slide-inner');
+      var children = Array.from(inner.children);
+      var pres = children.filter(function(el) { return el.tagName === 'PRE'; });
+      var others = children.filter(function(el) { return el.tagName !== 'PRE'; });
+
+      // Only apply if there is exactly one pre block and at least one other element
+      if (pres.length === 1 && others.length >= 1) {
+        var textCol = document.createElement('div');
+        textCol.className = 'col-text';
+        var codeCol = document.createElement('div');
+        codeCol.className = 'col-code';
+
+        others.forEach(function(el) { textCol.appendChild(el); });
+        pres.forEach(function(el) { codeCol.appendChild(el); });
+
+        inner.innerHTML = '';
+        inner.appendChild(textCol);
+        inner.appendChild(codeCol);
+        inner.classList.add('two-col');
+      }
+    });
+
+    // Auto-scale slides that overflow the viewport
+    function scaleSlides() {
+      slides.forEach(function(slide) {
+        var inner = slide.querySelector('.slide-inner');
+        // Reset any previous scaling
+        inner.style.transform = '';
+        inner.style.transformOrigin = 'top left';
+        var slideHeight = slide.clientHeight;
+        var padding = parseInt(getComputedStyle(slide).paddingTop) +
+                      parseInt(getComputedStyle(slide).paddingBottom);
+        var available = slideHeight - padding;
+        var contentHeight = inner.scrollHeight;
+        if (contentHeight > available && available > 0) {
+          var scale = available / contentHeight;
+          inner.style.transform = 'scale(' + scale + ')';
+          inner.style.width = (100 / scale) + '%';
+        }
+      });
+    }
+    scaleSlides();
+    window.addEventListener('resize', scaleSlides);
   })();
   </script>
 

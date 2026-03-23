@@ -41,6 +41,7 @@ in
     test.exec = "uv run pytest";
 
     build.exec = "uv run hotslice build examples/demo.md";
+    serve.exec = "uv run hotslice serve";
   };
 
   enterShell = ''
@@ -55,6 +56,7 @@ in
     echo "Commands:"
     echo "  dev              - Build demo deck and open in browser"
     echo "  build            - Build demo deck to demo.html"
+    echo "  serve            - Start the hotslice web server"
     echo ""
     echo "Quality commands:"
     echo "  lint             - Run ruff linter"
