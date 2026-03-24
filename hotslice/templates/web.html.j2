@@ -465,7 +465,12 @@ for i in range(3):
       if (code) code.style.color = codeFg;
 
       // Swap hljs stylesheet
-      previewCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/' + hljsSlug + '.min.css';
+      // Base16 themes live under a base16/ subdirectory on the CDN
+      var cssPath = hljsSlug;
+      if (hljsSlug.indexOf('base16-') === 0) {
+        cssPath = 'base16/' + hljsSlug.substring(7);
+      }
+      previewCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/' + cssPath + '.min.css';
 
       // Re-highlight code after CSS loads
       previewCss.onload = function() {

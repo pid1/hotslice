@@ -70,6 +70,18 @@ def _read_theme_meta(theme_dir: Path) -> dict:
     return {}
 
 
+def _hljs_slug_to_cdn_path(slug: str) -> str:
+    """Convert an hljs theme slug to its CDN path component.
+
+    Base16 themes live under a ``base16/`` subdirectory on the CDN, so
+    ``base16-monokai`` becomes ``base16/monokai``. All other slugs pass
+    through unchanged.
+    """
+    if slug.startswith("base16-"):
+        return "base16/" + slug[7:]
+    return slug
+
+
 def list_available_themes(theme_dir: str | None = None) -> list[dict]:
     """List all available on-disk themes with their metadata.
 
@@ -142,6 +154,7 @@ def render_deck(deck: DeckData, config: Config) -> str:
     theme_js = _read_file_or_empty(theme_dir / "theme.js")
 
     title = config.title or deck.title or "Untitled Presentation"
+    hljs_theme = _hljs_slug_to_cdn_path(hljs_theme)
 
     env = Environment(
         loader=FileSystemLoader(str(_TEMPLATES_DIR)),
