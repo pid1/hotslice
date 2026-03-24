@@ -227,14 +227,14 @@ Override the CSS custom properties to restyle everything:
   --accent: #4f46e5;       /* headings, links, accents */
   --code-bg: #f3f4f6;      /* code block background */
   --code-fg: #1f2937;      /* code text color */
-  --font-sans: system-ui, sans-serif;
+  --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
   --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace;
   --slide-padding: 64px;
   --slide-max-width: 1100px;
 }
 ```
 
-Code blocks use [Atkinson Hyperlegible Mono](https://fonts.google.com/specimen/Atkinson+Hyperlegible+Mono) loaded from Google Fonts. The font is designed for maximum legibility at all sizes.
+Body text uses [Atkinson Hyperlegible Next](https://fonts.google.com/specimen/Atkinson+Hyperlegible+Next) by default, and code blocks use [Atkinson Hyperlegible Mono](https://fonts.google.com/specimen/Atkinson+Hyperlegible+Mono). Both fonts are loaded from Google Fonts and designed for maximum legibility at all sizes. The pizza themes override the body font to Fredoka.
 
 The optional `theme.js` runs after the deck runtime, so you can add animations, custom key bindings, or other enhancements.
 

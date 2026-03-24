@@ -222,7 +222,7 @@ The base template defines these CSS custom properties. Override them in your `th
   --accent: #4f46e5;            /* accent color for headings, links, markers */
   --code-bg: #f3f4f6;           /* code block background */
   --code-fg: #1f2937;           /* code block text color */
-  --font-sans: system-ui, sans-serif;  /* body font stack */
+  --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;  /* body font stack */
   --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace; /* code font stack */
   --slide-padding: 64px;        /* slide content padding */
   --slide-max-width: 1100px;    /* max content width */
