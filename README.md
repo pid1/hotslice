@@ -2,6 +2,8 @@
 
 A hot take, one slice at a time. **Markdown → HTML slide decks from the CLI.**
 
+See it in action, and use the MCP, at [hotslice.pizza](https://hotslice.pizza/).
+
 hotslice converts a single Markdown file into a self-contained HTML presentation with keyboard/click navigation, syntax highlighting, and pluggable themes. Build decks from the CLI or upload Markdown through the built-in web UI.
 
 ## Quick Start
