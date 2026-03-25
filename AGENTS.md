@@ -53,13 +53,12 @@ dev
 | `hotslice/cli.py` | CLI entry point (argparse): `build` and `serve` subcommands |
 | `hotslice/parser.py` | Markdown parsing and slide splitting |
 | `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
+| `hotslice/mcp_server.py` | MCP server: prompt and tools for AI agent integration |
 | `install.sh` | `curl \| bash` installer for macOS and Linux |
 | `hotslice.toml` | Project-level config (repo root) |
 | `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
 | `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
 | `themes/` | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes) |
-| `Dockerfile` | Multi-stage build for containerized web server |
-
 ---
 
 ## Slide Authoring Format

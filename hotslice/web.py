@@ -2,21 +2,60 @@
 
 from __future__ import annotations
 
+import contextlib
+import re
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI, Form, Request, UploadFile
+from fastapi import FastAPI, Form, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse, Response
 from fastapi.templating import Jinja2Templates
 
 from hotslice.config import Config
+from hotslice.mcp_server import mcp as mcp_server
 from hotslice.parser import parse_deck
 from hotslice.renderer import list_available_themes, render_deck
 
 _TEMPLATES_DIR = Path(__file__).parent / "templates"
 
-app = FastAPI(title="hotslice", description="Markdown to HTML slide decks")
+_MAX_UPLOAD_SIZE = 2 * 1024 * 1024  # 2 MB
+_THEME_NAME_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
+_ALLOWED_EXTENSIONS = {".md", ".markdown", ".txt"}
+
+
+@contextlib.asynccontextmanager
+async def _lifespan(app: FastAPI):
+    async with mcp_server.session_manager.run():
+        yield
+
+
+app = FastAPI(
+    title="hotslice",
+    description="Markdown to HTML slide decks",
+    lifespan=_lifespan,
+)
 templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
+
+
+def _validate_theme(name: str) -> None:
+    """Raise HTTPException if the theme name contains unsafe characters."""
+    if not _THEME_NAME_RE.match(name):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid theme name. Use only letters, digits, hyphens, and underscores.",
+        )
+
+
+def _safe_stem(filename: str | None) -> str:
+    """Extract a safe filename stem from an upload filename."""
+    if not filename:
+        return "presentation"
+    # Use only the final path component, then take its stem
+    name = Path(filename).name
+    stem = Path(name).stem
+    # Replace anything that is not alphanumeric, hyphen, underscore, or dot
+    stem = re.sub(r"[^\w.-]", "_", stem)
+    return stem or "presentation"
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -42,29 +81,63 @@ async def convert(
     theme: str = Form("pizza-light"),
 ):
     """Convert uploaded markdown to HTML and return as download."""
+    # Validate theme name (blocks path traversal)
+    _validate_theme(theme)
+
+    # Validate file extension
+    if file.filename:
+        ext = Path(file.filename).suffix.lower()
+        if ext and ext not in _ALLOWED_EXTENSIONS:
+            raise HTTPException(
+                status_code=400,
+                detail="Only .md, .markdown, and .txt files are accepted.",
+            )
+
+    # Read with size limit
     content = await file.read()
-    markdown_text = content.decode("utf-8")
+    if len(content) > _MAX_UPLOAD_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large. Maximum size is {_MAX_UPLOAD_SIZE // 1024 // 1024} MB.",
+        )
+
+    # Decode with error handling
+    try:
+        markdown_text = content.decode("utf-8")
+    except (UnicodeDecodeError, ValueError):
+        raise HTTPException(
+            status_code=400,
+            detail="File must be valid UTF-8 text.",
+        )
 
     config = Config(theme=theme)
     deck = parse_deck(markdown_text)
 
-    # Apply frontmatter overrides
+    # Apply frontmatter overrides (re-validate theme if frontmatter changes it)
     if "theme" in deck.frontmatter:
-        config.theme = deck.frontmatter["theme"]
+        fm_theme = str(deck.frontmatter["theme"])
+        if _THEME_NAME_RE.match(fm_theme):
+            config.theme = fm_theme
     if "title" in deck.frontmatter:
-        config.title = deck.frontmatter["title"]
+        config.title = str(deck.frontmatter["title"])
 
     html = render_deck(deck, config)
 
-    # Derive filename from upload name
-    stem = Path(file.filename).stem if file.filename else "presentation"
+    stem = _safe_stem(file.filename)
     filename = f"{stem}.html"
 
     return Response(
         content=html,
         media_type="text/html",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "X-Content-Type-Options": "nosniff",
+        },
     )
+
+
+# MCP server for AI agent integration
+app.mount("/mcp", mcp_server.streamable_http_app())
 
 
 def main(host: str = "0.0.0.0", port: int = 8000):

@@ -250,16 +250,45 @@ Slides that contain exactly one code block alongside other content (headings, pa
 
 Slides with multiple code blocks or code-only slides are not affected.
 
-## Docker
+## MCP Server
 
-Run the web UI in a container:
+hotslice includes a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that lets AI agents generate presentations programmatically.
 
-```bash
-docker build -t hotslice .
-docker run -p 8000:8000 hotslice
+### Connecting via HTTP
+
+When running the web server (`hotslice serve`), the MCP endpoint is available at `/mcp`:
+
+```json
+{
+  "mcpServers": {
+    "hotslice": {
+      "url": "http://localhost:8000/mcp"
+    }
+  }
+}
 ```
 
-Open `http://localhost:8000` to access the upload form. The container runs as a non-root user and exposes port 8000.
+### Connecting via stdio
+
+For local use with MCP-compatible tools:
+
+```json
+{
+  "mcpServers": {
+    "hotslice": {
+      "command": "hotslice-mcp"
+    }
+  }
+}
+```
+
+### Available Capabilities
+
+| Type   | Name                 | Description                                       |
+|--------|----------------------|---------------------------------------------------|
+| Prompt | `write_presentation` | Guide for writing hotslice Markdown presentations |
+| Tool   | `build_presentation` | Convert Markdown to an HTML slide deck            |
+| Tool   | `list_themes`        | List all available themes with metadata           |
 
 ## Configuration
 
