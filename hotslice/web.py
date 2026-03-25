@@ -10,6 +10,7 @@ import uvicorn
 from fastapi import FastAPI, Form, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse, Response
 from fastapi.templating import Jinja2Templates
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from hotslice.config import Config
 from hotslice.mcp_server import mcp as mcp_server
@@ -138,6 +139,29 @@ async def convert(
 
 # MCP server for AI agent integration
 app.mount("/mcp", mcp_server.streamable_http_app())
+
+
+# ---------------------------------------------------------------------------
+# Middleware: rewrite /mcp → /mcp/ internally so Starlette's Mount never
+# issues a 307 trailing-slash redirect.  Behind an HTTPS reverse-proxy the
+# redirect's Location header used http://, which caused 421 Misdirected
+# Request.  Rewriting the path at the ASGI scope level eliminates the
+# redirect entirely — no extra round-trip, no scheme mismatch.
+#
+# This is a raw ASGI middleware (not BaseHTTPMiddleware) so it doesn't
+# interfere with MCP Streamable HTTP's streaming responses.
+# ---------------------------------------------------------------------------
+class _MCPPathRewrite:
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http" and scope["path"] == "/mcp":
+            scope = dict(scope, path="/mcp/")
+        await self.app(scope, receive, send)
+
+
+app.add_middleware(_MCPPathRewrite)
 
 
 def main(host: str = "0.0.0.0", port: int = 8000):
