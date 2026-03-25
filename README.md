@@ -133,7 +133,11 @@ hotslice serve [options]
 | `--host`   | `0.0.0.0` | Host to bind to                |
 | `--port`   | `8000`     | Port to listen on              |
 
-Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme picker lists all 257 installed themes, grouped by Light and Dark, with a search box for quick filtering. Selecting a theme updates the preview with that theme's actual colors.
+Open `http://localhost:8000` in your browser. The landing page explains what hotslice is, shows how to get started, and provides the upload form for converting Markdown to slides.
+
+The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme picker lists all 257 installed themes, grouped by Light and Dark, with a search box for quick filtering. Selecting a theme updates the preview with that theme's actual colors.
+
+Below the form, three info cards cover the main usage paths: CLI quick start, the web UI and its API endpoints, and the MCP server with its connection config. The footer includes a link to sponsor the project via [GitHub Sponsors](https://github.com/sponsors/pid1).
 
 **Upload restrictions:** The `/convert` endpoint accepts `.md`, `.markdown`, and `.txt` files up to 2 MB. Files must be valid UTF-8 text. Uploads that exceed the size limit receive an HTTP 413 response.
 
@@ -141,7 +145,7 @@ Open `http://localhost:8000` in your browser to upload a `.md` file, choose a th
 
 | Method | Path          | Description                              |
 |--------|---------------|------------------------------------------|
-| GET    | `/`           | Upload form (HTML)                       |
+| GET    | `/`           | Landing page with upload form (HTML)     |
 | GET    | `/api/themes` | List available themes (JSON)             |
 | POST   | `/convert`    | Convert uploaded Markdown to HTML (multipart form) |
 | POST   | `/mcp`        | MCP server endpoint (see [MCP Server](#mcp-server)) |

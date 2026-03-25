@@ -308,6 +308,102 @@
     .footer a:hover {
       text-decoration: underline;
     }
+
+    .header .description {
+      font-family: var(--font-body);
+      color: #6B5B4F;
+      font-size: 0.95rem;
+      max-width: 680px;
+      margin: 0.75rem auto 0;
+      line-height: 1.6;
+    }
+
+    .info-section {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px 20px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 900px) {
+      .info-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    .info-card {
+      background: var(--surface);
+      border: 3px solid var(--secondary);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 6px 6px 0px var(--secondary);
+      min-width: 0;              /* let grid children shrink below content size */
+    }
+    .info-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+    .info-card p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--fg);
+      margin-bottom: 0.5rem;
+      overflow-wrap: break-word;
+    }
+    .info-card code {
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
+      font-size: 0.75rem;
+      background: var(--accent-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .info-card pre {
+      background: var(--accent-bg);
+      border: 2px solid var(--secondary);
+      border-radius: 10px;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      overflow-x: auto;
+    }
+    .info-card pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.7rem;
+      line-height: 1.5;
+      color: var(--fg);
+      white-space: pre;          /* keep code formatting, let pre scroll */
+    }
+
+    .footer .sponsor {
+      margin-bottom: 12px;
+    }
+    .sponsor-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 2px solid var(--secondary);
+      border-radius: 30px;
+      color: var(--primary);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 3px 3px 0px var(--secondary);
+      transition: all 0.2s ease;
+    }
+    .sponsor-link:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 4px 5px 0px var(--secondary);
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -321,6 +417,7 @@
   <div class="header">
     <h1>&#127829; hotslice</h1>
     <p class="subtitle">Upload a Markdown file. Download a presentation.</p>
+    <p class="description">hotslice converts Markdown into self-contained HTML slide decks with keyboard navigation, syntax highlighting, and 257 themes. Use the CLI, this web UI, or connect an AI agent via the MCP server.</p>
   </div>
 
   <div class="main-content">
@@ -402,7 +499,46 @@ for i in range(3):
     </div>
   </div>
 
-  <div class="footer">Powered by <a href="https://github.com/pid1/hotslice">hotslice</a></div>
+  <div class="info-section">
+    <div class="info-card">
+      <h3>&#9889; Quick Start</h3>
+      <p>Install hotslice with a single command, then build your first deck:</p>
+      <pre><code>curl -fsSL \
+  https://raw.githubusercontent.com/pid1/hotslice/main/install.sh \
+  | bash
+
+hotslice build slides.md
+open slides.html</code></pre>
+      <p>Write slides in Markdown separated by <code>---</code>. Add optional TOML frontmatter for title and theme.</p>
+    </div>
+    <div class="info-card">
+      <h3>&#127760; Web UI</h3>
+      <p>Upload any <code>.md</code> file using the form above, pick a theme from the 257 available options, preview it live, and download the generated HTML.</p>
+      <p>The output is a single self-contained HTML file. No dependencies, no build tools. Open it in any browser.</p>
+      <p>You can also use the API directly:</p>
+      <pre><code>POST /convert  (multipart form)
+GET  /api/themes (JSON)</code></pre>
+    </div>
+    <div class="info-card">
+      <h3>&#129302; MCP Server</h3>
+      <p>Let AI agents build presentations for you. hotslice exposes an <a href="https://modelcontextprotocol.io" style="color: var(--primary); font-weight: 600;">MCP</a> endpoint at <code>/mcp</code> on this server.</p>
+      <pre><code>{
+  "mcpServers": {
+    "hotslice": {
+      "url": "http://HOST:PORT/mcp"
+    }
+  }
+}</code></pre>
+      <p>Tools: <code>build_presentation</code>, <code>list_themes</code>. Prompt: <code>write_presentation</code>.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="sponsor">
+      <a href="https://github.com/sponsors/pid1" class="sponsor-link" target="_blank" rel="noopener">&#10084;&#65039; Sponsor hotslice</a>
+    </div>
+    Powered by <a href="https://github.com/pid1/hotslice">hotslice</a>
+  </div>
 
   <!-- highlight.js for preview syntax highlighting -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
