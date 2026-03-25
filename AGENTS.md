@@ -43,6 +43,8 @@ dev
 - Generated theme CSS files contain `auto-generated` in their first-line comment. The generator script (`scripts/generate_themes.py`) uses this marker to distinguish generated themes from hand-crafted ones (pizza-light, pizza-dark). Do not add this marker to hand-crafted themes; it would cause the generator to overwrite them.
 - The web template stores each theme's color values in `data-slide-bg`, `data-slide-fg`, `data-accent`, `data-code-bg`, `data-code-fg` attributes on `<option>` elements. The preview JS reads these attributes to apply inline styles. Do not replace this with hardcoded color mappings.
 - Base16 theme slugs (e.g., `base16-monokai`) must be converted to CDN subdirectory paths (`base16/monokai`) before constructing highlight.js CDN URLs. The CDN hosts base16 CSS under `styles/base16/{name}.min.css`, not `styles/base16-{name}.min.css`. This conversion lives in two places that must stay in sync: `_hljs_slug_to_cdn_path()` in `hotslice/renderer.py` (for built deck output) and the equivalent JavaScript in `hotslice/templates/web.html.j2`'s `applyPreview()` function (for web UI preview). If you change one, update the other.
+- Theme name validation regex `^[a-zA-Z0-9][a-zA-Z0-9_-]*$` is defined independently in `hotslice/web.py` (`_THEME_NAME_RE`) and `hotslice/mcp_server.py` (`_THEME_NAME_RE`). Both files also re-validate frontmatter theme overrides and apply matching size limits. If you change validation rules in one, update the other.
+- The MCP server sets `streamable_http_path="/"` in `hotslice/mcp_server.py` so the endpoint resolves to `/mcp` when mounted via `app.mount("/mcp", ...)` in `hotslice/web.py`. If you change the mount path, update `streamable_http_path` to match (or vice versa), otherwise the endpoint breaks or doubles the prefix.
 
 ### Key Files
 
@@ -53,13 +55,12 @@ dev
 | `hotslice/cli.py` | CLI entry point (argparse): `build` and `serve` subcommands |
 | `hotslice/parser.py` | Markdown parsing and slide splitting |
 | `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
+| `hotslice/mcp_server.py` | MCP server: prompt and tools for AI agent integration |
 | `install.sh` | `curl \| bash` installer for macOS and Linux |
 | `hotslice.toml` | Project-level config (repo root) |
 | `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
 | `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
 | `themes/` | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes) |
-| `Dockerfile` | Multi-stage build for containerized web server |
-
 ---
 
 ## Slide Authoring Format
