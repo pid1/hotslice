@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 from hotslice.config import Config
 from hotslice.parser import parse_deck
@@ -18,6 +19,13 @@ mcp = FastMCP(
     stateless_http=True,
     json_response=True,
     streamable_http_path="/",
+    # Disable DNS rebinding protection: this MCP server is mounted inside a
+    # public FastAPI app behind a reverse proxy (Railway).  The default
+    # protection only allows localhost Host headers, which rejects every
+    # request whose Host is the public domain (→ 421 Misdirected Request).
+    transport_security=TransportSecuritySettings(
+        enable_dns_rebinding_protection=False,
+    ),
 )
 
 _AUTHORING_GUIDE = """\
