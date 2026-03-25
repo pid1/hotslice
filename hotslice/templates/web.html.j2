@@ -339,6 +339,7 @@
       border-radius: 20px;
       padding: 1.5rem;
       box-shadow: 6px 6px 0px var(--secondary);
+      min-width: 0;              /* let grid children shrink below content size */
     }
     .info-card h3 {
       font-family: var(--font-display);
@@ -351,6 +352,7 @@
       line-height: 1.6;
       color: var(--fg);
       margin-bottom: 0.5rem;
+      overflow-wrap: break-word;
     }
     .info-card code {
       font-family: 'Atkinson Hyperlegible Mono', monospace;
@@ -364,7 +366,7 @@
       border: 2px solid var(--secondary);
       border-radius: 10px;
       padding: 0.75rem;
-      margin-top: 0.5rem;
+      margin: 0.5rem 0;
       overflow-x: auto;
     }
     .info-card pre code {
@@ -373,6 +375,7 @@
       font-size: 0.7rem;
       line-height: 1.5;
       color: var(--fg);
+      white-space: pre;          /* keep code formatting, let pre scroll */
     }
 
     .footer .sponsor {
@@ -500,7 +503,9 @@ for i in range(3):
     <div class="info-card">
       <h3>&#9889; Quick Start</h3>
       <p>Install hotslice with a single command, then build your first deck:</p>
-      <pre><code>curl -fsSL https://raw.githubusercontent.com/pid1/hotslice/main/install.sh | bash
+      <pre><code>curl -fsSL \
+  https://raw.githubusercontent.com/pid1/hotslice/main/install.sh \
+  | bash
 
 hotslice build slides.md
 open slides.html</code></pre>
