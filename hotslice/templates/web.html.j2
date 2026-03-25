@@ -378,8 +378,11 @@
       white-space: pre;          /* keep code formatting, let pre scroll */
     }
 
-    .footer .sponsor {
-      margin-bottom: 12px;
+    .sponsor-fixed {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
     }
     .sponsor-link {
       display: inline-flex;
@@ -533,10 +536,11 @@ GET  /api/themes (JSON)</code></pre>
     </div>
   </div>
 
+  <div class="sponsor-fixed">
+    <a href="https://github.com/sponsors/pid1" class="sponsor-link" target="_blank" rel="noopener">&#10084;&#65039; Sponsor hotslice</a>
+  </div>
+
   <div class="footer">
-    <div class="sponsor">
-      <a href="https://github.com/sponsors/pid1" class="sponsor-link" target="_blank" rel="noopener">&#10084;&#65039; Sponsor hotslice</a>
-    </div>
     Powered by <a href="https://github.com/pid1/hotslice">hotslice</a>
   </div>
 
