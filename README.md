@@ -135,6 +135,8 @@ hotslice serve [options]
 
 Open `http://localhost:8000` in your browser to upload a `.md` file, choose a theme, preview it live, and download the generated HTML. The web UI features a pizza-themed design with a two-column layout: the upload form on the left and a live preview panel on the right. The theme picker lists all 257 installed themes, grouped by Light and Dark, with a search box for quick filtering. Selecting a theme updates the preview with that theme's actual colors.
 
+**Upload restrictions:** The `/convert` endpoint accepts `.md`, `.markdown`, and `.txt` files up to 2 MB. Files must be valid UTF-8 text. Uploads that exceed the size limit receive an HTTP 413 response.
+
 **API endpoints:**
 
 | Method | Path          | Description                              |
@@ -142,6 +144,7 @@ Open `http://localhost:8000` in your browser to upload a `.md` file, choose a th
 | GET    | `/`           | Upload form (HTML)                       |
 | GET    | `/api/themes` | List available themes (JSON)             |
 | POST   | `/convert`    | Convert uploaded Markdown to HTML (multipart form) |
+| POST   | `/mcp`        | MCP server endpoint (see [MCP Server](#mcp-server)) |
 
 ## Themes
 
