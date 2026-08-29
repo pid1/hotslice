@@ -112,6 +112,25 @@ docker run -d --name hotslice-cloudflared --restart unless-stopped \
 Drop the second container and add `-p 8000:8000` to the first for a LAN-only
 install.
 
+### A note for Unraid
+
+Community Applications has a `CloudflaredTunnel` template that uses the same
+official `cloudflare/cloudflared` image. Two of its defaults are worth changing
+if you use it:
+
+- It runs with `Network = host`, which lets the connector reach every service on
+  the box. On a bridge network it can reach hotslice and nothing else, so a
+  leaked token routes to one container rather than to your whole LAN.
+- It passes the token as `--token <value>` in `PostArgs`, which puts a live
+  credential into `docker inspect` and `ps` output. An `--env-file` keeps it in
+  one file you control the permissions on.
+
+Containers started with plain `docker run` show up in the Docker tab as orphans
+that the UI cannot edit, and are lost if `docker.img` is ever recreated. To
+manage them normally, drop a template in
+`/boot/config/plugins/dockerMan/templates-user/` whose `<Name>` matches the
+container, with the hardening flags in `<ExtraParams>`.
+
 Check both halves:
 
 ```bash
