@@ -1,47 +1,47 @@
 /* hotslice base16-woodland theme (auto-generated from highlight.js) */
 
 :root {
-	--slide-bg: #231e18;
-	--slide-fg: #cabcb1;
-	--accent: #6eb958;
-	--code-bg: #231e18;
-	--code-fg: #cabcb1;
-	--font-mono: "Atkinson Hyperlegible Mono", monospace;
+  --slide-bg: #231e18;
+  --slide-fg: #cabcb1;
+  --accent: #6eb958;
+  --code-bg: #231e18;
+  --code-fg: #cabcb1;
+  --font-mono: "Atkinson Hyperlegible Mono", monospace;
 }
 
 html,
 body {
-	background: var(--slide-bg);
+  background: var(--slide-bg);
 }
 
 .slide h2 {
-	color: var(--accent);
+  color: var(--accent);
 }
 .slide h3 {
-	color: var(--accent);
-	opacity: 0.85;
+  color: var(--accent);
+  opacity: 0.85;
 }
 
 .slide pre {
-	background: var(--code-bg);
-	border: 1px solid color-mix(in srgb, var(--slide-fg) 15%, transparent);
-	border-radius: 8px;
+  background: var(--code-bg);
+  border: 1px solid color-mix(in srgb, var(--slide-fg) 15%, transparent);
+  border-radius: 8px;
 }
 
 .slide blockquote {
-	border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--accent);
 }
 
 .slide a {
-	color: var(--accent);
+  color: var(--accent);
 }
 .slide th {
-	color: var(--accent);
+  color: var(--accent);
 }
 .slide li::marker {
-	color: var(--accent);
+  color: var(--accent);
 }
 
 #progress-bar {
-	background: var(--accent);
+  background: var(--accent);
 }
