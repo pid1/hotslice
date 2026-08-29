@@ -67,6 +67,9 @@ NAMED_COLORS: dict[str, str] = {
     "lime": "#00ff00",
 }
 
+# Kept in the exact shape prettier produces, so the generated files pass the
+# CSS_PRETTIER lint without a formatting pass after generation. If you edit
+# this, run prettier over themes/ and make the template match the result.
 THEME_CSS_TEMPLATE = """\
 /* hotslice {slug} theme (auto-generated from highlight.js) */
 
@@ -76,15 +79,21 @@ THEME_CSS_TEMPLATE = """\
   --accent: {accent};
   --code-bg: {code_bg};
   --code-fg: {code_fg};
-  --font-mono: 'Atkinson Hyperlegible Mono', monospace;
+  --font-mono: "Atkinson Hyperlegible Mono", monospace;
 }}
 
-html, body {{
+html,
+body {{
   background: var(--slide-bg);
 }}
 
-.slide h2 {{ color: var(--accent); }}
-.slide h3 {{ color: var(--accent); opacity: 0.85; }}
+.slide h2 {{
+  color: var(--accent);
+}}
+.slide h3 {{
+  color: var(--accent);
+  opacity: 0.85;
+}}
 
 .slide pre {{
   background: var(--code-bg);
@@ -96,9 +105,15 @@ html, body {{
   border-left: 4px solid var(--accent);
 }}
 
-.slide a {{ color: var(--accent); }}
-.slide th {{ color: var(--accent); }}
-.slide li::marker {{ color: var(--accent); }}
+.slide a {{
+  color: var(--accent);
+}}
+.slide th {{
+  color: var(--accent);
+}}
+.slide li::marker {{
+  color: var(--accent);
+}}
 
 #progress-bar {{
   background: var(--accent);
