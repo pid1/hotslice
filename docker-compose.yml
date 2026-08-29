@@ -27,7 +27,7 @@ services:
 
     # A public, unauthenticated endpoint that renders markdown is CPU the
     # internet can spend on your behalf. These limits mean a flood degrades
-    # hotslice rather than the NAS.
+    # hotslice rather than the host.
     deploy:
       resources:
         limits:
