@@ -19,7 +19,7 @@ COPY --from=builder /app/hotslice hotslice/
 COPY themes/ themes/
 
 ENV PATH="/app/.venv/bin:$PATH" \
-    PYTHONPATH="/app:$PYTHONPATH" \
+    PYTHONPATH="/app" \
     PYTHONDONTWRITEBYTECODE=1 \
     HOME=/tmp
 
@@ -28,7 +28,7 @@ ENV PATH="/app/.venv/bin:$PATH" \
 # persisting and can run with a read-only root filesystem. docker-compose.yml
 # does exactly that. Keep it that way — if something here ever needs to write,
 # give it a tmpfs rather than a bind mount to the array.
-RUN useradd --system --uid 10001 --no-create-home hotslice
+RUN useradd --uid 10001 --no-create-home --shell /usr/sbin/nologin hotslice
 USER 10001
 
 EXPOSE 8000

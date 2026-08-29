@@ -19,8 +19,27 @@ not have.
 ## Prerequisites
 
 - A host running Docker, up continuously. An Unraid box is the assumed case.
-- `hotslice.pizza` on Cloudflare DNS.
 - A Cloudflare Zero Trust account. The free plan covers everything here.
+- **`hotslice.pizza` served by Cloudflare's nameservers.** This one is not
+  optional and is the most common thing to get stuck on — see below.
+
+### The domain has to use Cloudflare DNS
+
+A tunnel's public hostname is a CNAME into `cfargotunnel.com` that only
+Cloudflare can create, so the zone has to live on Cloudflare. Registration does
+not: leave the domain registered wherever it is and delegate DNS.
+
+1. Add the domain in the Cloudflare dashboard. It imports the existing records
+   and gives you two assigned nameservers.
+2. At the registrar, replace the current nameservers with those two. On
+   Namecheap this is **Domain List -> Manage -> Nameservers -> Custom DNS**.
+3. Wait for Cloudflare to mark the zone Active. Usually minutes; the TLD can
+   take longer.
+4. Delete any imported record for the apex that still points at the old host —
+   an `ALIAS`/`CNAME` to `*.up.railway.app`, or its `A` record. Step 2 of the
+   tunnel setup writes the replacement.
+
+The registrar keeps billing and renewals. Only resolution moves.
 
 ## 1. Create the tunnel
 
@@ -71,9 +90,37 @@ curl -sf localhost:8000/api/themes   # from the host, only if you publish a port
 curl -sI https://hotslice.pizza      # the real test
 ```
 
-On Unraid, Community Applications has a `cloudflared` template if you would
-rather not run compose; point it at the same token and run the hotslice
-container on a shared custom Docker network so `hotslice:8000` resolves.
+### On Unraid, without compose
+
+Stock Unraid has Docker but no `docker compose` plugin, so either install
+**Docker Compose Manager** from Community Applications or run the two
+containers directly. The direct form, which is what the deployed stack
+actually uses:
+
+```bash
+docker network create hotslice-net
+
+docker run -d --name hotslice --restart unless-stopped \
+  --network hotslice-net \
+  --read-only --tmpfs /tmp:size=64m,mode=1777,noexec,nosuid,nodev \
+  --security-opt no-new-privileges:true --cap-drop ALL \
+  --cpus 1.0 --memory 512m \
+  ghcr.io/pid1/hotslice:latest
+
+docker run -d --name hotslice-cloudflared --restart unless-stopped \
+  --network hotslice-net \
+  --read-only --security-opt no-new-privileges:true --cap-drop ALL \
+  -e TUNNEL_TOKEN=... \
+  cloudflare/cloudflared:latest tunnel --no-autoupdate run
+```
+
+Neither publishes a port. `hotslice:8000` resolves because both containers sit
+on `hotslice-net`.
+
+`ghcr.io/pid1/hotslice:latest` is built and pushed by
+`.github/workflows/container.yml` on every push to `main`, so the NAS pulls
+rather than builds. `docker build -t ghcr.io/pid1/hotslice:latest .` works
+locally too.
 
 ## 4. Harden the public surface
 
@@ -100,6 +147,22 @@ and leave the landing page open — also free, up to 50 users.
 
 Optionally cache `/` at the edge. The landing page is static per deploy and
 caching it means routine traffic never reaches the NAS at all.
+
+## Verifying
+
+With the container up, before the tunnel exists, check it from inside — the
+read-only rootfs means `docker cp` will not work, so pipe scripts in on stdin:
+
+```bash
+docker exec hotslice python -c "import urllib.request as u; \
+  print(u.urlopen('http://127.0.0.1:8000/api/themes').status)"
+```
+
+A healthy instance answers `200` on `/` and `/api/themes` (257 themes), returns
+rendered HTML from `POST /convert`, rejects a 3 MB upload with `413`, and
+answers `406` on a plain `GET /mcp`. That 406 is correct — MCP Streamable HTTP
+wants an SSE `Accept` header. What matters is that it is not a `307` or `421`,
+which is what the `_MCPPathRewrite` middleware exists to prevent.
 
 ## Rolling back
 
