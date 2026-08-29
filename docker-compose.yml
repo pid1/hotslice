@@ -1,0 +1,65 @@
+# hotslice behind a Cloudflare Tunnel. See docs/deploy.md.
+#
+# There are no published ports. The tunnel reaches hotslice over the internal
+# compose network, so the only connection into this stack is the one cloudflared
+# makes outbound. Nothing on the host is listening for the internet.
+
+services:
+  hotslice:
+    build: .
+    image: ghcr.io/pid1/hotslice:latest
+    container_name: hotslice
+    restart: unless-stopped
+    expose:
+      - "8000"
+    networks:
+      - edge
+
+    # Nothing is written at runtime, so the filesystem is read-only and the two
+    # paths Python insists on writing to are small tmpfs mounts.
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+    # A public, unauthenticated endpoint that renders markdown is CPU the
+    # internet can spend on your behalf. These limits mean a flood degrades
+    # hotslice rather than the NAS.
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/themes').read()"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: hotslice-cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      # Dashboard-managed tunnel: the token carries the credentials and the
+      # ingress rules. Put it in .env next to this file, never in git.
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN:?set TUNNEL_TOKEN in .env}
+    networks:
+      - edge
+    depends_on:
+      - hotslice
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+networks:
+  edge:
+    driver: bridge
