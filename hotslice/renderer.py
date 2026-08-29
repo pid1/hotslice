@@ -103,7 +103,11 @@ def list_available_themes(theme_dir: str | None = None) -> list[dict]:
         if not base.is_dir():
             continue
         for entry in sorted(base.iterdir()):
-            if entry.is_dir() and (entry / "theme.css").is_file() and entry.name not in seen:
+            if (
+                entry.is_dir()
+                and (entry / "theme.css").is_file()
+                and entry.name not in seen
+            ):
                 seen.add(entry.name)
                 meta = _read_theme_meta(entry)
                 colors = meta.get("colors", {})

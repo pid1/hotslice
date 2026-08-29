@@ -11,16 +11,16 @@ from markdown_it import MarkdownIt
 # Matches sequences of emoji characters (including ZWJ and variation selectors)
 _EMOJI_RE = re.compile(
     "(["
-    "\U0001F600-\U0001F64F"  # Emoticons
-    "\U0001F300-\U0001F5FF"  # Misc Symbols and Pictographs
-    "\U0001F680-\U0001F6FF"  # Transport and Map
-    "\U0001F1E0-\U0001F1FF"  # Flags
-    "\U0001F900-\U0001F9FF"  # Supplemental Symbols
-    "\U0001FA00-\U0001FA6F"  # Chess Symbols
-    "\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
-    "\U00002702-\U000027B0"  # Dingbats
-    "\U0000FE0F"             # Variation Selector-16
-    "\U0000200D"             # Zero Width Joiner
+    "\U0001f600-\U0001f64f"  # Emoticons
+    "\U0001f300-\U0001f5ff"  # Misc Symbols and Pictographs
+    "\U0001f680-\U0001f6ff"  # Transport and Map
+    "\U0001f1e0-\U0001f1ff"  # Flags
+    "\U0001f900-\U0001f9ff"  # Supplemental Symbols
+    "\U0001fa00-\U0001fa6f"  # Chess Symbols
+    "\U0001fa70-\U0001faff"  # Symbols and Pictographs Extended-A
+    "\U00002702-\U000027b0"  # Dingbats
+    "\U0000fe0f"  # Variation Selector-16
+    "\U0000200d"  # Zero Width Joiner
     "]+)"
 )
 

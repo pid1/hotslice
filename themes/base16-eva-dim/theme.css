@@ -1,47 +1,47 @@
 /* hotslice base16-eva-dim theme (auto-generated from highlight.js) */
 
 :root {
-  --slide-bg: #2a3b4d;
-  --slide-fg: #9fa2a6;
-  --accent: #4b8f77;
-  --code-bg: #2a3b4d;
-  --code-fg: #9fa2a6;
-  --font-mono: "Atkinson Hyperlegible Mono", monospace;
+	--slide-bg: #2a3b4d;
+	--slide-fg: #9fa2a6;
+	--accent: #4b8f77;
+	--code-bg: #2a3b4d;
+	--code-fg: #9fa2a6;
+	--font-mono: "Atkinson Hyperlegible Mono", monospace;
 }
 
 html,
 body {
-  background: var(--slide-bg);
+	background: var(--slide-bg);
 }
 
 .slide h2 {
-  color: var(--accent);
+	color: var(--accent);
 }
 .slide h3 {
-  color: var(--accent);
-  opacity: 0.85;
+	color: var(--accent);
+	opacity: 0.85;
 }
 
 .slide pre {
-  background: var(--code-bg);
-  border: 1px solid color-mix(in srgb, var(--slide-fg) 15%, transparent);
-  border-radius: 8px;
+	background: var(--code-bg);
+	border: 1px solid color-mix(in srgb, var(--slide-fg) 15%, transparent);
+	border-radius: 8px;
 }
 
 .slide blockquote {
-  border-left: 4px solid var(--accent);
+	border-left: 4px solid var(--accent);
 }
 
 .slide a {
-  color: var(--accent);
+	color: var(--accent);
 }
 .slide th {
-  color: var(--accent);
+	color: var(--accent);
 }
 .slide li::marker {
-  color: var(--accent);
+	color: var(--accent);
 }
 
 #progress-bar {
-  background: var(--accent);
+	background: var(--accent);
 }

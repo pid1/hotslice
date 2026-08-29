@@ -3,85 +3,85 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap");
 
 :root {
-  --slide-bg: #fff8f0;
-  --slide-fg: #3d2b1f;
-  --accent: #e63946;
-  --code-bg: #fdebd0;
-  --code-fg: #3d2b1f;
-  --font-sans: "Fredoka", system-ui, -apple-system, sans-serif;
-  --font-mono: "Atkinson Hyperlegible Mono", monospace;
-  --slide-padding: 64px;
-  --slide-max-width: 1100px;
+	--slide-bg: #fff8f0;
+	--slide-fg: #3d2b1f;
+	--accent: #e63946;
+	--code-bg: #fdebd0;
+	--code-fg: #3d2b1f;
+	--font-sans: "Fredoka", system-ui, -apple-system, sans-serif;
+	--font-mono: "Atkinson Hyperlegible Mono", monospace;
+	--slide-padding: 64px;
+	--slide-max-width: 1100px;
 }
 
 html,
 body {
-  background: var(--slide-bg);
+	background: var(--slide-bg);
 }
 
 /* Title slide */
 .slide[data-index="0"] h1 {
-  font-size: 3.5rem;
-  background: linear-gradient(135deg, #e63946, #f4a261);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+	font-size: 3.5rem;
+	background: linear-gradient(135deg, #e63946, #f4a261);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
 }
 
 .slide[data-index="0"] p {
-  font-size: 1.4rem;
-  opacity: 0.65;
+	font-size: 1.4rem;
+	opacity: 0.65;
 }
 
 /* Accent bar on non-title slides */
 .slide:not([data-index="0"]) .slide-inner {
-  border-top: 3px dashed var(--accent);
-  padding-top: 1.5rem;
+	border-top: 3px dashed var(--accent);
+	padding-top: 1.5rem;
 }
 
 /* Headings */
 .slide h2 {
-  color: #e63946;
+	color: #e63946;
 }
 
 .slide h3 {
-  color: #f4a261;
+	color: #f4a261;
 }
 
 /* Code blocks */
 .slide pre {
-  background: var(--code-bg);
-  border: 2px solid #f4a261;
-  border-radius: 12px;
+	background: var(--code-bg);
+	border: 2px solid #f4a261;
+	border-radius: 12px;
 }
 
 /* Blockquotes */
 .slide blockquote {
-  background: #fdebd0;
-  border-left: 4px solid #e63946;
-  border-radius: 0 12px 12px 0;
-  padding: 1em 1.5em;
+	background: #fdebd0;
+	border-left: 4px solid #e63946;
+	border-radius: 0 12px 12px 0;
+	padding: 1em 1.5em;
 }
 
 /* Links */
 .slide a {
-  color: #e63946;
+	color: #e63946;
 }
 
 /* Table rows */
 .slide th {
-  color: #e63946;
+	color: #e63946;
 }
 .slide tr:hover td {
-  background: #fdebd0;
+	background: #fdebd0;
 }
 
 /* List markers */
 .slide li::marker {
-  color: #f4a261;
+	color: #f4a261;
 }
 
 /* Progress bar */
 #progress-bar {
-  background: linear-gradient(90deg, #e63946, #f4a261);
+	background: linear-gradient(90deg, #e63946, #f4a261);
 }
