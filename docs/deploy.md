@@ -1,101 +1,96 @@
 # Self-hosting hotslice
 
-hotslice runs as a container behind a [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/).
-This document covers the whole path from a fresh NAS to `hotslice.pizza`
-serving traffic.
+hotslice is a small stateless web service, so it is cheap to run on hardware you
+already own — a home server, a NAS, a spare box. This document covers putting it
+on the public internet behind a [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/),
+which is free and does not require opening a port.
+
+If you only want it on your LAN, skip to [Running the container](#running-the-container)
+and stop there.
 
 ## Why a tunnel and not a reverse proxy
 
-A conventional nginx or Caddy setup means forwarding 80 and 443 from the router
-to a machine that also holds your data, which publishes your home IP and
-associates it permanently with the domain. `cloudflared` inverts that: the
-connector dials **out** to Cloudflare and traffic returns down that connection.
-There is no inbound firewall rule, no DDNS, no certificate to renew, and the
-origin address never appears in DNS.
+The conventional answer is nginx or Caddy plus a port forward. That means
+forwarding 80 and 443 from your router to a machine that probably also holds
+your data, which publishes your home IP address and ties it to a domain name
+permanently.
+
+`cloudflared` inverts the direction: the connector dials **out** to Cloudflare
+and traffic returns down that connection. There is no inbound firewall rule, no
+dynamic DNS, no certificate to renew, and the origin address never appears in
+DNS.
 
 Caddy's ACME automation is genuinely good. It solves a problem this setup does
 not have.
 
 ## Prerequisites
 
-- A host running Docker, up continuously. An Unraid box is the assumed case.
-- A Cloudflare Zero Trust account. The free plan covers everything here.
-- **`hotslice.pizza` served by Cloudflare's nameservers.** This one is not
-  optional and is the most common thing to get stuck on — see below.
+- A host running Docker, up continuously.
+- A Cloudflare account with Zero Trust enabled. The free plan covers all of this.
+- A domain served by Cloudflare's nameservers — see below.
 
 ### The domain has to use Cloudflare DNS
 
-A tunnel's public hostname is a CNAME into `cfargotunnel.com` that only
-Cloudflare can create, so the zone has to live on Cloudflare. Registration does
-not: leave the domain registered wherever it is and delegate DNS.
+This is the step people get stuck on. A tunnel's public hostname is a CNAME into
+`cfargotunnel.com` that only Cloudflare can create, so the zone has to live on
+Cloudflare. Registration does not: leave the domain registered wherever it is
+and delegate only DNS.
 
 1. Add the domain in the Cloudflare dashboard. It imports the existing records
-   and gives you two assigned nameservers.
-2. At the registrar, replace the current nameservers with those two. On
-   Namecheap this is **Domain List -> Manage -> Nameservers -> Custom DNS**.
-3. Wait for Cloudflare to mark the zone Active. Usually minutes; the TLD can
-   take longer.
-4. Delete any imported record for the apex that still points at the old host —
-   an `ALIAS`/`CNAME` to `*.up.railway.app`, or its `A` record. Step 2 of the
-   tunnel setup writes the replacement.
+   and assigns you two nameservers.
+2. At your registrar, replace the current nameservers with those two. Every
+   registrar words this differently — look for "custom DNS" or "nameservers"
+   on the domain's settings page.
+3. Wait for Cloudflare to mark the zone Active. Usually minutes, occasionally
+   longer depending on the TLD.
+4. Delete any imported record for the hostname you are about to use. If the
+   domain previously pointed at a PaaS, that is typically an `ALIAS`/`CNAME` to
+   the old provider, or an `A` record. The tunnel writes its own replacement.
 
-The registrar keeps billing and renewals. Only resolution moves.
+Your registrar keeps billing and renewals. Only resolution moves.
 
 ## 1. Create the tunnel
 
 In the Cloudflare dashboard, **Zero Trust → Networks → Tunnels**.
 
-Either create a new tunnel or reuse an existing connector and add a hostname to
-it. Reusing is fine and usually preferable: one connector can front any number
-of services, and each additional hostname is a routing rule rather than another
-daemon.
+Create a tunnel, or add a hostname to a connector you already run. Reusing is
+usually preferable: one connector can front any number of services, and each
+additional hostname is a routing rule rather than another daemon.
 
-Under **Install and run a connector**, copy the tunnel token. It is a
-credential — it authorizes anything to serve your hostname — so treat it like a
-password.
+Under **Install and run a connector**, copy the tunnel token. It authorizes
+anything holding it to serve your hostname, so treat it like a password.
 
 ## 2. Point the hostname at the container
 
-On the tunnel's **Published application routes** tab, add:
+On the tunnel's published routes, add:
 
 | Field | Value |
 | --- | --- |
-| Subdomain | *(blank)* |
-| Domain | `hotslice.pizza` |
+| Subdomain | *(blank, or `www`)* |
+| Domain | your domain |
 | Service type | `HTTP` |
 | URL | `hotslice:8000` |
 
-`hotslice:8000` is the container name on the compose network, which is why the
-compose file publishes no ports. Cloudflare creates the proxied DNS record for
-you; if a record for the apex already exists pointing at Railway, this replaces
-it.
+`hotslice:8000` is the container name on the shared Docker network, which is why
+nothing below publishes a port. Cloudflare creates the proxied DNS record for
+you.
 
-Repeat with subdomain `www` if you want it.
+## Running the container
 
-## 3. Run the stack
+The published image is `ghcr.io/pid1/hotslice:latest`, built from this repo by
+`.github/workflows/container.yml` on every push to `main`. `docker build -t
+hotslice .` works too.
 
-```bash
-git clone https://github.com/pid1/hotslice
-cd hotslice
-cp .env.example .env
-# paste the tunnel token into .env
-docker compose up -d --build
-```
-
-Then check both halves:
+### With compose
 
 ```bash
-docker compose logs -f cloudflared   # want: "Registered tunnel connection"
-curl -sf localhost:8000/api/themes   # from the host, only if you publish a port
-curl -sI https://hotslice.pizza      # the real test
+cp .env.example .env      # paste your tunnel token
+docker compose up -d
 ```
 
-### On Unraid, without compose
+### Without compose
 
-Stock Unraid has Docker but no `docker compose` plugin, so either install
-**Docker Compose Manager** from Community Applications or run the two
-containers directly. The direct form, which is what the deployed stack
-actually uses:
+Not every host has the compose plugin — stock Unraid, for one. The equivalent:
 
 ```bash
 docker network create hotslice-net
@@ -110,48 +105,49 @@ docker run -d --name hotslice --restart unless-stopped \
 docker run -d --name hotslice-cloudflared --restart unless-stopped \
   --network hotslice-net \
   --read-only --security-opt no-new-privileges:true --cap-drop ALL \
-  -e TUNNEL_TOKEN=... \
+  -e TUNNEL_TOKEN=your-token-here \
   cloudflare/cloudflared:latest tunnel --no-autoupdate run
 ```
 
-Neither publishes a port. `hotslice:8000` resolves because both containers sit
-on `hotslice-net`.
+Drop the second container and add `-p 8000:8000` to the first for a LAN-only
+install.
 
-`ghcr.io/pid1/hotslice:latest` is built and pushed by
-`.github/workflows/container.yml` on every push to `main`, so the NAS pulls
-rather than builds. `docker build -t ghcr.io/pid1/hotslice:latest .` works
-locally too.
+Check both halves:
 
-## 4. Harden the public surface
+```bash
+docker logs -f hotslice-cloudflared   # want: "Registered tunnel connection"
+curl -sI https://your-domain          # the real test
+```
 
-hotslice on the public internet is an unauthenticated endpoint that accepts
-uploads and renders them. The container is already unprivileged, read-only,
-capability-dropped and CPU-capped by `docker-compose.yml`. Three things are
-worth adding at the edge, where they cost nothing:
+## Hardening a public instance
 
-**Cap the request body.** `web.py` reads the upload before checking it against
+On the public internet hotslice is an unauthenticated endpoint that accepts
+uploads and renders them. The container above is already unprivileged and
+read-only, with all capabilities dropped and CPU and memory capped, so a flood
+degrades hotslice rather than the host. Three things are worth adding at the
+edge, where they cost nothing:
+
+**Cap the request body.** `web.py` reads an upload before checking it against
 `_MAX_UPLOAD_SIZE`, so an oversized POST is buffered in full and only then
-rejected. Cloudflare's free plan caps bodies at 100 MB, which bounds the damage
-but well above the 2 MB hotslice actually accepts. A WAF rule rejecting
-`http.request.body.size > 2097152` on `/convert` moves the rejection to the
-edge, off the NAS.
+rejected with a 413. Cloudflare's free plan caps bodies at 100 MB, far above the
+2 MB hotslice accepts. A WAF rule rejecting `http.request.body.size > 2097152`
+on `/convert` moves that rejection to the edge.
 
-**Rate-limit `/convert` and `/mcp`.** Both spend CPU per request. A rule of
-roughly 10 requests per minute per IP is generous for real use and closes the
-cheap flood.
+**Rate-limit `/convert` and `/mcp`.** Both spend CPU per request. Roughly 10
+requests per minute per IP is generous for real use and closes the cheap flood.
 
 **Decide about `/mcp`.** Public and unauthenticated, the MCP endpoint is free
 compute for anyone who finds it. If it should stay open, rate-limiting is the
 floor. If not, put a Cloudflare Access policy with a service token on that path
-and leave the landing page open — also free, up to 50 users.
+and leave the landing page open — also free.
 
-Optionally cache `/` at the edge. The landing page is static per deploy and
-caching it means routine traffic never reaches the NAS at all.
+Optionally cache `/` at the edge. The landing page is static per deploy, so
+caching it means routine traffic never reaches your hardware at all.
 
 ## Verifying
 
-With the container up, before the tunnel exists, check it from inside — the
-read-only rootfs means `docker cp` will not work, so pipe scripts in on stdin:
+The read-only root filesystem means `docker cp` into the container fails by
+design, so pipe scripts in on stdin instead:
 
 ```bash
 docker exec hotslice python -c "import urllib.request as u; \
@@ -159,13 +155,14 @@ docker exec hotslice python -c "import urllib.request as u; \
 ```
 
 A healthy instance answers `200` on `/` and `/api/themes` (257 themes), returns
-rendered HTML from `POST /convert`, rejects a 3 MB upload with `413`, and
-answers `406` on a plain `GET /mcp`. That 406 is correct — MCP Streamable HTTP
-wants an SSE `Accept` header. What matters is that it is not a `307` or `421`,
-which is what the `_MCPPathRewrite` middleware exists to prevent.
+rendered HTML from `POST /convert`, and rejects an oversized upload with `413`.
+
+A plain `GET /mcp` answers `406`, which is correct — MCP Streamable HTTP expects
+an SSE `Accept` header. What matters is that it is not a `307` or `421`; that is
+what the `_MCPPathRewrite` middleware exists to prevent.
 
 ## Rolling back
 
-`docker compose down` stops the connector, and the hostname immediately returns
-Cloudflare's origin-unreachable error rather than falling through to anything.
-Deleting the hostname route removes the DNS record too.
+`docker compose down`, or stopping the connector, makes the hostname return
+Cloudflare's origin-unreachable error rather than falling through to anything
+else. Deleting the hostname route removes the DNS record with it.
