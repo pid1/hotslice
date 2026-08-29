@@ -20,7 +20,7 @@ mcp = FastMCP(
     json_response=True,
     streamable_http_path="/",
     # Disable DNS rebinding protection: this MCP server is mounted inside a
-    # public FastAPI app behind a reverse proxy (Railway).  The default
+    # public FastAPI app behind a reverse proxy (Cloudflare Tunnel).  The default
     # protection only allows localhost Host headers, which rejects every
     # request whose Host is the public domain (→ 421 Misdirected Request).
     transport_security=TransportSecuritySettings(

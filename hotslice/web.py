@@ -170,8 +170,8 @@ def main(host: str = "0.0.0.0", port: int = 8000):
         app,
         host=host,
         port=port,
-        # Trust X-Forwarded-Proto / X-Forwarded-For from reverse proxies (Railway,
-        # etc.) so Starlette's trailing-slash redirects use https:// instead of
+        # Trust X-Forwarded-Proto / X-Forwarded-For from reverse proxies (Cloudflare
+        # Tunnel, etc.) so Starlette's trailing-slash redirects use https:// instead of
         # http://.  Without this the /mcp → /mcp/ 307 redirect sends an http://
         # Location header, which fails with 421 Misdirected Request on the HTTPS edge.
         proxy_headers=True,

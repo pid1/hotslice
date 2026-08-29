@@ -360,6 +360,15 @@ Once your deck is open in a browser:
 
 Deep-link to any slide with `#N` in the URL (e.g., `slides.html#3`).
 
+## Self-hosting
+
+hotslice.pizza runs as a container behind a Cloudflare Tunnel — no open ports,
+no certificates to renew, no origin IP in DNS. `docker compose up -d` plus a
+tunnel token is the whole of it.
+
+See [docs/deploy.md](docs/deploy.md) for the full path, including the edge rules
+worth adding in front of a public, unauthenticated `/convert` and `/mcp`.
+
 ## Development
 
 ### Prerequisites

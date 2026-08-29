@@ -46,3 +46,6 @@ htmlcov/
 
 # FastForward runtime artifacts
 .fastforward/
+
+# Local deploy secrets
+.env
