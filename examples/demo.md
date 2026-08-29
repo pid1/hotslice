@@ -72,13 +72,13 @@ Languages are auto-detected, or specify them explicitly.
 
 ## Tables Work Too
 
-| Feature        | hotslice | Marp  | reveal.js |
-|----------------|----------|-------|-----------|
-| Dependencies   | 2        | 12+   | 30+       |
-| Output         | HTML     | HTML/PDF | HTML   |
-| Config         | TOML     | YAML  | JSON      |
-| Themes         | CSS/JS   | CSS   | CSS/JS    |
-| Learning curve | Low      | Low   | Medium    |
+| Feature        | hotslice | Marp     | reveal.js |
+| -------------- | -------- | -------- | --------- |
+| Dependencies   | 2        | 12+      | 30+       |
+| Output         | HTML     | HTML/PDF | HTML      |
+| Config         | TOML     | YAML     | JSON      |
+| Themes         | CSS/JS   | CSS      | CSS/JS    |
+| Learning curve | Low      | Low      | Medium    |
 
 GFM-style tables just work.
 
@@ -88,7 +88,7 @@ GFM-style tables just work.
 
 You get the full **CommonMark** spec plus GFM extras:
 
-- **Bold** and *italic* and ~~strikethrough~~
+- **Bold** and _italic_ and ~~strikethrough~~
 - [Links](https://github.com) that work
 - Inline `code` with nice styling
 - Ordered and unordered lists
@@ -129,14 +129,14 @@ Override CSS custom properties to restyle everything:
 
 ## Navigation
 
-| Key                    | Action         |
-|------------------------|----------------|
-| →  Space  Enter        | Next slide     |
-| ←  Backspace           | Previous slide |
-| Home                   | First slide    |
-| End                    | Last slide     |
-| Click right half       | Next slide     |
-| Click left half        | Previous slide |
+| Key              | Action         |
+| ---------------- | -------------- |
+| → Space Enter    | Next slide     |
+| ← Backspace      | Previous slide |
+| Home             | First slide    |
+| End              | Last slide     |
+| Click right half | Next slide     |
+| Click left half  | Previous slide |
 
 Deep-link to any slide with `#N` in the URL.
 

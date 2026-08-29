@@ -30,6 +30,7 @@ curl -fsSL https://raw.githubusercontent.com/pid1/hotslice/main/install.sh | bas
 ```
 
 The installer:
+
 - Detects your OS (macOS or Linux)
 - Installs `uv` if it is not already present
 - Installs hotslice to `~/.local/bin/` via `uv tool install`
@@ -53,7 +54,7 @@ uv tool install git+https://github.com/pid1/hotslice
 
 Write slides in Markdown, separated by `---`:
 
-```markdown
+````markdown
 +++
 title = "My Talk"
 theme = "pizza-dark"
@@ -77,7 +78,7 @@ This is the title slide.
 \```python
 print("hello from hotslice")
 \```
-```
+````
 
 ### Frontmatter
 
@@ -91,12 +92,14 @@ theme = "pizza-dark"
 ```
 
 Supported fields:
+
 - `title` — presentation title (used in `<title>` tag)
 - `theme` — theme name override
 
 ### Markdown Support
 
 hotslice uses the GFM-like preset from markdown-it-py, which includes:
+
 - Full CommonMark spec
 - Tables
 - Strikethrough (`~~text~~`)
@@ -112,13 +115,13 @@ hotslice uses the GFM-like preset from markdown-it-py, which includes:
 hotslice build <input.md> [options]
 ```
 
-| Flag            | Default              | Description                        |
-|-----------------|----------------------|------------------------------------|
-| `-o, --output`  | `<input_stem>.html`  | Output HTML file path              |
-| `--theme`       | `pizza-light`        | Theme name or path                 |
-| `--theme-dir`   | bundled `themes/`    | Directory to search for themes     |
-| `--title`       | auto-detected        | Presentation title override        |
-| `--separator`   | `^---$`              | Slide separator regex              |
+| Flag           | Default             | Description                    |
+| -------------- | ------------------- | ------------------------------ |
+| `-o, --output` | `<input_stem>.html` | Output HTML file path          |
+| `--theme`      | `pizza-light`       | Theme name or path             |
+| `--theme-dir`  | bundled `themes/`   | Directory to search for themes |
+| `--title`      | auto-detected       | Presentation title override    |
+| `--separator`  | `^---$`             | Slide separator regex          |
 
 When no `-o` flag is provided, the output file is written to the current directory using the input file's stem. For example, `hotslice build training.md` produces `training.html` in the current directory.
 
@@ -130,10 +133,10 @@ Start a web server with an upload form for converting Markdown to HTML presentat
 hotslice serve [options]
 ```
 
-| Flag       | Default    | Description                    |
-|------------|------------|--------------------------------|
-| `--host`   | `0.0.0.0` | Host to bind to                |
-| `--port`   | `8000`     | Port to listen on              |
+| Flag     | Default   | Description       |
+| -------- | --------- | ----------------- |
+| `--host` | `0.0.0.0` | Host to bind to   |
+| `--port` | `8000`    | Port to listen on |
 
 Open `http://localhost:8000` in your browser. The landing page explains what hotslice is, shows how to get started, and provides the upload form for converting Markdown to slides.
 
@@ -145,11 +148,11 @@ Below the form, three info cards cover the main usage paths: CLI quick start, th
 
 **API endpoints:**
 
-| Method | Path          | Description                              |
-|--------|---------------|------------------------------------------|
-| GET    | `/`           | Landing page with upload form (HTML)     |
-| GET    | `/api/themes` | List available themes (JSON)             |
-| POST   | `/convert`    | Convert uploaded Markdown to HTML (multipart form) |
+| Method | Path          | Description                                         |
+| ------ | ------------- | --------------------------------------------------- |
+| GET    | `/`           | Landing page with upload form (HTML)                |
+| GET    | `/api/themes` | List available themes (JSON)                        |
+| POST   | `/convert`    | Convert uploaded Markdown to HTML (multipart form)  |
 | POST   | `/mcp`        | MCP server endpoint (see [MCP Server](#mcp-server)) |
 
 ## Themes
@@ -231,13 +234,13 @@ Override the CSS custom properties to restyle everything:
 
 ```css
 :root {
-  --slide-bg: #ffffff;     /* slide background */
-  --slide-fg: #111111;     /* text color */
-  --accent: #4f46e5;       /* headings, links, accents */
-  --code-bg: #f3f4f6;      /* code block background */
-  --code-fg: #1f2937;      /* code text color */
-  --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;
-  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace;
+  --slide-bg: #ffffff; /* slide background */
+  --slide-fg: #111111; /* text color */
+  --accent: #4f46e5; /* headings, links, accents */
+  --code-bg: #f3f4f6; /* code block background */
+  --code-fg: #1f2937; /* code text color */
+  --font-sans: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", "SF Mono", "Fira Code", monospace;
   --slide-padding: 64px;
   --slide-max-width: 1100px;
 }
@@ -294,7 +297,7 @@ For local use with MCP-compatible tools:
 ### Available Capabilities
 
 | Type   | Name                 | Description                                       |
-|--------|----------------------|---------------------------------------------------|
+| ------ | -------------------- | ------------------------------------------------- |
 | Prompt | `write_presentation` | Guide for writing hotslice Markdown presentations |
 | Tool   | `build_presentation` | Convert Markdown to an HTML slide deck            |
 | Tool   | `list_themes`        | List all available themes with metadata           |
@@ -349,14 +352,14 @@ Metadata fields merge across layers. If the user config sets `author` and the pr
 
 Once your deck is open in a browser:
 
-| Input                | Action         |
-|----------------------|----------------|
-| → / Space / Enter    | Next slide     |
-| ← / Backspace        | Previous slide |
-| Home                 | First slide    |
-| End                  | Last slide     |
-| Click right half     | Next slide     |
-| Click left half      | Previous slide |
+| Input             | Action         |
+| ----------------- | -------------- |
+| → / Space / Enter | Next slide     |
+| ← / Backspace     | Previous slide |
+| Home              | First slide    |
+| End               | Last slide     |
+| Click right half  | Next slide     |
+| Click left half   | Previous slide |
 
 Deep-link to any slide with `#N` in the URL (e.g., `slides.html#3`).
 
@@ -389,14 +392,14 @@ dev
 
 Run these inside `devenv shell`:
 
-| Command        | Description                           |
-|----------------|---------------------------------------|
-| `setup`        | Install dependencies                  |
-| `dev`          | Build demo deck and open in browser   |
-| `build`        | Build demo deck to demo.html          |
-| `serve`        | Start the hotslice web server         |
-| `lint`         | Run ruff linter                       |
-| `lint-fix`     | Auto-fix lint issues                  |
-| `format`       | Run ruff formatter                    |
-| `test`         | Run pytest                            |
-| `install-deps` | Install Python dependencies with uv   |
+| Command        | Description                         |
+| -------------- | ----------------------------------- |
+| `setup`        | Install dependencies                |
+| `dev`          | Build demo deck and open in browser |
+| `build`        | Build demo deck to demo.html        |
+| `serve`        | Start the hotslice web server       |
+| `lint`         | Run ruff linter                     |
+| `lint-fix`     | Auto-fix lint issues                |
+| `format`       | Run ruff formatter                  |
+| `test`         | Run pytest                          |
+| `install-deps` | Install Python dependencies with uv |

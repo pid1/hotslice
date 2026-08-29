@@ -17,7 +17,7 @@ dev
 ### Commands
 
 | Command        | Description                         |
-|----------------|-------------------------------------|
+| -------------- | ----------------------------------- |
 | `setup`        | Initialize repo (runs install-deps) |
 | `dev`          | Build demo deck and open in browser |
 | `build`        | Build demo deck to demo.html        |
@@ -51,19 +51,20 @@ dev
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `hotslice/config.py` | Config loading with layered user/project support |
-| `hotslice/renderer.py` | Theme resolution, HTML rendering, `list_available_themes()` |
-| `hotslice/cli.py` | CLI entry point (argparse): `build` and `serve` subcommands |
-| `hotslice/parser.py` | Markdown parsing and slide splitting |
-| `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
-| `hotslice/mcp_server.py` | MCP server: prompt and tools for AI agent integration |
-| `install.sh` | `curl \| bash` installer for macOS and Linux |
-| `hotslice.toml` | Project-level config (repo root) |
-| `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
+| File                         | Purpose                                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `hotslice/config.py`         | Config loading with layered user/project support                                         |
+| `hotslice/renderer.py`       | Theme resolution, HTML rendering, `list_available_themes()`                              |
+| `hotslice/cli.py`            | CLI entry point (argparse): `build` and `serve` subcommands                              |
+| `hotslice/parser.py`         | Markdown parsing and slide splitting                                                     |
+| `hotslice/web.py`            | FastAPI web app (upload form, theme API, conversion endpoint)                            |
+| `hotslice/mcp_server.py`     | MCP server: prompt and tools for AI agent integration                                    |
+| `install.sh`                 | `curl \| bash` installer for macOS and Linux                                             |
+| `hotslice.toml`              | Project-level config (repo root)                                                         |
+| `hotslice/hljs_themes.py`    | Highlight.js theme registry (255 themes with display names, light/dark classification)   |
 | `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
-| `themes/` | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes) |
+| `themes/`                    | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes)             |
+
 ---
 
 ## Slide Authoring Format
@@ -109,24 +110,27 @@ More content.
    - `### Heading` — Use for subtitles or subsections within a slide. Rendered in the accent color.
 
 4. **Code blocks**: Use fenced code blocks with a language tag for syntax highlighting:
+
    ````markdown
    ```python
    def hello():
        print("world")
    ```
    ````
+
    highlight.js handles syntax highlighting on the frontend. Most common languages are supported.
 
 5. **Tables**: GFM-style tables are supported:
+
    ```markdown
    | Header 1 | Header 2 |
-   |----------|----------|
+   | -------- | -------- |
    | Cell 1   | Cell 2   |
    ```
 
 6. **Other Markdown features**:
    - **Bold**: `**text**`
-   - *Italic*: `*text*`
+   - _Italic_: `*text*`
    - ~~Strikethrough~~: `~~text~~`
    - Links: `[text](url)`
    - Images: `![alt](url)` — images are auto-sized to fit the slide
@@ -140,7 +144,7 @@ More content.
 
 ### Example: Minimal Deck
 
-```markdown
+````markdown
 # My Talk
 
 Speaker Name — February 2026
@@ -161,13 +165,15 @@ Speaker Name — February 2026
 result = hotslice.build("slides.md")
 # That's it. That's the solution.
 ```
+````
 
 ---
 
 # Questions?
 
 @speaker on twitter
-```
+
+````
 
 ### Building
 
@@ -176,7 +182,7 @@ hotslice build slides.md                   # → slides.html
 hotslice build slides.md -o output.html    # custom output path
 hotslice build slides.md --theme pizza-dark # use dark theme
 hotslice build slides.md --theme monokai   # use highlight.js theme
-```
+````
 
 ---
 
@@ -221,15 +227,17 @@ The base template defines these CSS custom properties. Override them in your `th
 
 ```css
 :root {
-  --slide-bg: #ffffff;          /* slide background color */
-  --slide-fg: #111111;          /* main text color */
-  --accent: #4f46e5;            /* accent color for headings, links, markers */
-  --code-bg: #f3f4f6;           /* code block background */
-  --code-fg: #1f2937;           /* code block text color */
-  --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;  /* body font stack */
-  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace; /* code font stack */
-  --slide-padding: 64px;        /* slide content padding */
-  --slide-max-width: 1100px;    /* max content width */
+  --slide-bg: #ffffff; /* slide background color */
+  --slide-fg: #111111; /* main text color */
+  --accent: #4f46e5; /* accent color for headings, links, markers */
+  --code-bg: #f3f4f6; /* code block background */
+  --code-fg: #1f2937; /* code block text color */
+  --font-sans:
+    "Atkinson Hyperlegible Next", system-ui, sans-serif; /* body font stack */
+  --font-mono:
+    "Atkinson Hyperlegible Mono", "SF Mono", "Fira Code", monospace; /* code font stack */
+  --slide-padding: 64px; /* slide content padding */
+  --slide-max-width: 1100px; /* max content width */
 }
 ```
 
@@ -250,6 +258,7 @@ The first slide has `data-index="0"`. The active slide has the `active` class.
 ### Theme JS
 
 If your theme includes a `theme.js`, it runs after the deck's navigation runtime is initialized. You can use it for:
+
 - Adding CSS transitions between slides
 - Custom key bindings
 - Analytics hooks

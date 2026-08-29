@@ -64,12 +64,12 @@ anything holding it to serve your hostname, so treat it like a password.
 
 On the tunnel's published routes, add:
 
-| Field | Value |
-| --- | --- |
-| Subdomain | *(blank, or `www`)* |
-| Domain | your domain |
-| Service type | `HTTP` |
-| URL | `hotslice:8000` |
+| Field        | Value               |
+| ------------ | ------------------- |
+| Subdomain    | _(blank, or `www`)_ |
+| Domain       | your domain         |
+| Service type | `HTTP`              |
+| URL          | `hotslice:8000`     |
 
 `hotslice:8000` is the container name on the shared Docker network, which is why
 nothing below publishes a port. Cloudflare creates the proxied DNS record for
