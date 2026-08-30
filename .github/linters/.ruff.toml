@@ -1,0 +1,4 @@
+# super-linter runs ruff with a config from LINTER_RULES_PATH rather than the
+# project's pyproject.toml, so the line length has to be repeated here or CI
+# formats to ruff's default 88 and disagrees with the checked-in code.
+line-length = 100
