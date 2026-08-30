@@ -355,11 +355,7 @@ def all_hljs_themes() -> list[dict[str, str]]:
 def light_hljs_themes() -> list[dict[str, str]]:
     """Return only light-variant themes, sorted by display name."""
     return sorted(
-        [
-            {"slug": s, "name": n, "variant": v}
-            for s, n, v in HLJS_THEMES
-            if v == "light"
-        ],
+        [{"slug": s, "name": n, "variant": v} for s, n, v in HLJS_THEMES if v == "light"],
         key=lambda t: t["name"],
     )
 
@@ -367,10 +363,6 @@ def light_hljs_themes() -> list[dict[str, str]]:
 def dark_hljs_themes() -> list[dict[str, str]]:
     """Return only dark-variant themes, sorted by display name."""
     return sorted(
-        [
-            {"slug": s, "name": n, "variant": v}
-            for s, n, v in HLJS_THEMES
-            if v == "dark"
-        ],
+        [{"slug": s, "name": n, "variant": v} for s, n, v in HLJS_THEMES if v == "dark"],
         key=lambda t: t["name"],
     )

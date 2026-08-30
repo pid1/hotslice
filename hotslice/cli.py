@@ -62,24 +62,18 @@ def main(argv: list[str] | None = None) -> None:
         prog="hotslice",
         description="🍕 A hot take, one slice at a time. Markdown → HTML slide decks.",
     )
-    parser.add_argument(
-        "--version", action="version", version=f"hotslice {__version__}"
-    )
+    parser.add_argument("--version", action="version", version=f"hotslice {__version__}")
 
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # build subcommand
-    build_parser = subparsers.add_parser(
-        "build", help="Build an HTML slide deck from markdown"
-    )
+    build_parser = subparsers.add_parser("build", help="Build an HTML slide deck from markdown")
     build_parser.add_argument("input", help="Path to the input markdown file")
     build_parser.add_argument("-o", "--output", help="Output HTML file path")
     build_parser.add_argument("--theme", help="Theme name or path")
     build_parser.add_argument("--theme-dir", help="Base directory to search for themes")
     build_parser.add_argument("--title", help="Presentation title override")
-    build_parser.add_argument(
-        "--separator", help="Slide separator regex (default: ^---$)"
-    )
+    build_parser.add_argument("--separator", help="Slide separator regex (default: ^---$)")
     build_parser.set_defaults(func=_build)
 
     # serve subcommand

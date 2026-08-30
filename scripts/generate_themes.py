@@ -179,28 +179,18 @@ def extract_colors(css_text: str, variant: str) -> dict[str, str]:
         return dict(defaults)
 
     # Extract background color
-    bg_match = re.search(
-        r"background(?:-color)?\s*:\s*([^;}\s]+(?:\([^)]*\))?)", block_content
-    )
+    bg_match = re.search(r"background(?:-color)?\s*:\s*([^;}\s]+(?:\([^)]*\))?)", block_content)
     slide_bg = normalize_color(bg_match.group(1)) if bg_match else defaults["slide_bg"]
 
     # Extract text color (not background-color)
-    fg_match = re.search(
-        r"(?:^|;)\s*color\s*:\s*([^;}\s]+(?:\([^)]*\))?)", block_content
-    )
+    fg_match = re.search(r"(?:^|;)\s*color\s*:\s*([^;}\s]+(?:\([^)]*\))?)", block_content)
     slide_fg = normalize_color(fg_match.group(1)) if fg_match else defaults["slide_fg"]
 
     # Find .hljs-keyword color for accent
     kw_block = re.search(r"\.hljs-keyword[^{]*\{([^}]+)\}", css_text)
     if kw_block:
-        accent_match = re.search(
-            r"color\s*:\s*([^;}\s]+(?:\([^)]*\))?)", kw_block.group(1)
-        )
-        accent = (
-            normalize_color(accent_match.group(1))
-            if accent_match
-            else defaults["accent"]
-        )
+        accent_match = re.search(r"color\s*:\s*([^;}\s]+(?:\([^)]*\))?)", kw_block.group(1))
+        accent = normalize_color(accent_match.group(1)) if accent_match else defaults["accent"]
     else:
         accent = defaults["accent"]
 
