@@ -108,7 +108,7 @@ You get the full **CommonMark** spec plus GFM extras:
 
 Themes are just directories with a `theme.css` file:
 
-```
+```text
 themes/my-theme/
   theme.css       ← required
   theme.js        ← optional (runs after deck JS)
@@ -142,7 +142,7 @@ Deep-link to any slide with `#N` in the URL.
 
 ---
 
-# Thanks! 🍕
+## Thanks! 🍕
 
 `pip install hotslice` and start slicing.
 

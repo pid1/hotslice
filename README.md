@@ -111,7 +111,7 @@ hotslice uses the GFM-like preset from markdown-it-py, which includes:
 
 ### `hotslice build`
 
-```
+```text
 hotslice build <input.md> [options]
 ```
 
@@ -129,7 +129,7 @@ When no `-o` flag is provided, the output file is written to the current directo
 
 Start a web server with an upload form for converting Markdown to HTML presentations.
 
-```
+```text
 hotslice serve [options]
 ```
 
@@ -191,7 +191,7 @@ When you specify a theme name, hotslice searches these locations in order:
 
 Place custom themes in `~/.config/hotslice/themes/` to make them available across all your projects. For example, a theme called `corporate` would live at:
 
-```
+```text
 ~/.config/hotslice/themes/corporate/
   theme.css       # Required
   theme.js        # Optional
@@ -204,7 +204,7 @@ Then use it with `hotslice build slides.md --theme corporate`.
 
 A theme is a directory with at minimum a `theme.css` file:
 
-```
+```text
 themes/my-theme/
   theme.css       # Required: CSS overrides
   theme.js        # Optional: JS that runs after deck runtime

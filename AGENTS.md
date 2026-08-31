@@ -170,11 +170,11 @@ result = hotslice.build("slides.md")
 
 ---
 
-# Questions?
+## Questions?
 
 @speaker on twitter
 
-````
+````text
 
 ### Building
 
@@ -204,7 +204,7 @@ The first match wins. This means user themes override bundled themes of the same
 
 ### Directory Structure
 
-```
+```text
 themes/my-theme/
   theme.css       # REQUIRED: CSS overrides and custom styles
   theme.js        # OPTIONAL: JavaScript that runs after deck runtime
@@ -213,7 +213,7 @@ themes/my-theme/
 
 User themes follow the same structure. Place them in `~/.config/hotslice/themes/`:
 
-```
+```text
 ~/.config/hotslice/themes/my-theme/
   theme.css
   theme.js        # optional
