@@ -498,7 +498,7 @@ for slide in deck.slides:
 
     <!-- Deck runtime -->
     <script>
-      (function () {
+      (() => {
         const slides = document.querySelectorAll(".slide");
         const counter = document.getElementById("slide-counter");
         const progressBar = document.getElementById("progress-bar");
@@ -510,8 +510,8 @@ for slide in deck.slides:
           slides[current].classList.remove("active");
           current = n;
           slides[current].classList.add("active");
-          counter.textContent = current + 1 + " / " + total;
-          progressBar.style.width = ((current + 1) / total) * 100 + "%";
+          counter.textContent = `${current + 1} / ${total}`;
+          progressBar.style.width = `${((current + 1) / total) * 100}%`;
           window.location.hash = current + 1;
         }
 
@@ -523,7 +523,7 @@ for slide in deck.slides:
         }
 
         // Keyboard navigation
-        document.addEventListener("keydown", function (e) {
+        document.addEventListener("keydown", (e) => {
           switch (e.key) {
             case "ArrowRight":
             case " ":
@@ -548,7 +548,7 @@ for slide in deck.slides:
         });
 
         // Click navigation (click right half = next, left half = prev)
-        document.addEventListener("click", function (e) {
+        document.addEventListener("click", (e) => {
           if (e.target.closest("a, button, input, textarea, select")) return;
           if (e.clientX > window.innerWidth / 2) next();
           else prev();

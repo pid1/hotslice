@@ -566,7 +566,7 @@ for slide in deck.slides:
 
     <!-- Deck runtime -->
     <script>
-      (function () {
+      (() => {
         const slides = document.querySelectorAll(".slide");
         const counter = document.getElementById("slide-counter");
         const progressBar = document.getElementById("progress-bar");
@@ -578,8 +578,8 @@ for slide in deck.slides:
           slides[current].classList.remove("active");
           current = n;
           slides[current].classList.add("active");
-          counter.textContent = current + 1 + " / " + total;
-          progressBar.style.width = ((current + 1) / total) * 100 + "%";
+          counter.textContent = `${current + 1} / ${total}`;
+          progressBar.style.width = `${((current + 1) / total) * 100}%`;
           window.location.hash = current + 1;
         }
 
@@ -591,7 +591,7 @@ for slide in deck.slides:
         }
 
         // Keyboard navigation
-        document.addEventListener("keydown", function (e) {
+        document.addEventListener("keydown", (e) => {
           switch (e.key) {
             case "ArrowRight":
             case " ":
@@ -616,7 +616,7 @@ for slide in deck.slides:
         });
 
         // Click navigation (click right half = next, left half = prev)
-        document.addEventListener("click", function (e) {
+        document.addEventListener("click", (e) => {
           if (e.target.closest("a, button, input, textarea, select")) return;
           if (e.clientX > window.innerWidth / 2) next();
           else prev();
@@ -637,15 +637,11 @@ for slide in deck.slides:
         hljs.highlightAll();
 
         // Two-column layout: wrap slides with text + code into side-by-side columns
-        slides.forEach(function (slide) {
+        slides.forEach((slide) => {
           var inner = slide.querySelector(".slide-inner");
           var children = Array.from(inner.children);
-          var pres = children.filter(function (el) {
-            return el.tagName === "PRE";
-          });
-          var others = children.filter(function (el) {
-            return el.tagName !== "PRE";
-          });
+          var pres = children.filter((el) => el.tagName === "PRE");
+          var others = children.filter((el) => el.tagName !== "PRE");
 
           // Only apply if there is exactly one pre block and at least one other element
           if (pres.length === 1 && others.length >= 1) {
@@ -654,10 +650,10 @@ for slide in deck.slides:
             var codeCol = document.createElement("div");
             codeCol.className = "col-code";
 
-            others.forEach(function (el) {
+            others.forEach((el) => {
               textCol.appendChild(el);
             });
-            pres.forEach(function (el) {
+            pres.forEach((el) => {
               codeCol.appendChild(el);
             });
 
@@ -670,21 +666,21 @@ for slide in deck.slides:
 
         // Auto-scale slides that overflow the viewport
         function scaleSlides() {
-          slides.forEach(function (slide) {
+          slides.forEach((slide) => {
             var inner = slide.querySelector(".slide-inner");
             // Reset any previous scaling
             inner.style.transform = "";
             inner.style.transformOrigin = "top left";
             var slideHeight = slide.clientHeight;
             var padding =
-              parseInt(getComputedStyle(slide).paddingTop) +
-              parseInt(getComputedStyle(slide).paddingBottom);
+              parseInt(getComputedStyle(slide).paddingTop, 10) +
+              parseInt(getComputedStyle(slide).paddingBottom, 10);
             var available = slideHeight - padding;
             var contentHeight = inner.scrollHeight;
             if (contentHeight > available && available > 0) {
               var scale = available / contentHeight;
-              inner.style.transform = "scale(" + scale + ")";
-              inner.style.width = 100 / scale + "%";
+              inner.style.transform = `scale(${scale})`;
+              inner.style.width = `${100 / scale}%`;
             }
           });
         }
