@@ -17,7 +17,7 @@ dev
 ### Commands
 
 | Command        | Description                         |
-|----------------|-------------------------------------|
+| -------------- | ----------------------------------- |
 | `setup`        | Initialize repo (runs install-deps) |
 | `dev`          | Build demo deck and open in browser |
 | `build`        | Build demo deck to demo.html        |
@@ -41,6 +41,7 @@ dev
 - `list_available_themes()` returns only on-disk themes (directories with `theme.css`). All 255 hljs themes now have generated on-disk directories, so this function returns 257 themes total. Do not add dynamic theme discovery to this function; it scans directories, reads `theme.toml`, and returns color metadata.
 - `render_deck()` tries on-disk theme resolution first, then falls back to hljs slug-to-pizza-base mapping. Since all hljs slugs now have on-disk themes, the fallback only triggers if a generated theme directory is deleted. Do not reverse this priority order.
 - Generated theme CSS files contain `auto-generated` in their first-line comment. The generator script (`scripts/generate_themes.py`) uses this marker to distinguish generated themes from hand-crafted ones (pizza-light, pizza-dark). Do not add this marker to hand-crafted themes; it would cause the generator to overwrite them.
+- `THEME_CSS_TEMPLATE` in `scripts/generate_themes.py` is written in the exact shape prettier emits, so generated themes pass the `CSS_PRETTIER` lint straight out of the generator with no formatting pass. If you change the template, run prettier over `themes/` and make the template match the result, otherwise every regeneration will fight the linter.
 - The web template stores each theme's color values in `data-slide-bg`, `data-slide-fg`, `data-accent`, `data-code-bg`, `data-code-fg` attributes on `<option>` elements. The preview JS reads these attributes to apply inline styles. Do not replace this with hardcoded color mappings.
 - Base16 theme slugs (e.g., `base16-monokai`) must be converted to CDN subdirectory paths (`base16/monokai`) before constructing highlight.js CDN URLs. The CDN hosts base16 CSS under `styles/base16/{name}.min.css`, not `styles/base16-{name}.min.css`. This conversion lives in two places that must stay in sync: `_hljs_slug_to_cdn_path()` in `hotslice/renderer.py` (for built deck output) and the equivalent JavaScript in `hotslice/templates/web.html.j2`'s `applyPreview()` function (for web UI preview). If you change one, update the other.
 - Theme name validation regex `^[a-zA-Z0-9][a-zA-Z0-9_-]*$` is defined independently in `hotslice/web.py` (`_THEME_NAME_RE`) and `hotslice/mcp_server.py` (`_THEME_NAME_RE`). Both files also re-validate frontmatter theme overrides and apply matching size limits. If you change validation rules in one, update the other.
@@ -51,19 +52,20 @@ dev
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `hotslice/config.py` | Config loading with layered user/project support |
-| `hotslice/renderer.py` | Theme resolution, HTML rendering, `list_available_themes()` |
-| `hotslice/cli.py` | CLI entry point (argparse): `build` and `serve` subcommands |
-| `hotslice/parser.py` | Markdown parsing and slide splitting |
-| `hotslice/web.py` | FastAPI web app (upload form, theme API, conversion endpoint) |
-| `hotslice/mcp_server.py` | MCP server: prompt and tools for AI agent integration |
-| `install.sh` | `curl \| bash` installer for macOS and Linux |
-| `hotslice.toml` | Project-level config (repo root) |
-| `hotslice/hljs_themes.py` | Highlight.js theme registry (255 themes with display names, light/dark classification) |
+| File                         | Purpose                                                                                  |
+| ---------------------------- | ---------------------------------------------------------------------------------------- |
+| `hotslice/config.py`         | Config loading with layered user/project support                                         |
+| `hotslice/renderer.py`       | Theme resolution, HTML rendering, `list_available_themes()`                              |
+| `hotslice/cli.py`            | CLI entry point (argparse): `build` and `serve` subcommands                              |
+| `hotslice/parser.py`         | Markdown parsing and slide splitting                                                     |
+| `hotslice/web.py`            | FastAPI web app (upload form, theme API, conversion endpoint)                            |
+| `hotslice/mcp_server.py`     | MCP server: prompt and tools for AI agent integration                                    |
+| `install.sh`                 | `curl \| bash` installer for macOS and Linux                                             |
+| `hotslice.toml`              | Project-level config (repo root)                                                         |
+| `hotslice/hljs_themes.py`    | Highlight.js theme registry (255 themes with display names, light/dark classification)   |
 | `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
-| `themes/` | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes) |
+| `themes/`                    | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes)             |
+
 ---
 
 ## Slide Authoring Format
@@ -109,24 +111,27 @@ More content.
    - `### Heading` — Use for subtitles or subsections within a slide. Rendered in the accent color.
 
 4. **Code blocks**: Use fenced code blocks with a language tag for syntax highlighting:
+
    ````markdown
    ```python
    def hello():
        print("world")
    ```
    ````
+
    highlight.js handles syntax highlighting on the frontend. Most common languages are supported.
 
 5. **Tables**: GFM-style tables are supported:
+
    ```markdown
    | Header 1 | Header 2 |
-   |----------|----------|
+   | -------- | -------- |
    | Cell 1   | Cell 2   |
    ```
 
 6. **Other Markdown features**:
    - **Bold**: `**text**`
-   - *Italic*: `*text*`
+   - _Italic_: `*text*`
    - ~~Strikethrough~~: `~~text~~`
    - Links: `[text](url)`
    - Images: `![alt](url)` — images are auto-sized to fit the slide
@@ -140,7 +145,7 @@ More content.
 
 ### Example: Minimal Deck
 
-```markdown
+````markdown
 # My Talk
 
 Speaker Name — February 2026
@@ -161,13 +166,15 @@ Speaker Name — February 2026
 result = hotslice.build("slides.md")
 # That's it. That's the solution.
 ```
+````
 
 ---
 
-# Questions?
+## Questions?
 
 @speaker on twitter
-```
+
+````text
 
 ### Building
 
@@ -176,7 +183,7 @@ hotslice build slides.md                   # → slides.html
 hotslice build slides.md -o output.html    # custom output path
 hotslice build slides.md --theme pizza-dark # use dark theme
 hotslice build slides.md --theme monokai   # use highlight.js theme
-```
+````
 
 ---
 
@@ -197,7 +204,7 @@ The first match wins. This means user themes override bundled themes of the same
 
 ### Directory Structure
 
-```
+```text
 themes/my-theme/
   theme.css       # REQUIRED: CSS overrides and custom styles
   theme.js        # OPTIONAL: JavaScript that runs after deck runtime
@@ -206,7 +213,7 @@ themes/my-theme/
 
 User themes follow the same structure. Place them in `~/.config/hotslice/themes/`:
 
-```
+```text
 ~/.config/hotslice/themes/my-theme/
   theme.css
   theme.js        # optional
@@ -221,15 +228,17 @@ The base template defines these CSS custom properties. Override them in your `th
 
 ```css
 :root {
-  --slide-bg: #ffffff;          /* slide background color */
-  --slide-fg: #111111;          /* main text color */
-  --accent: #4f46e5;            /* accent color for headings, links, markers */
-  --code-bg: #f3f4f6;           /* code block background */
-  --code-fg: #1f2937;           /* code block text color */
-  --font-sans: 'Atkinson Hyperlegible Next', system-ui, sans-serif;  /* body font stack */
-  --font-mono: 'Atkinson Hyperlegible Mono', 'SF Mono', 'Fira Code', monospace; /* code font stack */
-  --slide-padding: 64px;        /* slide content padding */
-  --slide-max-width: 1100px;    /* max content width */
+  --slide-bg: #ffffff; /* slide background color */
+  --slide-fg: #111111; /* main text color */
+  --accent: #4f46e5; /* accent color for headings, links, markers */
+  --code-bg: #f3f4f6; /* code block background */
+  --code-fg: #1f2937; /* code block text color */
+  --font-sans:
+    "Atkinson Hyperlegible Next", system-ui, sans-serif; /* body font stack */
+  --font-mono:
+    "Atkinson Hyperlegible Mono", "SF Mono", "Fira Code", monospace; /* code font stack */
+  --slide-padding: 64px; /* slide content padding */
+  --slide-max-width: 1100px; /* max content width */
 }
 ```
 
@@ -250,6 +259,7 @@ The first slide has `data-index="0"`. The active slide has the `active` class.
 ### Theme JS
 
 If your theme includes a `theme.js`, it runs after the deck's navigation runtime is initialized. You can use it for:
+
 - Adding CSS transitions between slides
 - Custom key bindings
 - Analytics hooks

@@ -36,4 +36,9 @@ EXPOSE 8000
 # hotslice-web, not a bare `uvicorn` invocation, so the proxy_headers /
 # forwarded_allow_ips settings that keep the /mcp redirect on https live in
 # web.py alone (see AGENTS.md).
+# The compose file declares an equivalent check; having it in the image
+# means any runtime gets one, not just compose.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/themes').read()"]
+
 CMD ["hotslice-web"]

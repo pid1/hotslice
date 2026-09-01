@@ -105,7 +105,7 @@ async def convert(
     # Decode with error handling
     try:
         markdown_text = content.decode("utf-8")
-    except (UnicodeDecodeError, ValueError):
+    except UnicodeDecodeError, ValueError:
         raise HTTPException(
             status_code=400,
             detail="File must be valid UTF-8 text.",

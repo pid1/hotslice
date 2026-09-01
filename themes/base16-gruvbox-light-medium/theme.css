@@ -6,15 +6,21 @@
   --accent: #427b58;
   --code-bg: #fbf1c7;
   --code-fg: #504945;
-  --font-mono: 'Atkinson Hyperlegible Mono', monospace;
+  --font-mono: "Atkinson Hyperlegible Mono", monospace;
 }
 
-html, body {
+html,
+body {
   background: var(--slide-bg);
 }
 
-.slide h2 { color: var(--accent); }
-.slide h3 { color: var(--accent); opacity: 0.85; }
+.slide h2 {
+  color: var(--accent);
+}
+.slide h3 {
+  color: var(--accent);
+  opacity: 0.85;
+}
 
 .slide pre {
   background: var(--code-bg);
@@ -26,9 +32,15 @@ html, body {
   border-left: 4px solid var(--accent);
 }
 
-.slide a { color: var(--accent); }
-.slide th { color: var(--accent); }
-.slide li::marker { color: var(--accent); }
+.slide a {
+  color: var(--accent);
+}
+.slide th {
+  color: var(--accent);
+}
+.slide li::marker {
+  color: var(--accent);
+}
 
 #progress-bar {
   background: var(--accent);
