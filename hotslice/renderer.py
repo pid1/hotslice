@@ -156,10 +156,10 @@ def render_deck(deck: DeckData, config: Config) -> str:
     title = config.title or deck.title or "Untitled Presentation"
     hljs_theme = _hljs_slug_to_cdn_path(hljs_theme)
 
-    # nosemgrep: python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
     # autoescape stays off deliberately: slide bodies are authored HTML and
     # escaping them would render the product useless. Input is the deck the
     # user is building for themselves.
+    # nosemgrep: python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
     env = Environment(
         loader=FileSystemLoader(str(_TEMPLATES_DIR)),
         autoescape=False,  # We're generating HTML, slides contain raw HTML
