@@ -1,0 +1,13 @@
+# Generated decks. `make build` renders examples/demo.md into demo.html and the
+# examples/ output, so anything annotated inside them is overwritten on the next
+# build. The findings there are:
+#
+#   missing-integrity     - the deck template references highlight.js themes
+#                           from a CDN by design; a deck is a self-contained
+#                           file the author opens locally, not a served page
+#                           with an origin to protect.
+#   plaintext-http-link   - an http:// link to github.com in the demo content.
+#
+# Scanning of hotslice's own source under hotslice/ and scripts/ is unaffected.
+demo.html
+examples/*.html

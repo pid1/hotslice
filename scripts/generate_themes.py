@@ -217,6 +217,9 @@ def fetch_css(slug: str) -> str | None:
             req = urllib.request.Request(
                 url, headers={"User-Agent": "hotslice-theme-generator/1.0"}
             )
+            # The URLs are built from a fixed CDN base and a theme slug; fetching them
+            # is what this generator is for.
+            # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
             with urllib.request.urlopen(req, timeout=15) as resp:
                 return resp.read().decode("utf-8")
         except Exception:
