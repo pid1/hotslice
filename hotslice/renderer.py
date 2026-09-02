@@ -166,6 +166,9 @@ def render_deck(deck: DeckData, config: Config) -> str:
     )
     template = env.get_template("deck.html.j2")
 
+    # The environment is built with autoescape off on purpose: slide bodies are
+    # authored HTML and escaping them would break the output.
+    # nosemgrep: python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
     return template.render(
         title=title,
         slides=deck.slides,
