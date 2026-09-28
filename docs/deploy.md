@@ -1,187 +1,175 @@
-# Self-hosting hotslice
+# Deploying hotslice
 
-hotslice is a small stateless web service, so it is cheap to run on hardware you
-already own — a home server, a NAS, a spare box. This document covers putting it
-on the public internet behind a [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/),
-which is free and does not require opening a port.
+The public instance at <https://hotslice.pid1.space> is a
+[Python Worker](https://developers.cloudflare.com/workers/languages/python/)
+on Cloudflare. The same FastAPI app that `hotslice serve` runs locally is served
+through the Workers ASGI adapter, so there's no second implementation to keep in
+sync. Nothing runs on hardware you own.
 
-If you only want it on your LAN, skip to [Running the container](#running-the-container)
-and stop there.
+## Plan: Workers Paid, not Free
 
-## Why a tunnel and not a reverse proxy
+The Workers Free plan allows **10 ms of CPU per request**. hotslice doesn't fit
+in that under Pyodide. Measured on the live Worker (September 2026, demo deck):
 
-The conventional answer is nginx or Caddy plus a port forward. That means
-forwarding 80 and 443 from your router to a machine that probably also holds
-your data, which publishes your home IP address and ties it to a domain name
-permanently.
+| Request                        | Warm CPU | Cold isolate |
+| ------------------------------ | -------- | ------------ |
+| `GET /`                        | 5–14 ms  | ~45 ms       |
+| `POST /convert`                | 11–58 ms | 200–550 ms   |
+| MCP `build_presentation`       | 22–58 ms | 230–780 ms   |
+| `POST /convert` over the limit | ~11 ms   | —            |
 
-`cloudflared` inverts the direction: the connector dials **out** to Cloudflare
-and traffic returns down that connection. There is no inbound firewall rule, no
-dynamic DNS, no certificate to renew, and the origin address never appears in
-DNS.
+On Free, nearly every conversion would fail with error 1102. The account needs
+Workers Paid, where the default CPU limit is 30 s per request. Everything else
+(requests, bundle size, memory) stays well inside the included limits.
 
-Caddy's ACME automation is genuinely good. It solves a problem this setup does
-not have.
+Markdown parsing accounts for most of the warm cost, and it already runs as
+little Python per request as it can (see
+[What the runtime changes](#what-the-runtime-changes)). Fitting in 10 ms would
+mean serving the conversion path from JavaScript instead of Python.
 
-## Prerequisites
+## Layout
 
-- A host running Docker, up continuously.
-- A Cloudflare account with Zero Trust enabled. The free plan covers all of this.
-- A domain served by Cloudflare's nameservers — see below.
-
-### The domain has to use Cloudflare DNS
-
-This is the step people get stuck on. A tunnel's public hostname is a CNAME into
-`cfargotunnel.com` that only Cloudflare can create, so the zone has to live on
-Cloudflare. Registration does not: leave the domain registered wherever it is
-and delegate only DNS.
-
-1. Add the domain in the Cloudflare dashboard. It imports the existing records
-   and assigns you two nameservers.
-2. At your registrar, replace the current nameservers with those two. Every
-   registrar words this differently — look for "custom DNS" or "nameservers"
-   on the domain's settings page.
-3. Wait for Cloudflare to mark the zone Active. Usually minutes, occasionally
-   longer depending on the TLD.
-4. Delete any imported record for the hostname you are about to use. If the
-   domain previously pointed at a PaaS, that is typically an `ALIAS`/`CNAME` to
-   the old provider, or an `A` record. The tunnel writes its own replacement.
-
-Your registrar keeps billing and renewals. Only resolution moves.
-
-## 1. Create the tunnel
-
-In the Cloudflare dashboard, **Zero Trust → Networks → Tunnels**.
-
-Create a tunnel, or add a hostname to a connector you already run. Reusing is
-usually preferable: one connector can front any number of services, and each
-additional hostname is a routing rule rather than another daemon.
-
-Under **Install and run a connector**, copy the tunnel token. It authorizes
-anything holding it to serve your hostname, so treat it like a password.
-
-## 2. Point the hostname at the container
-
-On the tunnel's published routes, add:
-
-| Field        | Value               |
-| ------------ | ------------------- |
-| Subdomain    | _(blank, or `www`)_ |
-| Domain       | your domain         |
-| Service type | `HTTP`              |
-| URL          | `hotslice:8000`     |
-
-`hotslice:8000` is the container name on the shared Docker network, which is why
-nothing below publishes a port. Cloudflare creates the proxied DNS record for
-you.
-
-## Running the container
-
-The published image is `ghcr.io/pid1/hotslice:latest`, built from this repo by
-`.github/workflows/container.yml` on every push to `main`. `docker build -t
-hotslice .` works too.
-
-### With compose
-
-```bash
-cp .env.example .env      # paste your tunnel token
-docker compose up -d
+```text
+worker/
+  pyproject.toml   # runtime deps only; pywrangler vendors these into the bundle
+  wrangler.jsonc   # Worker config: route, data-file rules, build step
+  build.sh         # the build step: copies the package in, writes build_id.py
+  src/entry.py     # entrypoint: size check, then hands off to hotslice.web.app
+  src/hotslice/    # copied from ../hotslice by build.sh (gitignored)
+  src/themes/      # copied from ../themes by build.sh (gitignored)
+  src/build_id.py  # commit served at /.build-id, written by build.sh (gitignored)
 ```
 
-### Without compose
+`worker/` is its own project because pywrangler vendors every dependency into
+the bundle, and the root project depends on `uvicorn[standard]`, whose native
+extensions have no WebAssembly build.
 
-Not every host has the compose plugin — stock Unraid, for one. The equivalent:
+Wrangler doesn't follow symlinks, so `build.sh` (wrangler's `build.command`) copies
+the package and themes in before every `dev` and `deploy`. Always edit the
+top-level `hotslice/` and `themes/`, never the copies.
 
-```bash
-docker network create hotslice-net
+## Deploying
 
-docker run -d --name hotslice --restart unless-stopped \
-  --network hotslice-net \
-  --read-only --tmpfs /tmp:size=64m,mode=1777,noexec,nosuid,nodev \
-  --security-opt no-new-privileges:true --cap-drop ALL \
-  --cpus 1.0 --memory 512m \
-  ghcr.io/pid1/hotslice:latest
-
-docker run -d --name hotslice-cloudflared --restart unless-stopped \
-  --network hotslice-net \
-  --read-only --security-opt no-new-privileges:true --cap-drop ALL \
-  -e TUNNEL_TOKEN=your-token-here \
-  cloudflare/cloudflared:latest tunnel --no-autoupdate run
-```
-
-Drop the second container and add `-p 8000:8000` to the first for a LAN-only
-install.
-
-### A note for Unraid
-
-Community Applications has a `CloudflaredTunnel` template that uses the same
-official `cloudflare/cloudflared` image. Two of its defaults are worth changing
-if you use it:
-
-- It runs with `Network = host`, which lets the connector reach every service on
-  the box. On a bridge network it can reach hotslice and nothing else, so a
-  leaked token routes to one container rather than to your whole LAN.
-- It passes the token as `--token <value>` in `PostArgs`, which puts a live
-  credential into `docker inspect` and `ps` output. An `--env-file` keeps it in
-  one file you control the permissions on.
-
-Containers started with plain `docker run` show up in the Docker tab as orphans
-that the UI cannot edit, and are lost if `docker.img` is ever recreated. To
-manage them normally, drop a template in
-`/boot/config/plugins/dockerMan/templates-user/` whose `<Name>` matches the
-container, with the hardening flags in `<ExtraParams>`.
-
-Check both halves:
+From a devenv shell:
 
 ```bash
-docker logs -f hotslice-cloudflared   # want: "Registered tunnel connection"
-curl -sI https://your-domain          # the real test
+worker-dev      # local workerd on http://localhost:8787
+worker-deploy   # build, bundle, upload, and generate the memory snapshot
 ```
 
-## Hardening a public instance
+Both need Node (pywrangler shells out to `npx wrangler`). `worker-deploy` also
+needs a logged-in `wrangler` (`uv run pywrangler login`) or the API token below.
 
-On the public internet hotslice is an unauthenticated endpoint that accepts
-uploads and renders them. The container above is already unprivileged and
-read-only, with all capabilities dropped and CPU and memory capped, so a flood
-degrades hotslice rather than the host. Three things are worth adding at the
-edge, where they cost nothing:
+### On push to main
 
-**Cap the request body.** `web.py` reads an upload before checking it against
-`_MAX_UPLOAD_SIZE`, so an oversized POST is buffered in full and only then
-rejected with a 413. Cloudflare's free plan caps bodies at 100 MB, far above the
-2 MB hotslice accepts. A WAF rule rejecting `http.request.body.size > 2097152`
-on `/convert` moves that rejection to the edge.
+Deploys follow the same two-layer pattern as the other `pid1.space` sites:
 
-**Rate-limit `/convert` and `/mcp`.** Both spend CPU per request. Roughly 10
-requests per minute per IP is generous for real use and closes the cheap flood.
+1. **Workers Builds** (primary). Cloudflare builds and deploys every push to
+   `main`. Configure it under **Workers & Pages → hotslice → Settings → Build**:
+   connect `pid1/hotslice`, branch `main`, root directory `/worker`, build
+   command empty (`build.sh` runs inside the deploy), deploy command
+   `uv run pywrangler deploy`.
+2. **`.github/workflows/cf-fallback.yml`** (backup). Ten minutes after a push
+   that touches `hotslice/`, `themes/`, or `worker/`, it reads
+   `https://hotslice.pid1.space/.build-id`. If the live Worker isn't serving that
+   commit, it deploys. It needs two repository secrets:
+   - `CLOUDFLARE_ACCOUNT_ID`: `5c9482b9c0fe698b745e95011ac5ced4`
+   - `CLOUDFLARE_API_TOKEN`: from the **Edit Cloudflare Workers** template,
+     limited to this account and the `pid1.space` zone.
 
-**Decide about `/mcp`.** Public and unauthenticated, the MCP endpoint is free
-compute for anyone who finds it. If it should stay open, rate-limiting is the
-floor. If not, put a Cloudflare Access policy with a service token on that path
-and leave the landing page open — also free.
+`/.build-id` comes from `git rev-parse HEAD` in `build.sh`, not from
+`WORKERS_CI_COMMIT_SHA`, which Workers Builds sets to the branch name on manual
+builds and would make the fallback redeploy every time.
 
-Optionally cache `/` at the edge. The landing page is static per deploy, so
-caching it means routine traffic never reaches your hardware at all.
+## Routing
+
+`wrangler.jsonc` attaches the Worker to `hotslice.pid1.space/*` with a **zone
+route**. A route intercepts every request before the origin is contacted, so
+all it needs is some proxied DNS record for the hostname.
+
+Right now that record is the leftover CNAME to the deleted `nas` tunnel
+(`f047a2ad-….cfargotunnel.com`). It is never reached, but it's misleading.
+The cleaner end state is a custom domain, which owns its own record and
+certificate, matching the other `*.pid1.space` Workers. Cloudflare refuses to
+attach a custom domain while an externally managed record exists, and neither
+the wrangler OAuth token nor the automation token used for the migration can
+edit DNS. So this step is manual:
+
+1. In the dashboard, delete the `hotslice` CNAME in the `pid1.space` zone. The
+   site is down from here until step 3 finishes, usually well under a minute.
+2. In `worker/wrangler.jsonc`, replace the route with
+   `{ "pattern": "hotslice.pid1.space", "custom_domain": true }`.
+3. `worker-deploy`.
+
+## What the runtime changes
+
+Python Workers run CPython on Pyodide (WebAssembly) inside workerd. A few
+behaviors differ from a normal server, and the code is shaped around them.
+
+**Import time is free; request time is metered.** At deploy, Cloudflare imports
+the entrypoint and snapshots the interpreter's memory, and every cold start
+restores that snapshot. Work at module level is paid once, at deploy. So
+`web.py` scans the themes, serializes `/api/themes`, and renders the landing page
+at import; `mcp_server.py` builds the theme list at import; the Jinja environment
+and markdown parser are module-level. Scanning the themes alone takes about
+15 ms natively, more than the whole Free-plan budget.
+
+**No randomness at import.** Anything random in the snapshot would be shared by
+every instance, so `os.urandom` raises during import. The MCP SDK's
+`MCPServer()` generates its request-state key that way, so `mcp_server.py`
+passes a codec that creates the key on first use instead.
+
+**Lifespan runs per request, not per process.** The ASGI adapter runs a full
+lifespan startup and shutdown around every request, and the MCP SDK's
+`StreamableHTTPSessionManager.run()` works only once per instance. Rather than
+start one manager from the app lifespan, `mcp_server.http_app` creates a
+short-lived manager per request. The server is stateless, so nothing is lost.
+
+**The body is read before the app runs.** The adapter buffers the whole
+request body into Python before FastAPI sees it, so `web.py`'s 2 MB check comes
+after the damage. `entry.py` rejects on `Content-Length` first, which turns a
+multi-megabyte upload into an 11 ms 413.
+
+**Only `.py` files are bundled by default.** The `rules` in `wrangler.jsonc`
+ship templates, theme CSS/JS, and `theme.toml` as data modules. They appear
+in the Worker's filesystem at their relative paths, so `renderer.py` reads them
+unchanged.
+
+## Hardening
+
+On the public internet hotslice is an unauthenticated endpoint that renders
+uploads. On Workers a flood costs requests and CPU time rather than degrading a
+machine, but it still costs something. Both of these are free on the zone:
+
+**Rate-limit `/convert` and `/mcp`.** Around 10 requests per minute per IP is
+generous for real use.
+
+**Decide about `/mcp`.** If it shouldn't be open to anyone, put a Cloudflare
+Access policy with a service token on that path and leave the landing page
+public.
 
 ## Verifying
 
-The read-only root filesystem means `docker cp` into the container fails by
-design, so pipe scripts in on stdin instead:
-
 ```bash
-docker exec hotslice python -c "import urllib.request as u; \
-  print(u.urlopen('http://127.0.0.1:8000/api/themes').status)"
+B=https://hotslice.pid1.space
+curl -s -o /dev/null -w "%{http_code}\n" $B/                 # 200
+curl -s $B/api/themes | python3 -c 'import json,sys; print(len(json.load(sys.stdin)))'   # 257
+curl -s -o /dev/null -w "%{http_code}\n" -F file=@examples/demo.md $B/convert   # 200
+curl -s -o /dev/null -w "%{http_code}\n" $B/mcp              # 405
 ```
 
-A healthy instance answers `200` on `/` and `/api/themes` (257 themes), returns
-rendered HTML from `POST /convert`, and rejects an oversized upload with `413`.
+A plain `GET /mcp` answers `405` by design: the server is stateless and has
+nothing to stream, which the MCP spec allows servers to signal this way. An MCP
+client talks to it with `POST`.
 
-A plain `GET /mcp` answers `406`, which is correct — MCP Streamable HTTP expects
-an SSE `Accept` header. What matters is that it is not a `307` or `421`; that is
-what the `_MCPPathRewrite` middleware exists to prevent.
+CPU time per request is in **Workers & Pages → hotslice → Observability**, or
+queryable through the Workers observability API. Watch for the `exceededCpu`
+outcome.
 
 ## Rolling back
 
-`docker compose down`, or stopping the connector, makes the hostname return
-Cloudflare's origin-unreachable error rather than falling through to anything
-else. Deleting the hostname route removes the DNS record with it.
+```bash
+cd worker && uv run pywrangler rollback   # previous version, instantly
+```
+
+`uv run pywrangler deployments list` shows what's available.

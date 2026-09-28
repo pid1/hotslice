@@ -2,18 +2,17 @@
 
 from __future__ import annotations
 
-import contextlib
+import json
 import re
 from pathlib import Path
 
-import uvicorn
-from fastapi import FastAPI, Form, HTTPException, Request, UploadFile
+from fastapi import FastAPI, Form, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, Response
-from fastapi.templating import Jinja2Templates
+from jinja2 import Environment, FileSystemLoader
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 from hotslice.config import Config
-from hotslice.mcp_server import mcp as mcp_server
+from hotslice.mcp_server import http_app as mcp_http_app
 from hotslice.parser import parse_deck
 from hotslice.renderer import list_available_themes, render_deck
 
@@ -24,18 +23,25 @@ _THEME_NAME_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_-]*$")
 _ALLOWED_EXTENSIONS = {".md", ".markdown", ".txt"}
 
 
-@contextlib.asynccontextmanager
-async def _lifespan(app: FastAPI):
-    async with mcp_server.session_manager.run():
-        yield
-
-
 app = FastAPI(
     title="hotslice",
     description="Markdown to HTML slide decks",
-    lifespan=_lifespan,
 )
-templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
+
+# The landing page and theme list only change when the themes on disk do, so
+# build both once at import. Scanning the themes alone takes longer than the
+# 10 ms of CPU a free-tier Cloudflare Worker gets per request; on Workers this
+# import runs at deploy time and lands in the memory snapshot, so no request
+# ever pays for it.
+_THEMES = list_available_themes()
+_THEMES_JSON = json.dumps(_THEMES).encode()
+# autoescape=True matches the Starlette Jinja2Templates this replaced.
+# nosemgrep: python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
+_INDEX_HTML = (
+    Environment(loader=FileSystemLoader(str(_TEMPLATES_DIR)), autoescape=True)
+    .get_template("web.html.j2")
+    .render(themes=_THEMES)
+)
 
 
 def _validate_theme(name: str) -> None:
@@ -60,20 +66,15 @@ def _safe_stem(filename: str | None) -> str:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
+async def index():
     """Serve the upload form."""
-    themes = list_available_themes()
-    return templates.TemplateResponse(
-        request=request,
-        name="web.html.j2",
-        context={"themes": themes},
-    )
+    return HTMLResponse(_INDEX_HTML)
 
 
 @app.get("/api/themes")
 async def get_themes():
     """Return available themes as JSON."""
-    return list_available_themes()
+    return Response(content=_THEMES_JSON, media_type="application/json")
 
 
 @app.post("/convert")
@@ -138,15 +139,16 @@ async def convert(
 
 
 # MCP server for AI agent integration
-app.mount("/mcp", mcp_server.streamable_http_app())
+app.mount("/mcp", mcp_http_app)
 
 
 # ---------------------------------------------------------------------------
 # Middleware: rewrite /mcp → /mcp/ internally so Starlette's Mount never
 # issues a 307 trailing-slash redirect.  Behind an HTTPS reverse-proxy the
 # redirect's Location header used http://, which caused 421 Misdirected
-# Request.  Rewriting the path at the ASGI scope level eliminates the
-# redirect entirely — no extra round-trip, no scheme mismatch.
+# Request, and MCP clients do not reliably follow redirects on POST anyway.
+# Rewriting the path at the ASGI scope level eliminates the redirect
+# entirely — no extra round-trip, no scheme mismatch.
 #
 # This is a raw ASGI middleware (not BaseHTTPMiddleware) so it doesn't
 # interfere with MCP Streamable HTTP's streaming responses.
@@ -165,7 +167,11 @@ app.add_middleware(_MCPPathRewrite)
 
 
 def main(host: str = "0.0.0.0", port: int = 8000):
-    """Run the web server."""
+    """Run the web server locally. Production runs on Cloudflare Workers (worker/)."""
+    # Imported here so the Worker, which serves `app` through its own ASGI
+    # adapter, never loads uvicorn.
+    import uvicorn
+
     uvicorn.run(
         app,
         host=host,

@@ -2,7 +2,7 @@
 
 A hot take, one slice at a time. **Markdown → HTML slide decks from the CLI.**
 
-See it in action, and use the MCP, at [hotslice.pizza](https://hotslice.pizza/).
+See it in action, and use the MCP, at [hotslice.pid1.space](https://hotslice.pid1.space/).
 
 hotslice converts a single Markdown file into a self-contained HTML presentation with keyboard/click navigation, syntax highlighting, and pluggable themes. Build decks from the CLI or upload Markdown through the built-in web UI.
 
@@ -363,15 +363,16 @@ Once your deck is open in a browser:
 
 Deep-link to any slide with `#N` in the URL (e.g., `slides.html#3`).
 
-## Self-hosting
+## Hosting
 
-hotslice is stateless and small, so it runs comfortably on hardware you already
-own. Behind a Cloudflare Tunnel there are no open ports, no certificates to
-renew, and no origin IP in DNS — `docker compose up -d` plus a tunnel token is
-the whole of it.
+The public instance runs as a Cloudflare Python Worker: the same FastAPI app
+`hotslice serve` runs locally, served from Cloudflare's edge with nothing to
+keep running yourself. `worker-deploy` from a devenv shell (or a push to
+`main`) ships it.
 
-See [docs/deploy.md](docs/deploy.md) for the full path, including the edge rules
-worth adding in front of a public, unauthenticated `/convert` and `/mcp`.
+See [docs/deploy.md](docs/deploy.md) for the layout, why it needs the Workers
+Paid plan, the runtime quirks the code works around, and the edge rules worth
+adding in front of a public, unauthenticated `/convert` and `/mcp`.
 
 ## Development
 

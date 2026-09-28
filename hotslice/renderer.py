@@ -17,6 +17,18 @@ _BUNDLED_THEMES_DIR = _PACKAGE_DIR.parent / "themes"
 _TEMPLATES_DIR = _PACKAGE_DIR / "templates"
 
 
+# autoescape stays off deliberately: slide bodies are authored HTML and
+# escaping them would render the product useless. Input is the deck the
+# user is building for themselves.
+# Built once so the compiled template is cached across renders; compiling it
+# costs more than the render itself.
+# nosemgrep: python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
+_ENV = Environment(
+    loader=FileSystemLoader(str(_TEMPLATES_DIR)),
+    autoescape=False,  # We're generating HTML, slides contain raw HTML
+)
+
+
 def _resolve_theme_dir(theme_name: str, theme_dir: str | None) -> Path:
     """Resolve a theme name to its directory path.
 
@@ -156,15 +168,7 @@ def render_deck(deck: DeckData, config: Config) -> str:
     title = config.title or deck.title or "Untitled Presentation"
     hljs_theme = _hljs_slug_to_cdn_path(hljs_theme)
 
-    # autoescape stays off deliberately: slide bodies are authored HTML and
-    # escaping them would render the product useless. Input is the deck the
-    # user is building for themselves.
-    # nosemgrep: python.flask.security.xss.audit.direct-use-of-jinja2.direct-use-of-jinja2
-    env = Environment(
-        loader=FileSystemLoader(str(_TEMPLATES_DIR)),
-        autoescape=False,  # We're generating HTML, slides contain raw HTML
-    )
-    template = env.get_template("deck.html.j2")
+    template = _ENV.get_template("deck.html.j2")
 
     # The environment is built with autoescape off on purpose: slide bodies are
     # authored HTML and escaping them would break the output.

@@ -1,0 +1,24 @@
+# The Cloudflare Worker that serves hotslice.pizza. See docs/deploy.md.
+#
+# This is a separate project from the root pyproject.toml because pywrangler
+# vendors every dependency into the Worker bundle, and the root project pulls
+# in uvicorn[standard], whose native extensions have no WebAssembly build.
+# Keep this list to what hotslice.web imports at runtime.
+[project]
+name = "hotslice-worker"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "markdown-it-py>=3.0",
+    "linkify-it-py>=2.0",
+    "jinja2>=3.1",
+    "fastapi>=0.115",
+    "python-multipart>=0.0.18",
+    "mcp>=2.1",
+]
+
+[dependency-groups]
+dev = [
+    "workers-py",
+    "workers-runtime-sdk",
+]

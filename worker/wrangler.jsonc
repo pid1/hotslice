@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hotslice",
+  "main": "src/entry.py",
+  "compatibility_date": "2026-09-27",
+  "compatibility_flags": ["python_workers"],
+
+  // A zone route rather than a custom domain: the route intercepts every
+  // request before it reaches the origin, so it only needs *a* proxied DNS
+  // record for the hostname to exist. See docs/deploy.md for switching to a
+  // custom domain.
+  "routes": [{ "pattern": "hotslice.pid1.space/*", "zone_name": "pid1.space" }],
+  // One public URL, not two: the route is the only way in.
+  "workers_dev": false,
+
+  // Python Workers bundle only .py files by default. The templates and themes
+  // are read from disk at import time, so ship them as data modules; they
+  // appear in the Worker's filesystem at the same relative paths.
+  "rules": [
+    {
+      "type": "Data",
+      "globs": ["**/*.css", "**/*.js", "**/*.toml", "**/*.j2"],
+      "fallthrough": true,
+    },
+  ],
+
+  // Copies the package and themes in (wrangler does not follow symlinks) and
+  // writes the commit served at /.build-id. Runs before every `dev` and
+  // `deploy`.
+  "build": {
+    "command": "./build.sh",
+    "watch_dir": ["../hotslice", "../themes"],
+  },
+
+  "observability": { "enabled": true },
+}
