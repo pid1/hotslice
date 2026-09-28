@@ -62,6 +62,10 @@ def _create_parser() -> MarkdownIt:
     return md
 
 
+# Rendering does not mutate the parser, so one instance serves every deck.
+_PARSER = _create_parser()
+
+
 def _extract_frontmatter(text: str) -> tuple[dict, str]:
     """Extract TOML frontmatter fenced by +++ lines.
 
@@ -99,7 +103,7 @@ def parse_deck(markdown_text: str, separator: str = "^---$") -> DeckData:
     Splits the markdown on the separator pattern, extracts frontmatter
     from the beginning if present, and parses each slide chunk to HTML.
     """
-    md = _create_parser()
+    md = _PARSER
     sep_re = re.compile(separator, re.MULTILINE)
 
     # Extract frontmatter

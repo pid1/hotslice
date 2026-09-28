@@ -525,10 +525,10 @@ GET  /api/themes (JSON)</code></pre>
     <div class="info-card">
       <h3>&#129302; MCP Server</h3>
       <p>Let AI agents build presentations for you. hotslice exposes an <a href="https://modelcontextprotocol.io" style="color: var(--primary); font-weight: 600;">MCP</a> endpoint at <code>/mcp</code> on this server.</p>
-      <pre><code>{
+      <pre><code id="mcp-config">{
   "mcpServers": {
     "hotslice": {
-      "url": "https://hotslice.pizza/mcp"
+      "url": "https://hotslice.pid1.space/mcp"
     }
   }
 }</code></pre>
@@ -622,6 +622,11 @@ GET  /api/themes (JSON)</code></pre>
     }
 
     select.addEventListener('change', applyPreview);
+
+    // Show this server's own MCP endpoint (the markup carries the canonical
+    // host as a no-JS fallback). Before highlightAll, which reads textContent.
+    document.getElementById('mcp-config').textContent = JSON.stringify(
+      { mcpServers: { hotslice: { url: location.origin + '/mcp' } } }, null, 2);
 
     // Initial highlight
     hljs.highlightAll();

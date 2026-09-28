@@ -10,6 +10,7 @@ in
     uv
     ruff
     git
+    nodejs # pywrangler shells out to `npx wrangler`
   ];
 
   languages.python = {
@@ -42,6 +43,10 @@ in
 
     build.exec = "uv run hotslice build examples/demo.md";
     serve.exec = "uv run hotslice serve";
+
+    # The Cloudflare Worker that serves hotslice.pid1.space (see docs/deploy.md).
+    worker-dev.exec = "cd worker && uv run pywrangler dev";
+    worker-deploy.exec = "cd worker && uv run pywrangler deploy";
   };
 
   enterShell = ''
@@ -57,6 +62,8 @@ in
     echo "  dev              - Build demo deck and open in browser"
     echo "  build            - Build demo deck to demo.html"
     echo "  serve            - Start the hotslice web server"
+    echo "  worker-dev       - Run the Cloudflare Worker locally"
+    echo "  worker-deploy    - Deploy the Cloudflare Worker"
     echo ""
     echo "Quality commands:"
     echo "  lint             - Run ruff linter"

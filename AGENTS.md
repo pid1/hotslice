@@ -16,17 +16,19 @@ dev
 
 ### Commands
 
-| Command        | Description                         |
-| -------------- | ----------------------------------- |
-| `setup`        | Initialize repo (runs install-deps) |
-| `dev`          | Build demo deck and open in browser |
-| `build`        | Build demo deck to demo.html        |
-| `serve`        | Start the hotslice web server       |
-| `lint`         | Run ruff linter                     |
-| `lint-fix`     | Run ruff with auto-fix              |
-| `format`       | Run ruff formatter                  |
-| `test`         | Run pytest                          |
-| `install-deps` | Install dependencies with uv        |
+| Command         | Description                         |
+| --------------- | ----------------------------------- |
+| `setup`         | Initialize repo (runs install-deps) |
+| `dev`           | Build demo deck and open in browser |
+| `build`         | Build demo deck to demo.html        |
+| `serve`         | Start the hotslice web server       |
+| `lint`          | Run ruff linter                     |
+| `lint-fix`      | Run ruff with auto-fix              |
+| `format`        | Run ruff formatter                  |
+| `test`          | Run pytest                          |
+| `install-deps`  | Install dependencies with uv        |
+| `worker-dev`    | Run the Cloudflare Worker locally   |
+| `worker-deploy` | Deploy the Cloudflare Worker        |
 
 ### For AI Agents
 
@@ -45,10 +47,16 @@ dev
 - The web template stores each theme's color values in `data-slide-bg`, `data-slide-fg`, `data-accent`, `data-code-bg`, `data-code-fg` attributes on `<option>` elements. The preview JS reads these attributes to apply inline styles. Do not replace this with hardcoded color mappings.
 - Base16 theme slugs (e.g., `base16-monokai`) must be converted to CDN subdirectory paths (`base16/monokai`) before constructing highlight.js CDN URLs. The CDN hosts base16 CSS under `styles/base16/{name}.min.css`, not `styles/base16-{name}.min.css`. This conversion lives in two places that must stay in sync: `_hljs_slug_to_cdn_path()` in `hotslice/renderer.py` (for built deck output) and the equivalent JavaScript in `hotslice/templates/web.html.j2`'s `applyPreview()` function (for web UI preview). If you change one, update the other.
 - Theme name validation regex `^[a-zA-Z0-9][a-zA-Z0-9_-]*$` is defined independently in `hotslice/web.py` (`_THEME_NAME_RE`) and `hotslice/mcp_server.py` (`_THEME_NAME_RE`). Both files also re-validate frontmatter theme overrides and apply matching size limits. If you change validation rules in one, update the other.
-- The MCP server sets `streamable_http_path="/"` in `hotslice/mcp_server.py` so the endpoint resolves to `/mcp` when mounted via `app.mount("/mcp", ...)` in `hotslice/web.py`. If you change the mount path, update `streamable_http_path` to match (or vice versa), otherwise the endpoint breaks or doubles the prefix.
-- Uvicorn is started with `proxy_headers=True` and `forwarded_allow_ips="*"` so that reverse proxies (Cloudflare Tunnel, etc.) can pass `X-Forwarded-Proto` and `X-Forwarded-For` headers. Do not remove these settings when deploying behind a reverse proxy.
+- `hotslice/web.py` mounts `mcp_server.http_app` at `/mcp`. `http_app` builds a fresh stateless `StreamableHTTPSessionManager` for every request, rather than starting one from the FastAPI lifespan, because the Workers ASGI adapter runs the lifespan around every request and a session manager can only be `run()` once. Do not move the MCP session manager back into a lifespan. `http_app` answers `GET` and `DELETE` with 405: a stateless server has no stream to offer and no session to end.
+- Uvicorn is started with `proxy_headers=True` and `forwarded_allow_ips="*"` so that reverse proxies can pass `X-Forwarded-Proto` and `X-Forwarded-For` headers. This applies only to `hotslice serve` and `hotslice-web`; the Worker doesn't use uvicorn, and `web.py` imports it inside `main()` so the Worker never loads it. Do not remove these settings.
 - The `_MCPPathRewrite` ASGI middleware in `hotslice/web.py` rewrites `/mcp` → `/mcp/` at the scope level before routing, preventing Starlette's `Mount` from issuing a 307 trailing-slash redirect. Without this middleware, the redirect's `Location` header uses `http://` behind HTTPS proxies, causing 421 Misdirected Request. This is a raw ASGI middleware (not `BaseHTTPMiddleware`) to avoid breaking MCP Streamable HTTP's streaming responses. Do not replace it with `@app.middleware("http")` or `BaseHTTPMiddleware`.
-- The deployment target is a self-hosted container behind a Cloudflare Tunnel (`Dockerfile`, `docker-compose.yml`, `docs/deploy.md`). The container runs unprivileged with a read-only root filesystem because a conversion is entirely in-memory and persists nothing. Do not add a `VOLUME` or a writable bind mount; if something needs scratch space, give it a tmpfs.
+- The deployment target is a Cloudflare Python Worker (`worker/`, `docs/deploy.md`) serving `hotslice.pid1.space`. It runs the same `hotslice.web.app` through the Workers ASGI adapter; there is no separate Worker implementation. It needs the Workers Paid plan: warm conversions use 11–58 ms of CPU against the Free plan's 10 ms limit.
+- Work that doesn't depend on the request happens at import time: `web.py` scans the themes, serializes `/api/themes`, and pre-renders the landing page; `mcp_server.py` builds the theme list; `renderer.py` and `parser.py` build the Jinja environment and markdown parser once. On Workers, import runs at deploy time and is captured in the memory snapshot, so it costs nothing per request. Do not move this work back into request handlers; `list_available_themes()` alone takes ~15 ms natively.
+- Nothing may use randomness at import time: Workers raise on `os.urandom` during import, because a random value in the snapshot would be shared by every instance. That's why `mcp_server.py` passes `_LazyEphemeralCodec` instead of letting `MCPServer()` generate its request-state key in the constructor. Check any new top-level code or dependency for this.
+- `worker/src/hotslice/` and `worker/src/themes/` are gitignored copies made by `worker/build.sh`, which wrangler runs as its `build.command` (wrangler does not follow symlinks). Edit the top-level `hotslice/` and `themes/`; the copies are overwritten on every `dev` and `deploy`.
+- `worker/pyproject.toml` lists the Worker's runtime dependencies separately from the root `pyproject.toml`, because pywrangler vendors everything and the root's `uvicorn[standard]` has no WebAssembly build. If `hotslice/web.py` or anything it imports gains a dependency, add it to both.
+- `worker/src/entry.py` serves `/.build-id` (the commit `worker/build.sh` wrote into `src/build_id.py`, via `git rev-parse HEAD`) with `Cache-Control: no-store`. `.github/workflows/cf-fallback.yml` compares it with the pushed commit to decide whether Workers Builds already deployed. Don't take the SHA from `WORKERS_CI_COMMIT_SHA` (it's the branch name on manual builds) and don't make the endpoint cacheable.
+- `worker/src/entry.py` rejects oversized bodies on `Content-Length` before calling the app, because the Workers ASGI adapter buffers the entire body into Python first. Keep that check ahead of `asgi.fetch`.
 
 ### Key Files
 
@@ -62,6 +70,9 @@ dev
 | `hotslice/mcp_server.py`     | MCP server: prompt and tools for AI agent integration                                    |
 | `install.sh`                 | `curl \| bash` installer for macOS and Linux                                             |
 | `hotslice.toml`              | Project-level config (repo root)                                                         |
+| `worker/wrangler.jsonc`      | Cloudflare Worker config: route, data-file rules, build step that copies the package in  |
+| `worker/src/entry.py`        | Worker entrypoint: body-size check, then serves `hotslice.web.app` via the ASGI adapter  |
+| `docs/deploy.md`             | Deploying the Worker, plan requirements, and the Workers runtime constraints             |
 | `hotslice/hljs_themes.py`    | Highlight.js theme registry (255 themes with display names, light/dark classification)   |
 | `scripts/generate_themes.py` | One-time generator: fetches hljs CSS from CDN, extracts colors, writes theme directories |
 | `themes/`                    | 257 bundled themes (2 hand-crafted pizza themes + 255 generated hljs themes)             |

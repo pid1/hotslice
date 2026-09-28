@@ -1,0 +1,11 @@
+# Copied in from the repo root by the wrangler build command.
+src/hotslice/
+src/themes/
+src/build_id.py
+
+# pywrangler / wrangler output
+python_modules/
+.venv-workers/
+.wrangler/
+node_modules/
+pylock.toml

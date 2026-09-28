@@ -1,0 +1,92 @@
+---
+name: cloudflare fallback deploy
+
+# Cloudflare Workers Builds is the primary deploy path: it builds and deploys
+# this Worker on every push to main, with GitHub acting only as the git
+# server. This workflow exists for the pushes that path misses entirely -- a
+# Cloudflare incident, a revoked GitHub App, a dropped webhook.
+#
+# It is deduplicated, not merely delayed: it waits for Cloudflare to have its
+# turn, then asks the live site which commit it is serving. If that is already
+# this commit, the job stops. Only a site still serving an older tree gets a
+# deploy from here, so the two paths cannot both publish the same push.
+
+on: # yamllint disable-line rule:truthy
+  push:
+    branches: [main]
+    # Only what ends up in the Worker bundle. Docs and CLI-only changes don't
+    # change the deployed Worker.
+    paths:
+      - "hotslice/**"
+      - "themes/**"
+      - "worker/**"
+      - ".github/workflows/cf-fallback.yml"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: cf-fallback
+  cancel-in-progress: false
+
+env:
+  SITE: https://hotslice.pid1.space
+
+jobs:
+  fallback:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Give Cloudflare first crack
+        # Workers Builds has to vendor the Python packages and generate the
+        # memory snapshot, which takes a few minutes. Waiting is what makes
+        # this a fallback instead of a second deploy racing the first.
+        run: sleep 600
+
+      - name: Ask the live site which commit it is serving
+        id: check
+        run: |
+          set -euo pipefail
+
+          # /.build-id is served with Cache-Control: no-store, so this reads
+          # the deployed Worker rather than an edge copy of an older one.
+          if ! live=$(curl -fsS --max-time 20 --retry 3 --retry-delay 5 "${SITE}/.build-id"); then
+            # Unreachable is not the same as stale, but it is the case where
+            # a deploy is most likely to be the thing that fixes it.
+            echo "could not read ${SITE}/.build-id; deploying" | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          live=$(echo "$live" | tr -d '[:space:]')
+
+          if [ "$live" = "$GITHUB_SHA" ]; then
+            echo "Cloudflare already published ${GITHUB_SHA:0:7}; nothing to do." \
+              | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Site is serving ${live:0:7}, this commit is ${GITHUB_SHA:0:7}; deploying." \
+              | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.check.outputs.deploy == 'true'
+        with:
+          # This job only reads the tree; no need to persist the token.
+          persist-credentials: false
+
+      # pywrangler (via uv) vendors the Python packages and wraps wrangler.
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        if: steps.check.outputs.deploy == 'true'
+
+      - name: Deploy to Cloudflare
+        if: steps.check.outputs.deploy == 'true'
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # build.sh runs as wrangler's build.command, so there is no separate
+        # build step.
+        run: uv run pywrangler deploy
