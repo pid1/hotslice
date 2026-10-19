@@ -1,0 +1,10 @@
+[
+  {
+    "package": "python",
+    "held_at": "3.14",
+    "latest": "3.15",
+    "reason": "hotslice/ is deployed as a Cloudflare Python Worker (worker/), and the newest Workers Python runtime is 3.14 (compat flag python_workers_314; workers-py 1.17.8 supports only 3.12-3.14, no 3.15 Pyodide build). Raising requires-python or ruff's target to 3.15 would admit 3.15-only code the Worker can't run. All dependencies install and the CLI builds on 3.15.",
+    "added": "2026-10-19",
+    "revisit": "2026-11-16"
+  }
+]

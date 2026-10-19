@@ -2,15 +2,17 @@
 name = "hotslice"
 version = "0.1.0"
 description = "A hot take, one slice at a time. Markdown → HTML slide decks from the CLI."
+# Held at 3.14: the Cloudflare Worker (worker/) runs this package on Python 3.14,
+# the newest Workers runtime. See .github/factory-holds.json.
 requires-python = ">=3.14"
 dependencies = [
-    "markdown-it-py>=3.0",
-    "linkify-it-py>=2.0",
-    "jinja2>=3.1",
-    "fastapi>=0.115",
-    "uvicorn[standard]>=0.34",
-    "python-multipart>=0.0.18",
-    "mcp>=2.1",
+    "markdown-it-py>=4.2",
+    "linkify-it-py>=2.2",
+    "jinja2>=3.1.6",
+    "fastapi>=0.148",
+    "uvicorn[standard]>=0.54",
+    "python-multipart>=0.0.32",
+    "mcp>=2.3",
 ]
 
 [project.scripts]
@@ -26,7 +28,7 @@ build-backend = "hatchling.build"
 # [tool.ruff]; black does not, and would otherwise wrap at its default 88,
 # so the two disagree on every line between 88 and 100 characters.
 [tool.ruff]
-target-version = "py314"
+target-version = "py314"  # held with requires-python; see .github/factory-holds.json
 line-length = 100
 
 [tool.ruff.lint]
@@ -37,5 +39,5 @@ testpaths = ["tests"]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.15.1",
+    "ruff>=0.17.1",
 ]
