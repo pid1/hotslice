@@ -7,6 +7,7 @@
 [project]
 name = "hotslice-worker"
 version = "0.1.0"
+# 3.14 is the newest Python Workers runtime (see .github/factory-holds.json).
 requires-python = ">=3.14"
 dependencies = [
     "markdown-it-py>=3.0",
