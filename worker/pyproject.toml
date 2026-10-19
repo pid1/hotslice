@@ -10,16 +10,16 @@ version = "0.1.0"
 # 3.14 is the newest Python Workers runtime (see .github/factory-holds.json).
 requires-python = ">=3.14"
 dependencies = [
-    "markdown-it-py>=3.0",
-    "linkify-it-py>=2.0",
-    "jinja2>=3.1",
-    "fastapi>=0.115",
-    "python-multipart>=0.0.18",
-    "mcp>=2.1",
+    "markdown-it-py>=4.2",
+    "linkify-it-py>=2.2",
+    "jinja2>=3.1.6",
+    "fastapi>=0.148",
+    "python-multipart>=0.0.32",
+    "mcp>=2.3",
 ]
 
 [dependency-groups]
 dev = [
-    "workers-py",
-    "workers-runtime-sdk",
+    "workers-py>=1.17.8",
+    "workers-runtime-sdk>=1.9.4",
 ]

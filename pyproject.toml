@@ -6,13 +6,13 @@ description = "A hot take, one slice at a time. Markdown → HTML slide decks fr
 # the newest Workers runtime. See .github/factory-holds.json.
 requires-python = ">=3.14"
 dependencies = [
-    "markdown-it-py>=3.0",
-    "linkify-it-py>=2.0",
-    "jinja2>=3.1",
-    "fastapi>=0.115",
-    "uvicorn[standard]>=0.34",
-    "python-multipart>=0.0.18",
-    "mcp>=2.1",
+    "markdown-it-py>=4.2",
+    "linkify-it-py>=2.2",
+    "jinja2>=3.1.6",
+    "fastapi>=0.148",
+    "uvicorn[standard]>=0.54",
+    "python-multipart>=0.0.32",
+    "mcp>=2.3",
 ]
 
 [project.scripts]
@@ -39,5 +39,5 @@ testpaths = ["tests"]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.15.1",
+    "ruff>=0.17.1",
 ]
