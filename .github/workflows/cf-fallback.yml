@@ -80,6 +80,12 @@ jobs:
       # pywrangler (via uv) vendors the Python packages and wraps wrangler.
       - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         if: steps.check.outputs.deploy == 'true'
+        with:
+          # Pinned to a uv release over 7 days old (the same cooldown the
+          # pyproject files apply to packages). Unpinned, setup-uv installs
+          # whatever uv shipped today. 0.13.1 understands the relative
+          # exclude-newer = "7 days" in worker/pyproject.toml.
+          version: "0.13.1"
 
       - name: Deploy to Cloudflare
         if: steps.check.outputs.deploy == 'true'
