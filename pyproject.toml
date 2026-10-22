@@ -9,7 +9,7 @@ dependencies = [
     "markdown-it-py>=4.2",
     "linkify-it-py>=2.2",
     "jinja2>=3.1.6",
-    "fastapi>=0.148",
+    "fastapi>=0.143.2",
     "uvicorn[standard]>=0.54",
     "python-multipart>=0.0.32",
     "mcp>=2.3",
@@ -37,7 +37,13 @@ select = ["E", "F", "I", "W"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
+# Supply-chain cooldown: only resolve releases that have been public for 7
+# days, so a hijacked or malicious release is usually pulled before it can
+# land here. Keep it relative; a timestamp would freeze the lock instead.
+[tool.uv]
+exclude-newer = "7 days"
+
 [dependency-groups]
 dev = [
-    "ruff>=0.17.1",
+    "ruff>=0.17.0",
 ]

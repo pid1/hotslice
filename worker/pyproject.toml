@@ -13,13 +13,19 @@ dependencies = [
     "markdown-it-py>=4.2",
     "linkify-it-py>=2.2",
     "jinja2>=3.1.6",
-    "fastapi>=0.148",
+    "fastapi>=0.143.2",
     "python-multipart>=0.0.32",
     "mcp>=2.3",
 ]
 
+# Supply-chain cooldown: only resolve releases that have been public for 7
+# days, so a hijacked or malicious release is usually pulled before it can
+# land here. Keep it relative; a timestamp would freeze the lock instead.
+[tool.uv]
+exclude-newer = "7 days"
+
 [dependency-groups]
 dev = [
-    "workers-py>=1.17.8",
-    "workers-runtime-sdk>=1.9.4",
+    "workers-py>=1.17.7",
+    "workers-runtime-sdk>=1.9.3",
 ]
