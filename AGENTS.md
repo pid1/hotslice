@@ -277,3 +277,20 @@ If your theme includes a `theme.js`, it runs after the deck's navigation runtime
 - Animation triggers
 
 The deck runtime exposes no global API — interact via DOM events and the `.slide.active` class.
+
+## Sadr
+
+### Build and test
+
+- There are no tests: tests/ does not exist and pytest is not a dependency. The check is `uv sync --locked`, `uv run ruff check .`, `uv run ruff format --check .`, and `uv run hotslice build examples/demo.md -o /tmp/demo.html`.
+- Run the web app with `uv run hotslice serve --port 8765`. Passing means `GET /` and `GET /api/themes` answer 200, and `POST /convert` with `-F file=@examples/demo.md` returns an HTML deck.
+- Check the Worker bundle with `cd worker && uv run pywrangler sync`. It resolves and installs the Worker's packages without deploying.
+
+### Toolchain
+
+- uv commands in worker/ read the root pyproject.toml's `[tool.uv]` table, because worker/pyproject.toml has none. A root `exclude-newer` makes `uv run pywrangler sync` fail, because the Pyodide index has no upload dates (checked with uv 0.13.4 and workers-py 1.17.8).
+
+### Deploys outside CI
+
+- Cloudflare Workers Builds deploys worker/ on every push to main. pywrangler resolves the packages with `uv pip compile worker/pyproject.toml` against PyPI and the Pyodide index into a gitignored pylock.toml. It ignores worker/uv.lock, so production gets the newest release that matches each floor in worker/pyproject.toml.
+- pywrangler runs wrangler with `npx wrangler`, which installs the newest wrangler release on each deploy.
