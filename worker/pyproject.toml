@@ -23,3 +23,11 @@ dev = [
     "workers-py>=1.17.8",
     "workers-runtime-sdk>=1.9.4",
 ]
+
+# This table stays here, even empty, so that uv in worker/ does not read the
+# root pyproject.toml's [tool.uv]. pywrangler resolves against the Pyodide
+# index, which has no upload dates, so the root exclude-newer would make
+# `uv run pywrangler sync` fail. For the same reason this table cannot set
+# exclude-newer itself, so Semgrep's cooldown rule is suppressed here.
+# nosemgrep: uv-missing-dependency-cooldown
+[tool.uv]

@@ -41,3 +41,7 @@ testpaths = ["tests"]
 dev = [
     "ruff>=0.17.1",
 ]
+
+[tool.uv]
+# Install only releases that have been public for at least 7 days.
+exclude-newer = "7 days"
